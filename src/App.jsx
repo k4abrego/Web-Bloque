@@ -1,13 +1,24 @@
-import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Login from "./pages/login/login";
+import InicioAdmin from "./pages/admin/inicioAdmin";
+import InicioAlimentador from "./pages/alimentador/inicioAlim";
 
 function App() {
   return (
-    <div className="app">
-      <h1>SIPINNA Atizapán de Zaragoza</h1>
-      <p>Sistema de reportes y seguimiento</p>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
 
-      <button>Iniciar Sesión</button>
-    </div>
+        <Route path="/admin" element={<InicioAdmin />} />
+
+        <Route
+          path="/alimentador"
+          element={<InicioAlimentador />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

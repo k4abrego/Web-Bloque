@@ -1,0 +1,294 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  background-color: white;
+}
+
+
+/* LADO IZQUIERDO */
+
+.login-side {
+  width: 30%; /* 30% de la pantalla */
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+/* Fondo degradado */
+  background: linear-gradient(
+    180deg,
+    #c7e5fa 0%,
+    #b7c8f5 55%,
+    #9d91df 100%
+  );
+  
+  position: relative;
+}
+
+ .login-side::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  right: -100px;
+
+  width: 100px;
+  height: 100%;
+
+  /* Mismo degradado vertical que el panel izquierdo*/
+  background: linear-gradient(
+    180deg,
+    #c7e5fa 0%,
+    #b7c8f5 55%,
+    #9d91df 100%
+  );
+
+  /* Hace que el degradado desaparezca hacia la derecha */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    black 0%,
+    transparent 100%
+  );
+
+  mask-image: linear-gradient(
+    to right,
+    black 0%,
+    transparent 100%
+  );
+
+  pointer-events: none;
+}
+
+/* Contenedor del logo y nombre de SIPINNA */
+.login-brand {
+  text-align: center;
+}
+
+
+.login-brand h1 {
+  color: #368bc1;
+  margin-bottom: 15px;
+}
+
+.login-brand h2 {
+  color: #111827;
+  font-size: 22px;
+}
+
+
+/* PARTE DERECHA */
+
+/* Contenedor del lado derecho */
+.login-main {
+  width: 70%; /*70 de pantalla*/
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Tarjeta que contiene todo el formulario */
+.login-card {
+  width: 100%;
+  max-width: 500px;
+
+  padding: 45px;
+
+  background-color: white;
+
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+
+  border-radius:20px;
+}
+/* Icono superior del login */
+.login-icon {
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+/* Titulo de inicio de sesion */
+.login-card h1 {
+  text-align: center;
+  margin: 0;
+  font-size: 30px;
+}
+
+/* Texto debajo del titulo */
+.login-description {
+  text-align: center;
+  color: #6b7280;
+  margin-top: 8px;
+  margin-bottom: 35px;
+}
+
+
+/* FORMULARIO */
+
+/* Grupos de cajas de texto */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+/* Correo y contraseña */
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  
+}
+
+/* Campos de entrada */
+.form-group input {
+  padding: 13px 14px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+
+  outline: none;
+}
+
+/* Cambios cuando el usuario selecciona un input */
+.form-group input:focus {
+  border-color: #6735c4;
+  box-shadow: 0 0 0 3px rgba(103,53,196,0.35)
+}
+
+
+/* OLVIDASTE CONTRASEÑA */
+
+/* contenedor y posicion*/
+.forgot-password {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: -10px;
+  margin-bottom: 25px;
+}
+
+/* Boton olvide contraseña */
+.forgot-password button {
+  background: none;
+  border: none;
+
+  color: #6735c4;
+
+  cursor: pointer;
+
+  font-size: 13px;
+}
+
+
+/* BOTÓN LOGIN */
+
+.login-button {
+  width: 100%;
+
+  padding: 15px;
+
+  border: none;
+  border-radius: 99px;
+
+  background-color: #6735c4;
+
+  color: white;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+/* Cambio de color al pasar el mouse */
+.login-button:hover {
+  background-color: #300a77;
+}
+
+
+/* SELECTOR DE ROL */
+
+/* Contenedor de botones admin y alim */
+.role-selector {
+  display: flex;
+  justify-content: center;
+
+  gap: 5px;
+
+  margin-top: 30px;
+}
+/* Estilo de los botones de rol */
+.role {
+  padding: 7px 14px;
+
+  border: 1.5px solid transparent;
+  border-radius: 99px;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  color: #333;
+}
+
+/* Borde que indica que boton esta seleccionado */
+.role.active {
+  border-color: #6735c4;
+
+  color: #6735c4;
+
+  font-weight: 600;
+}
+
+/* imagen del logo de sipinna, temporal */
+.sipinna-logo{
+    width: 300px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+/* Contenedor que envuelve el input de contraseña y el botón del ojo */
+.password-input-container {
+  position: relative;
+}
+
+
+/* Campo de entrada de contraseña */
+.password-input-container input {
+  width: 100%;
+
+  padding-right: 45px;
+}
+
+/* Botón que muestra u oculta la contraseña */
+.password-toggle {
+  position: absolute;
+
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: none;
+  
+  border: none;
+
+  color: #6b7280;
+
+  cursor: pointer;
+
+  padding: 4px;
+}
+
+
+/* Efecto cuando el mouse pasa sobre el botón del ojo */
+.password-toggle:hover {
+  color: #6735c4;
+}

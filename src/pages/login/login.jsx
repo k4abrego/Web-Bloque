@@ -12,11 +12,12 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Temporal mientras no existe el backend
-    console.log("Correo:", correo);
-    console.log("Contraseña:", contrasena);
-    console.log("Rol seleccionado:", rol);
+    const handleSubmit = (e) => {
+      e.preventDefault();
 
+      // Pendiente: conectar con Auth API.
+      // El backend validará las credenciales y el rol.
+};
     // Después aquí conectaremos el backend
   };
 

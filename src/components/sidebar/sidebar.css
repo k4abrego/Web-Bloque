@@ -84,8 +84,14 @@
 }
 
 
-.sidebar-item:hover:not(:disabled){
+.sidebar-item:hover{
     background:rgba(255,255,255,.15);
+    transform: scale(1.05)
+}
+
+.sidebar-item.active:hover{
+    background:rgba(255,255,255,.15);
+    color: white
 }
 
 /* Boton del menu sleeccinado */

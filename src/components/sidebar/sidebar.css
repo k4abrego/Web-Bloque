@@ -1,0 +1,190 @@
+/* =========================
+   SIDEBAR PRINCIPAL
+   ========================= */
+
+
+.admin-sidebar {
+    width: 250px; /* tamaño del sidebar*/ 
+    min-height:100vh; /* altura de la pag */
+    background-color:#4b2373; /* color del sidebar */
+    display: flex;
+    flex-direction: column; /*acomodo en columna del sidebar */
+    flex-shrink: 0;
+    transition-duration: 600ms;  /* Duración de la transicion */
+    overflow: hidden;
+    /* border-radius: 99px; */
+}
+
+
+/* Sidebar colapsado */
+.admin-sidebar.collapsed {
+    width: 90px;
+    /* border-radius: 15px; */
+}
+
+
+/* =========================
+   BOTÓN SUPERIOR
+   ========================= */
+.sidebar-top {
+    position: relative;
+    display: flex;
+    justify-content: flex-end; /* Posicion */
+    padding: 25px 20px 40px 20px; /* Distancia entre cada boton */
+}
+
+
+/* Propiedades del boton para ocultar/mostrar sidebar */
+.sidebar-toggle-inside {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    color:white;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    transition: left 600ms ease;
+
+}
+
+/* Toggle al pasar el cursor por el boton del sidebar */
+.sidebar-toggle-inside:hover {
+    transform: scale(1.2);
+}
+
+/* =========================
+   MENÚ
+   ========================= */
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /*distancia entre botones del sb*/
+    padding: 20px 18px;
+    flex: 1;
+}
+
+
+.sidebar-item {
+    display:flex;
+    align-items:center;
+    gap:15px; /* Distancia entre icono y texto del sb */
+    padding:14px;
+    width:100%;
+    border:none;
+    border-radius:99px;
+    background:transparent;
+    color:white; /* Color de los iconos */
+    font-size: 15px;  /*Tamaño del texto con sidebar desplegado*/
+    text-decoration: none;
+    cursor: pointer; /* Forma del cursor al pasarlo por los botones*/
+}
+
+
+.sidebar-item:hover:not(:disabled){
+    background:rgba(255,255,255,.15);
+}
+
+/* Boton del menu sleeccinado */
+.sidebar-item.active {
+    background: white; /*color del menu seleccionado */
+    color:#462267; /* Color del texto del menu selec. */
+    font-weight:600;
+}
+
+
+.sidebar-item:disabled {
+    opacity: 1;
+}
+
+
+/* =========================
+   FOOTER
+   ========================= */
+.sidebar-footer {
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+}
+
+/* Cuadro blanco detras del logo */
+.sidebar-logo-container {
+    background: white;
+    padding:15px;
+    border-radius:15px;
+    width:100%;
+}
+
+
+.sidebar-logo {
+    width:100%;
+    display: block;
+}
+
+
+/* .sidebar-subtitle {
+    color:white;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+} */
+
+
+/* Perfil */
+.profile {
+    display: flex;
+    align-items: center;
+    gap:12px; /* Distancia entre icono y text */
+    color:white;
+    font-weight: 500; /* Grosor de la letra */
+}
+
+
+/* =========================
+   ESTADO COLAPSADO
+   ========================= */
+
+/* La imagen se esconde en el sidbar colapsado*/
+.admin-sidebar.collapsed .sidebar-logo-container,
+.admin-sidebar.collapsed .sidebar-subtitle {
+    opacity: 0;
+}
+
+
+.admin-sidebar.collapsed .sidebar-footer {
+    padding:20px 10px;
+}
+
+
+.admin-sidebar.collapsed .profile {
+    justify-content:center;
+}
+
+
+.admin-sidebar.collapsed .sidebar-text {
+    display:none;
+}
+
+
+.admin-sidebar.collapsed .sidebar-item {
+    justify-content:center;
+    padding:14px 0;
+}
+
+/* Centrar botón cuando el sidebar está colapsado */
+.admin-sidebar.collapsed .sidebar-top {
+
+    justify-content: center;
+
+}
+
+.admin-sidebar.collapsed .sidebar-toggle-inside {
+
+    right: 26px;
+
+}

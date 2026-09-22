@@ -18,7 +18,7 @@ function Login() {
       // Pendiente: conectar con Auth API.
       // El backend validará las credenciales y el rol.
 };
-    // Después aquí conectaremos el backend
+    // Después aquí se coencta el backend
   };
 
   return (
@@ -32,11 +32,11 @@ function Login() {
             className="sipinna-logo"
             />
 
-          <h2>
+          {/* <h2>
             Sistema de Administración
             <br />
             de reportes
-          </h2>
+          </h2> */}
         </div>
       </div>
 
@@ -51,7 +51,7 @@ function Login() {
           <h1>Inicio de sesión</h1>
 
           <p className="login-description">
-            Acceso exclusivo para personal autorizado de SIPINNA.
+            Sistema de administración de reportes
           </p>
 
           <form onSubmit={handleSubmit}>
@@ -102,6 +102,7 @@ function Login() {
                 ): (
                     <Eye size={19} />
                 )}
+
             </button>
             </div>
             </div>

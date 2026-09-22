@@ -1,0 +1,28 @@
+/* Contenedor principal del panel de administrador */
+.admin-layout {
+
+  /* Coloca Sidebar y contenido uno junto al otro */
+  display: flex;
+
+  /* Ocupa toda la altura de la pantalla */
+  min-height: 100vh;
+
+  /* Fondo general del panel */
+  background-color: #f8fafc;
+
+}
+
+
+/* Área donde se muestran las páginas del administrador */
+.admin-content {
+
+  /* Ocupa el espacio restante después del Sidebar */
+  flex: 1;
+
+  /* Permite que el contenido se reduzca sin desbordarse */
+  min-width: 0;
+
+  /* Espacio interior */
+  padding: 32px;
+
+}

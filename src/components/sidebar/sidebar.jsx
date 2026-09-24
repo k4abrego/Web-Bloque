@@ -45,13 +45,15 @@ function Sidebar({ isOpen, onToggle }) {
           ========================= */}
 
       <nav className="sidebar-menu">
+
+        {/* Inicio */}
         <NavLink
           to="/admin"
           end
-          className={({isActive}) =>
+          className={({ isActive }) =>
             isActive
-            ? "sidebar-item active"
-            : "sidebar-item"
+              ? "sidebar-item active"
+              : "sidebar-item"
           }
         >
           <House size={22}/>
@@ -59,48 +61,75 @@ function Sidebar({ isOpen, onToggle }) {
           <span className="sidebar-text">
             Inicio
           </span>
-
         </NavLink>
 
-        <button
-          className="sidebar-item"
-          disabled
+
+        {/* Lista de reportes */}
+        <NavLink
+          to="/admin/reportes"
+          className={({ isActive }) =>
+            isActive
+              ? "sidebar-item active"
+              : "sidebar-item"
+          }
         >
           <ClipboardList size={22}/>
+
           <span className="sidebar-text">
             Lista de reportes
           </span>
-        </button>
+        </NavLink>
 
-        <button
-          className="sidebar-item"
-          disabled
+
+        {/* Filtros y etiquetas */}
+        <NavLink
+          to="/admin/filtros"
+          className={({ isActive }) =>
+            isActive
+              ? "sidebar-item active"
+              : "sidebar-item"
+          }
         >
           <Tags size={22}/>
+
           <span className="sidebar-text">
             Filtros y etiquetas
           </span>
-        </button>
+        </NavLink>
 
-        <button
-          className="sidebar-item"
-          disabled
+
+        {/* Archivos */}
+        <NavLink
+          to="/admin/archivos"
+          className={({ isActive }) =>
+            isActive
+              ? "sidebar-item active"
+              : "sidebar-item"
+          }
         >
           <FolderOpen size={22}/>
+
           <span className="sidebar-text">
             Archivos
           </span>
-        </button>
+        </NavLink>
 
-        <button
-          className="sidebar-item"
-          disabled
+
+        {/* Archivados */}
+        <NavLink
+          to="/admin/archivados"
+          className={({ isActive }) =>
+            isActive
+              ? "sidebar-item active"
+              : "sidebar-item"
+          }
         >
           <Archive size={22}/>
+
           <span className="sidebar-text">
             Archivados
           </span>
-        </button>
+        </NavLink>
 
       </nav>
 

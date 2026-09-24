@@ -32,11 +32,11 @@ function Login() {
             className="sipinna-logo"
             />
 
-          {/* <h2>
-            Sistema de Administración
+          <h2>
+            texto explicativo
             <br />
-            de reportes
-          </h2> */}
+            si
+          </h2>
         </div>
       </div>
 

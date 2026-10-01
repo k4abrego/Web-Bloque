@@ -7,7 +7,9 @@ import InicioAlimentador from "./pages/alimentador/inicioAlim";
 import ReportesAdmin from "./pages/admin/reportesAdmin";
 import FiltrosAdmin from "./pages/admin/filtrosAdmin";
 import ArchivosAdmin from "./pages/admin/archivosAdmin";
-import ArchivadosAdmin from "./pages/admin/archivadosAdmin";
+import MapaCalorAdmin from "./pages/admin/mapaCalorAdmin";
+import AlimentadoresAdmin from "./pages/admin/alimentadoresAdmin";
+import ConfiguracionAdmin from "./pages/admin/configuracionAdmin";
 
 
 function App() {
@@ -60,10 +62,22 @@ function App() {
             element={<ArchivosAdmin />}
           />
 
-          {/* Archivados - provisional */}
+          {/* Mapa de calor */}
           <Route
-            path="archivados"
-            element={<ArchivadosAdmin />}
+            path="mapa-calor"
+            element={<MapaCalorAdmin />}
+          />
+
+          {/* Cuentas de alimentadores */}
+          <Route
+            path="alimentadores"
+            element={<AlimentadoresAdmin />}
+          />
+
+          {/* Configuración */}
+          <Route
+            path="configuracion"
+            element={<ConfiguracionAdmin />}
           />
 
         </Route>

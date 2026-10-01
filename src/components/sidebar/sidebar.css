@@ -59,12 +59,26 @@
 /* =========================
    MENÚ
    ========================= */
+
+
 .sidebar-menu {
     display: flex;
     flex-direction: column;
     gap: 12px; /*distancia entre botones del sb*/
     padding: 20px 18px;
     flex: 1;
+}
+
+/* =========================
+   TÍTULOS DE SECCIONES
+   ========================= */
+
+.sidebar-section-title {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 10px 14px 2px 14px;
 }
 
 
@@ -142,13 +156,129 @@
 } */
 
 
-/* Perfil */
+/* =========================
+   PERFIL DEL ADMINISTRADOR
+   ========================= */
+
+.profile-wrapper {
+    width: 100%;
+    position: relative;
+}
+
+/* Botón del perfil */
 .profile {
+    width: 100%;
     display: flex;
     align-items: center;
-    gap:12px; /* Distancia entre icono y text */
-    color:white;
-    font-weight: 500; /* Grosor de la letra */
+    gap: 12px;
+
+    padding: 12px;
+
+    background: transparent;
+    border: none;
+    border-radius: 99px;
+
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+/* Efecto al pasar el cursor */
+.profile:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Flecha */
+.profile-arrow {
+    margin-left: auto;
+    transition: transform 0.25s ease;
+}
+
+/* Gira la flecha cuando el menú está abierto */
+.profile-arrow.open {
+    transform: rotate(180deg);
+}
+
+
+/* =========================
+   INFORMACIÓN DEL PERFIL
+   ========================= */
+
+.profile-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    margin-bottom: 10px;
+    padding: 14px;
+
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+
+    color: white;
+}
+
+
+/* Línea divisoria dentro del menú de perfil */
+.profile-divider {
+    width: 100%;
+    height: 1px;
+
+    margin: 7px 0;
+
+    background: rgba(255, 255, 255, 0.2);
+}
+
+
+/* Botón para cerrar sesión */
+.profile-logout {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 9px 8px;
+
+    background: transparent;
+    border: none;
+    border-radius: 99px;
+    text-decoration: none;
+
+    color: white;
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+
+/* Hover del botón cerrar sesión */
+.profile-logout:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Nombre */
+.profile-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Correo */
+.profile-email {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* Rol */
+.profile-role {
+    font-size: 11px;
+    opacity: 0.65;
 }
 
 
@@ -160,6 +290,12 @@
 .admin-sidebar.collapsed .sidebar-logo-container,
 .admin-sidebar.collapsed .sidebar-subtitle {
     opacity: 0;
+}
+
+
+/* Oculta los títulos de sección al colapsar el sidebar */
+.admin-sidebar.collapsed .sidebar-section-title {
+    display: none;
 }
 
 
@@ -194,4 +330,28 @@
 
     right: 26px;
 
+}
+
+/* Centra el botón de perfil cuando el sidebar está cerrado */
+.admin-sidebar.collapsed .profile {
+    justify-content: center;
+}
+
+/* Oculta la flecha */
+.admin-sidebar.collapsed .profile-arrow {
+    display: none;
+}
+
+.admin-sidebar.collapsed .profile {
+    width: 58px;
+    height: 58px;
+
+    padding: 0;
+
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    margin: 0 auto;
 }

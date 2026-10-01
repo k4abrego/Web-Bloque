@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import {
@@ -5,10 +6,14 @@ import {
   ClipboardList,
   Tags,
   FolderOpen,
-  Archive,
+  Map,
+  Users,
+  Settings,
   PanelLeftClose,
   PanelLeftOpen,
-  User
+  User,
+  LogOut,
+  ChevronDown,
 } from "lucide-react";
 
 import logoSIPINNA from "../../assets/sipinnalogo.png";
@@ -16,6 +21,8 @@ import "./sidebar.css";
 
 
 function Sidebar({ isOpen, onToggle }) {
+
+  const [profileOpen, setProfileOpen] = useState(false);
 
   return (
     <aside
@@ -57,11 +64,19 @@ function Sidebar({ isOpen, onToggle }) {
           }
         >
           <House size={22}/>
-
           <span className="sidebar-text">
             Inicio
           </span>
         </NavLink>
+
+
+        {/* =========================
+            SECCIÓN REPORTES
+            ========================= */}
+
+        <span className="sidebar-section-title">
+          REPORTES
+        </span>
 
 
         {/* Lista de reportes */}
@@ -74,9 +89,24 @@ function Sidebar({ isOpen, onToggle }) {
           }
         >
           <ClipboardList size={22}/>
-
           <span className="sidebar-text">
             Lista de reportes
+          </span>
+        </NavLink>
+
+
+        {/* Mapa de calor */}
+        <NavLink
+          to="/admin/mapa-calor"
+          className={({ isActive }) =>
+            isActive
+              ? "sidebar-item active"
+              : "sidebar-item"
+          }
+        >
+          <Map size={22}/>
+          <span className="sidebar-text">
+            Mapa de calor
           </span>
         </NavLink>
 
@@ -91,7 +121,6 @@ function Sidebar({ isOpen, onToggle }) {
           }
         >
           <Tags size={22}/>
-
           <span className="sidebar-text">
             Filtros y etiquetas
           </span>
@@ -108,26 +137,49 @@ function Sidebar({ isOpen, onToggle }) {
           }
         >
           <FolderOpen size={22}/>
-
           <span className="sidebar-text">
             Archivos
           </span>
         </NavLink>
 
 
-        {/* Archivados */}
+        {/* =========================
+            SECCIÓN ADMINISTRACIÓN
+            ========================= */}
+
+        <span className="sidebar-section-title">
+          ADMINISTRACIÓN
+        </span>
+
+
+        {/* Cuentas de alimentadores */}
         <NavLink
-          to="/admin/archivados"
+          to="/admin/alimentadores"
           className={({ isActive }) =>
             isActive
               ? "sidebar-item active"
               : "sidebar-item"
           }
         >
-          <Archive size={22}/>
-
+          <Users size={22}/>
           <span className="sidebar-text">
-            Archivados
+            Cuentas de alimentadores
+          </span>
+        </NavLink>
+
+
+        {/* Configuración */}
+        <NavLink
+          to="/admin/configuracion"
+          className={({ isActive }) =>
+            isActive
+              ? "sidebar-item active"
+              : "sidebar-item"
+          }
+        >
+          <Settings size={22}/>
+          <span className="sidebar-text">
+            Configuración
           </span>
         </NavLink>
 
@@ -160,11 +212,75 @@ function Sidebar({ isOpen, onToggle }) {
 
 
 
-        <div className="profile">
-          <User size={22}/>
-          <span className="sidebar-text">
-            Administrador
-          </span>
+        {/* Perfil del administrador */}
+        <div className="profile-wrapper">
+
+          {/* Información desplegable */}
+          {profileOpen && isOpen && (
+            <div className="profile-dropdown">
+
+              <span className="profile-name">
+                Administrador SIPINNA
+              </span>
+
+              <span className="profile-email">
+                admin@sipinna.mx
+              </span>
+
+              <span className="profile-role">
+                Rol: Administrador
+              </span>
+
+              {/* Separador */}
+              <div className="profile-divider"></div>
+
+              {/* Cerrar sesión */}
+              <NavLink
+                to="/login"
+                className="profile-logout"
+              >
+                <LogOut size={18}/>
+
+                <span>
+                  Cerrar sesión
+                </span>
+              </NavLink>
+
+            </div>
+          )}
+
+
+          {/* Botón de perfil */}
+          <button
+            className="profile"
+            onClick={() => {
+
+              /* Si el sidebar está cerrado, primero lo abre */
+              if (!isOpen) {
+                onToggle();
+                return;
+              }
+
+              /* Si está abierto, muestra u oculta la información */
+              setProfileOpen(!profileOpen);
+            }}
+          >
+
+            <User size={22}/>
+
+            <span className="sidebar-text">
+              Administrador
+            </span>
+
+            <ChevronDown
+              size={18}
+              className={`profile-arrow ${
+                profileOpen ? "open" : ""
+              }`}
+            />
+
+          </button>
+
         </div>
 
       </div>

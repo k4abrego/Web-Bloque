@@ -2,13 +2,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
-  House,
-  ClipboardList,
-  Tags,
-  FolderOpen,
-  Map,
-  Users,
-  Settings,
   PanelLeftClose,
   PanelLeftOpen,
   User,
@@ -17,13 +10,17 @@ import {
 } from "lucide-react";
 import logoSIPINNA from "../../assets/sipinnalogo.png";
 import "./sidebar.css";
+import sidebarConfig from "./sidebarConfig";
 
 
 // Crea el menu lateral y decidee si se muestra abierto o cerrado
-function Sidebar({ isOpen, onToggle }) {
+function Sidebar({ role, isOpen, onToggle }) {
 
 // Guarda la info del perfil
   const [profileOpen, setProfileOpen] = useState(false);
+
+// Opciones del menu correspondiente al rol
+  const menuItems = sidebarConfig[role] || [];
 
   return (
     <aside
@@ -49,130 +46,46 @@ function Sidebar({ isOpen, onToggle }) {
       {/* Menú principal */}
       <nav className="sidebar-menu">
 
-        {/* Inicio Admin */}
-        <NavLink
-          to="/admin"
-          end
-          className={({ isActive }) =>
-            isActive
-              ? "sidebar-item active"
-              : "sidebar-item"
+        {menuItems.map((item, index) => {
+
+          /* Muestra los títulos de cada sección del menú */
+          if (item.section) {
+            return (
+              <span
+                key={`section-${index}`}
+                className="sidebar-section-title"
+              >
+                {item.section}
+              </span>
+            );
           }
-        >
-          <House size={22}/>
-          <span className="sidebar-text">
-            Inicio
-          </span>
-        </NavLink>
 
+          /* Obtiene el icono correspondiente a cada opción */
+          const Icon = item.icon;
 
-        {/* Sección de reportes */}
+          /* Crea cada opción del menú según el rol */
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              end={item.path === `/${role}`}
+              className={({ isActive }) =>
+                isActive
+                  ? "sidebar-item active"
+                  : "sidebar-item"
+              }
+            >
 
-        <span className="sidebar-section-title">
-          REPORTES
-        </span>
+              <Icon size={22}/>
 
+              <span className="sidebar-text">
+                {item.label}
+              </span>
 
-        {/* Lista de reportes */}
-        <NavLink
-          to="/admin/reportes"
-          className={({ isActive }) =>
-            isActive
-              ? "sidebar-item active"
-              : "sidebar-item"
-          }
-        >
-          <ClipboardList size={22}/>
-          <span className="sidebar-text">
-            Lista de reportes
-          </span>
-        </NavLink>
+            </NavLink>
+          );
 
-
-        {/* Mapa de calor */}
-        <NavLink
-          to="/admin/mapa-calor"
-          className={({ isActive }) =>
-            isActive
-              ? "sidebar-item active"
-              : "sidebar-item"
-          }
-        >
-          <Map size={22}/>
-          <span className="sidebar-text">
-            Mapa de calor
-          </span>
-        </NavLink>
-
-
-        {/* Filtros y etiquetas */}
-        <NavLink
-          to="/admin/filtros"
-          className={({ isActive }) =>
-            isActive
-              ? "sidebar-item active"
-              : "sidebar-item"
-          }
-        >
-          <Tags size={22}/>
-          <span className="sidebar-text">
-            Filtros y etiquetas
-          </span>
-        </NavLink>
-
-
-        {/* Archivos */}
-        <NavLink
-          to="/admin/archivos"
-          className={({ isActive }) =>
-            isActive
-              ? "sidebar-item active"
-              : "sidebar-item"
-          }
-        >
-          <FolderOpen size={22}/>
-          <span className="sidebar-text">
-            Archivos
-          </span>
-        </NavLink>
-
-
-        {/* Sección de administrador */}
-        <span className="sidebar-section-title">
-          ADMINISTRACIÓN
-        </span>
-
-
-        {/* Cuentas de alimentadores */}
-        <NavLink
-          to="/admin/alimentadores"
-          className={({ isActive }) =>
-            isActive
-              ? "sidebar-item active"
-              : "sidebar-item"
-          }
-        >
-          <Users size={22}/>
-          <span className="sidebar-text">
-            Cuentas de alimentadores
-          </span>
-        </NavLink>
-
-
-        {/* Configuración */}
-        <NavLink
-          to="/admin/configuracion"
-          className={({ isActive }) =>
-            isActive
-              ? "sidebar-item active"
-              : "sidebar-item"
-          }
-        >
-          <Settings size={22}/>
-          <span className="sidebar-text">
-            Configuración
-          </span>
-        </NavLink>
+        })}
 
       </nav>
 

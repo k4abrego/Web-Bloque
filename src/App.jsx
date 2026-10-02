@@ -1,6 +1,6 @@
 // Imports
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AdminLayout from "./layouts/adminLayout";
+import AdminLayout from "./layouts/dashboardLayout";
 import Login from "./pages/login/login";
 import InicioAdmin from "./pages/admin/inicioAdmin";
 import InicioAlimentador from "./pages/alimentador/inicioAlim";
@@ -10,6 +10,7 @@ import ArchivosAdmin from "./pages/admin/archivosAdmin";
 import MapaCalorAdmin from "./pages/admin/mapaCalorAdmin";
 import AlimentadoresAdmin from "./pages/admin/alimentadoresAdmin";
 import ConfiguracionAdmin from "./pages/admin/configuracionAdmin";
+import DashboardLayout from "./layouts/dashboardLayout";
 
 
 function App() {
@@ -35,7 +36,7 @@ function App() {
         {/* Panel de administrador */}
         <Route
           path="/admin"
-          element={<AdminLayout />}
+          element={<DashboardLayout role = "admin"/>}
         >
 
           {/* Inicio */}
@@ -86,8 +87,11 @@ function App() {
         {/* Panel Alimentador */}
         <Route
           path="/alimentador"
-          element={<InicioAlimentador />}
-        />
+          element={<DashboardLayout role = "alimentador" />}
+        >
+          <Route index element = {<InicioAlimentador />} />
+        </Route>
+      
 
       </Routes>
 

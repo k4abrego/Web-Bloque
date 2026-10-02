@@ -1,3 +1,4 @@
+// Pagina principal
 function MapaCalorAdmin() {
   return (
     <div>

@@ -1,14 +1,20 @@
+// Imports
 import { ShieldCheck, Eye, EyeOff } from "lucide-react"
 import { useState } from "react";
 import "./login.css";
 import logoSIPINNA from "../../assets/sipinnalogo.png"
 
+
+// Crea la panralla de inicio de sesión
 function Login() {
+
+  // Guarda los datos ingresados y opciones del formulario
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
   const [rol, setRol] = useState("admin");
   const [mostrarContrasena, setMostrarContrasena] = useState(false);
 
+  //Controla lpo que pasa cuando el usuario quiere iniciar sesión
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -21,9 +27,14 @@ function Login() {
     // Después aquí se coencta el backend
   };
 
+
   return (
+    // Pagina de login general
     <div className="login-page">
 
+
+      {/* Lado Izquierdo
+      Muestra la identidad visual de sipinna */}
       <div className="login-side">
         <div className="login-brand">
           <img
@@ -40,22 +51,31 @@ function Login() {
         </div>
       </div>
 
+
+      {/* Lado derecho
+      Formulario para iniciar sesion */}
       <div className="login-main">
 
         <div className="login-card">
 
+          {/* Icono superior del formulario */}
           <div className="login-icon">
             <ShieldCheck size={42} />
           </div>
 
-          <h1>Inicio de sesión</h1>
 
+          {/* titulo del inicio de sesion */}
+          <h1>Inicio de sesión</h1>
           <p className="login-description">
             Sistema de administración de reportes
           </p>
 
+
+          {/* Formulario 
+          Recibe credenciales del usuario */}
           <form onSubmit={handleSubmit}>
 
+            {/* Para ingresar el correo */}
             <div className="form-group">
               <label htmlFor="correo">
                 Correo electrónico
@@ -71,11 +91,14 @@ function Login() {
               />
             </div>
 
+
+            {/* Para ingresar la contraseña */}
             <div className="form-group">
               <label htmlFor="contrasena">
                 Contraseña
               </label>
 
+              {/* Contraseña y boton del ojito */}
               <div className="password-input-container">
             
 
@@ -87,6 +110,8 @@ function Login() {
                 onChange={(e) => setContrasena(e.target.value)}
                 required
               />
+            
+              {/* Cambua entre mostrar y ocultar contraseña */}
               <button
               type="button"
                 className="password-toggle"
@@ -103,16 +128,20 @@ function Login() {
                     <Eye size={19} />
                 )}
 
-            </button>
-            </div>
+              </button>
+              </div>
             </div>
 
+
+            {/* Opcion para recuperar una contraseña olvidada*/}
             <div className="forgot-password">
               <button type="button">
                 ¿Olvidaste tu contraseña?
               </button>
             </div>
 
+
+            {/* Boton para enviar el formulario */}
             <button
               className="login-button"
               type="submit"
@@ -120,6 +149,8 @@ function Login() {
               Iniciar sesión
             </button>
 
+
+            {/* Selector de Rol */}
             <div className="role-selector">
 
               <button

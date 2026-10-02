@@ -1,5 +1,5 @@
+// Imports
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import AdminLayout from "./layouts/adminLayout";
 import Login from "./pages/login/login";
 import InicioAdmin from "./pages/admin/inicioAdmin";

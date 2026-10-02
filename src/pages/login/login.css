@@ -1,3 +1,4 @@
+/* Config la pag completa de login */
 .login-page {
   min-height: 100vh;
   display: flex;
@@ -7,6 +8,7 @@
 
 /* LADO IZQUIERDO */
 
+/* Panel izq de la pantalla */
 .login-side {
   width: 30%; /* 30% de la pantalla */
   min-height: 100vh;
@@ -26,6 +28,8 @@
   position: relative;
 }
 
+
+/* Degradado de la parte izquierda */
  .login-side::after {
   content: "";
 
@@ -61,17 +65,21 @@
   pointer-events: none;
 }
 
+
 /* Contenedor del logo y nombre de SIPINNA */
 .login-brand {
   text-align: center;
 }
 
 
+/* Formato del titulo principal sipinna */
 .login-brand h1 {
   color: #368bc1;
   margin-bottom: 15px;
 }
 
+
+/* Formato del texto sec. sipinna */
 .login-brand h2 {
   color: #111827;
   font-size: 22px;
@@ -79,7 +87,6 @@
 
 
 /* PARTE DERECHA */
-
 /* Contenedor del lado derecho */
 .login-main {
   width: 70%; /*70 de pantalla*/
@@ -88,6 +95,7 @@
   justify-content: center;
   align-items: center;
 }
+
 
 /* Tarjeta que contiene todo el formulario */
 .login-card {
@@ -102,6 +110,8 @@
 
   border-radius:20px;
 }
+
+
 /* Icono superior del login */
 .login-icon {
   text-align: center;
@@ -109,12 +119,14 @@
   margin-bottom: 10px;
 }
 
+
 /* Titulo de inicio de sesion */
 .login-card h1 {
   text-align: center;
   margin: 0;
   font-size: 30px;
 }
+
 
 /* Texto debajo del titulo */
 .login-description {
@@ -126,13 +138,13 @@
 
 
 /* FORMULARIO */
-
 /* Grupos de cajas de texto */
 .form-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
 }
+
 
 /* Correo y contraseña */
 .form-group label {
@@ -141,6 +153,7 @@
   font-size: 14px;
   
 }
+
 
 /* Campos de entrada */
 .form-group input {
@@ -152,6 +165,7 @@
   outline: none;
 }
 
+
 /* Cambios cuando el usuario selecciona un input */
 .form-group input:focus {
   border-color: #6735c4;
@@ -160,7 +174,6 @@
 
 
 /* OLVIDASTE CONTRASEÑA */
-
 /* contenedor y posicion*/
 .forgot-password {
   display: flex;
@@ -169,6 +182,7 @@
   margin-top: -10px;
   margin-bottom: 25px;
 }
+
 
 /* Boton olvide contraseña */
 .forgot-password button {
@@ -184,7 +198,7 @@
 
 
 /* BOTÓN LOGIN */
-
+/* Formato del boton de iniciar sesion */
 .login-button {
   width: 100%;
 
@@ -202,6 +216,7 @@
   cursor: pointer;
 }
 
+
 /* Cambio de color al pasar el mouse */
 .login-button:hover {
   background-color: #300a77;
@@ -209,7 +224,6 @@
 
 
 /* SELECTOR DE ROL */
-
 /* Contenedor de botones admin y alim */
 .role-selector {
   display: flex;
@@ -219,6 +233,8 @@
 
   margin-top: 30px;
 }
+
+
 /* Estilo de los botones de rol */
 .role {
   padding: 7px 14px;
@@ -233,6 +249,7 @@
   color: #333;
 }
 
+
 /* Borde que indica que boton esta seleccionado */
 .role.active {
   border-color: #6735c4;
@@ -242,12 +259,14 @@
   font-weight: 600;
 }
 
+
 /* imagen del logo de sipinna, temporal */
 .sipinna-logo{
     width: 300px;
     height: auto;
     margin-bottom: 15px;
 }
+
 
 /* Contenedor que envuelve el input de contraseña y el botón del ojo */
 .password-input-container {
@@ -261,6 +280,7 @@
 
   padding-right: 45px;
 }
+
 
 /* Botón que muestra u oculta la contraseña */
 .password-toggle {

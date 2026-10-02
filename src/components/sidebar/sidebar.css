@@ -2,7 +2,7 @@
    SIDEBAR PRINCIPAL
    ========================= */
 
-
+/* Configuracion general del sidebar */
 .admin-sidebar {
     width: 250px; /* tamaño del sidebar*/ 
     min-height:100vh; /* altura de la pag */
@@ -26,6 +26,8 @@
 /* =========================
    BOTÓN SUPERIOR
    ========================= */
+
+/* Seccion donde esta el boton del sidebar */
 .sidebar-top {
     position: relative;
     display: flex;
@@ -51,16 +53,14 @@
 
 }
 
+
 /* Toggle al pasar el cursor por el boton del sidebar */
 .sidebar-toggle-inside:hover {
     transform: scale(1.2);
 }
 
-/* =========================
-   MENÚ
-   ========================= */
 
-
+/* Organiza verticalmente todo */
 .sidebar-menu {
     display: flex;
     flex-direction: column;
@@ -69,10 +69,7 @@
     flex: 1;
 }
 
-/* =========================
-   TÍTULOS DE SECCIONES
-   ========================= */
-
+/* Formato a los titulos reportes y admin */
 .sidebar-section-title {
     color: rgba(255, 255, 255, 0.6);
     font-size: 11px;
@@ -82,6 +79,7 @@
 }
 
 
+/* Formato a cada opcion del menu */
 .sidebar-item {
     display:flex;
     align-items:center;
@@ -98,10 +96,12 @@
 }
 
 
+/* Formato al pasar el mouse sobre las opciones */
 .sidebar-item:hover{
     background:rgba(255,255,255,.15);
     transform: scale(1.05)
 }
+
 
 /* .sidebar-item.active:hover{
     background:rgba(255,255,255,.15);
@@ -109,7 +109,8 @@
     
 } */
 
-/* Boton del menu sleeccinado */
+
+/* Boton del menu sleeccinado en blanco*/
 .sidebar-item.active {
     background: white; /*color del menu seleccionado */
     color:#462267; /* Color del texto del menu selec. */
@@ -117,6 +118,7 @@
 }
 
 
+/* Mantiene visible la opcion desabilitada */
 .sidebar-item:disabled {
     opacity: 1;
 }
@@ -125,6 +127,8 @@
 /* =========================
    FOOTER
    ========================= */
+
+/* Organiza logo y perfil abajo en el sidebar */
 .sidebar-footer {
     padding:20px;
     display:flex;
@@ -132,6 +136,7 @@
     align-items:center;
     gap:20px;
 }
+
 
 /* Cuadro blanco detras del logo */
 .sidebar-logo-container {
@@ -141,7 +146,7 @@
     width:100%;
 }
 
-
+/* Ajusta tamaño del logo */
 .sidebar-logo {
     width:100%;
     display: block;
@@ -160,10 +165,12 @@
    PERFIL DEL ADMINISTRADOR
    ========================= */
 
+/* Contenedor de la info del perfil */
 .profile-wrapper {
     width: 100%;
     position: relative;
 }
+
 
 /* Botón del perfil */
 .profile {
@@ -187,16 +194,19 @@
     transition: background 0.2s ease;
 }
 
+
 /* Efecto al pasar el cursor */
 .profile:hover {
     background: rgba(255, 255, 255, 0.15);
 }
 
-/* Flecha */
+
+/* Flecha a la derecha */
 .profile-arrow {
     margin-left: auto;
     transition: transform 0.25s ease;
 }
+
 
 /* Gira la flecha cuando el menú está abierto */
 .profile-arrow.open {
@@ -208,6 +218,7 @@
    INFORMACIÓN DEL PERFIL
    ========================= */
 
+/* Formato al cuadro que despliega info */
 .profile-dropdown {
     display: flex;
     flex-direction: column;
@@ -263,17 +274,20 @@
     background: rgba(255, 255, 255, 0.15);
 }
 
+
 /* Nombre */
 .profile-name {
     font-size: 14px;
     font-weight: 600;
 }
 
+
 /* Correo */
 .profile-email {
     font-size: 12px;
     opacity: 0.8;
 }
+
 
 /* Rol */
 .profile-role {
@@ -299,21 +313,25 @@
 }
 
 
+/* Ajusta el espacio inferior cuando se colapsa */
 .admin-sidebar.collapsed .sidebar-footer {
     padding:20px 10px;
 }
 
 
+/* Centra el perfil al estar colapsado */
 .admin-sidebar.collapsed .profile {
     justify-content:center;
 }
 
 
+/* Oculta los textos y deja solo iconos */
 .admin-sidebar.collapsed .sidebar-text {
     display:none;
 }
 
 
+/* Centra los botones del menu */
 .admin-sidebar.collapsed .sidebar-item {
     justify-content:center;
     padding:14px 0;
@@ -326,22 +344,27 @@
 
 }
 
+
+/* Ajusta la posicion del boton que abre el sidebar */
 .admin-sidebar.collapsed .sidebar-toggle-inside {
 
     right: 26px;
 
 }
 
+
 /* Centra el botón de perfil cuando el sidebar está cerrado */
 .admin-sidebar.collapsed .profile {
     justify-content: center;
 }
+
 
 /* Oculta la flecha */
 .admin-sidebar.collapsed .profile-arrow {
     display: none;
 }
 
+/* Boton ciruclar del perfil */
 .admin-sidebar.collapsed .profile {
     width: 58px;
     height: 58px;

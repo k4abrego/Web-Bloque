@@ -1,6 +1,6 @@
+// Imports
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-
 import {
   House,
   ClipboardList,
@@ -15,25 +15,24 @@ import {
   LogOut,
   ChevronDown,
 } from "lucide-react";
-
 import logoSIPINNA from "../../assets/sipinnalogo.png";
 import "./sidebar.css";
 
 
+// Crea el menu lateral y decidee si se muestra abierto o cerrado
 function Sidebar({ isOpen, onToggle }) {
 
+// Guarda la info del perfil
   const [profileOpen, setProfileOpen] = useState(false);
 
   return (
     <aside
       className={`admin-sidebar ${isOpen ? "" : "collapsed"}`}
     >
-      {/* =========================
-          BOTÓN SUPERIOR
-          ========================= */}
-
+      {/* Botón superior */}
       <div className="sidebar-top">
 
+        {/* Cambia el icono dependiendo si el sidebar esta abierto o cerrado */}
         <button
           className="sidebar-toggle-inside"
           onClick={onToggle}
@@ -47,13 +46,10 @@ function Sidebar({ isOpen, onToggle }) {
         </button>
       </div>
 
-      {/* =========================
-          MENÚ PRINCIPAL
-          ========================= */}
-
+      {/* Menú principal */}
       <nav className="sidebar-menu">
 
-        {/* Inicio */}
+        {/* Inicio Admin */}
         <NavLink
           to="/admin"
           end
@@ -70,9 +66,7 @@ function Sidebar({ isOpen, onToggle }) {
         </NavLink>
 
 
-        {/* =========================
-            SECCIÓN REPORTES
-            ========================= */}
+        {/* Sección de reportes */}
 
         <span className="sidebar-section-title">
           REPORTES
@@ -143,10 +137,7 @@ function Sidebar({ isOpen, onToggle }) {
         </NavLink>
 
 
-        {/* =========================
-            SECCIÓN ADMINISTRACIÓN
-            ========================= */}
-
+        {/* Sección de administrador */}
         <span className="sidebar-section-title">
           ADMINISTRACIÓN
         </span>
@@ -186,14 +177,10 @@ function Sidebar({ isOpen, onToggle }) {
       </nav>
 
 
-      {/* =========================
-          PARTE INFERIOR
-          LOGO + PERFIL
-          ========================= */}
-
-
+      {/* Parte inferiro del sidebar*/}
       <div className="sidebar-footer">
 
+        {/* Logo de sipinna */}
         <div className="sidebar-brand">
 
           <div className="sidebar-logo-container">
@@ -231,7 +218,7 @@ function Sidebar({ isOpen, onToggle }) {
                 Rol: Administrador
               </span>
 
-              {/* Separador */}
+              {/* Separa la info de la opcion de cerrar sesion*/}
               <div className="profile-divider"></div>
 
               {/* Cerrar sesión */}
@@ -272,6 +259,8 @@ function Sidebar({ isOpen, onToggle }) {
               Administrador
             </span>
 
+
+            {/* La flecha gira dependiendo si se abre o se cierra */}
             <ChevronDown
               size={18}
               className={`profile-arrow ${
@@ -289,4 +278,5 @@ function Sidebar({ isOpen, onToggle }) {
   );
 }
 
+// Permite utilizar sidebar en otras partes de la app
 export default Sidebar;

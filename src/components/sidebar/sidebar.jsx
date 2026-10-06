@@ -155,13 +155,13 @@ function Sidebar({ role, isOpen, onToggle }) {
             className="profile"
             onClick={() => {
 
-              /* Si el sidebar está cerrado, primero lo abre */
+              // Si el sidebar está cerrado, primero lo abre 
               if (!isOpen) {
                 onToggle();
                 return;
               }
 
-              /* Si está abierto, muestra u oculta la información */
+              // Si está abierto, muestra u oculta la información 
               setProfileOpen(!profileOpen);
             }}
           >

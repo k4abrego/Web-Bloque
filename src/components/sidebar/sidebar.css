@@ -1,7 +1,4 @@
-/* =========================
-   SIDEBAR PRINCIPAL
-   ========================= */
-
+/* --- Sidebar principal --- */
 /* Configuracion general del sidebar */
 .admin-sidebar {
     width: 250px; /* tamaño del sidebar*/ 
@@ -23,9 +20,7 @@
 }
 
 
-/* =========================
-   BOTÓN SUPERIOR
-   ========================= */
+/* --- Boton Superior --- */
 
 /* Seccion donde esta el boton del sidebar */
 .sidebar-top {
@@ -49,7 +44,9 @@
     cursor: pointer;
     position: absolute;
     right: 20px;
-    transition: left 600ms ease;
+    transition: 
+      left 600ms ease, 
+      transform 0.2s ease;
 
 }
 
@@ -68,6 +65,7 @@
     padding: 20px 18px;
     flex: 1;
 }
+
 
 /* Formato a los titulos reportes y admin */
 .sidebar-section-title {
@@ -93,6 +91,10 @@
     font-size: 15px;  /*Tamaño del texto con sidebar desplegado*/
     text-decoration: none;
     cursor: pointer; /* Forma del cursor al pasarlo por los botones*/
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
 }
 
 
@@ -124,9 +126,7 @@
 }
 
 
-/* =========================
-   FOOTER
-   ========================= */
+/* --- Footer --- */
 
 /* Organiza logo y perfil abajo en el sidebar */
 .sidebar-footer {
@@ -161,9 +161,7 @@
 } */
 
 
-/* =========================
-   PERFIL DEL ADMINISTRADOR
-   ========================= */
+/* --- Perfil de administrador --- */
 
 /* Contenedor de la info del perfil */
 .profile-wrapper {
@@ -214,9 +212,7 @@
 }
 
 
-/* =========================
-   INFORMACIÓN DEL PERFIL
-   ========================= */
+/* --- Info del perfil --- */
 
 /* Formato al cuadro que despliega info */
 .profile-dropdown {
@@ -296,9 +292,7 @@
 }
 
 
-/* =========================
-   ESTADO COLAPSADO
-   ========================= */
+/* --- Estado colapsado --- */
 
 /* La imagen se esconde en el sidbar colapsado*/
 .admin-sidebar.collapsed .sidebar-logo-container,

@@ -1,4 +1,4 @@
-/* Iconos utilizados en las opciones de los diferentes menús */
+// Iconos utilizados en las opciones de los diferentes menús 
 import {
   House,
   ClipboardList,
@@ -12,12 +12,10 @@ import {
 } from "lucide-react";
 
 
-/* Opciones del sidebar que corresponden a cada tipo de usuario */
+// Opciones del sidebar que corresponden a cada tipo de usuario 
 const sidebarConfig = {
 
-  /* =========================
-     ADMINISTRADOR
-     ========================= */
+//   --- Administrador --- 
 
   admin: [
     {
@@ -72,9 +70,7 @@ const sidebarConfig = {
   ],
 
 
-  /* =========================
-     ALIMENTADOR
-     ========================= */
+//  --- Alimentador ---
 
   alimentador: [
     {
@@ -108,5 +104,5 @@ const sidebarConfig = {
 };
 
 
-/* Permite utilizar esta configuración desde el Sidebar */
+// Permite utilizar esta configuración desde el Sidebar
 export default sidebarConfig;

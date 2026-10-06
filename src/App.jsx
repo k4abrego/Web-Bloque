@@ -11,7 +11,7 @@ import MapaCalorAdmin from "./pages/admin/mapaCalorAdmin";
 import AlimentadoresAdmin from "./pages/admin/alimentadoresAdmin";
 import ConfiguracionAdmin from "./pages/admin/configuracionAdmin";
 import DashboardLayout from "./layouts/dashboardLayout";
-
+import DetalleReporteAdmin from "./pages/admin/detalleReporteAdmin";
 
 function App() {
 
@@ -49,6 +49,11 @@ function App() {
           <Route
             path="reportes"
             element={<ReportesAdmin />}
+          />
+
+          <Route
+            path="reportes/:id"
+            element = {<DetalleReporteAdmin/>}
           />
 
           {/* Filtros y etiquetas */}

@@ -1,0 +1,135 @@
+.reportes-alim {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.reportes-alim-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.reportes-alim-header h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+    color: #111827;
+}
+
+.reportes-alim-header p {
+    margin: 0;
+    color: #6b7280;
+}
+
+.reportes-alim-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.reportes-button {
+    padding: 11px 18px;
+    border-radius: 9px;
+
+    border: 1px solid #4b2373;
+    background: #ffffff;
+
+    color: #4b2373;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.reportes-tabs {
+    display: flex;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+}
+
+.reportes-tab {
+    padding: 15px 24px;
+
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+
+    color: #6b7280;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.reportes-tab.active {
+    color: #4b2373;
+    border-bottom-color: #4b2373;
+    font-weight: 600;
+}
+
+.reportes-table-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    overflow-x: auto;
+}
+
+.reportes-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.reportes-table th {
+    padding: 15px 18px;
+    text-align: left;
+
+    background: #f9fafb;
+    color: #6b7280;
+
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.reportes-table td {
+    border-top: 1px solid #f0f0f0;
+}
+
+.reportes-empty {
+    min-height: 350px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    color: #9ca3af;
+}
+
+.reportes-empty-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background: #f3f4f6;
+
+    font-size: 22px;
+    color: #9ca3af;
+
+    margin-bottom: 8px;
+}
+
+.reportes-empty strong {
+    color: #6b7280;
+    font-size: 15px;
+}
+
+.reportes-empty span {
+    font-size: 13px;
+}

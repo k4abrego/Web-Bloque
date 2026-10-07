@@ -1,0 +1,221 @@
+.inicio-alim {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.inicio-alim-header {
+    margin-bottom: 28px;
+}
+
+.inicio-alim-header h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.inicio-alim-header p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 16px;
+}
+
+.alim-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.alim-stat-card {
+    min-height: 120px;
+    padding: 22px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    box-sizing: border-box;
+}
+
+.alim-stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    flex-shrink: 0;
+}
+
+.alim-placeholder {
+    background: #e5e7eb;
+    border-radius: 6px;
+    animation: alim-pulse 1.8s ease-in-out infinite;
+}
+
+.alim-placeholder.title {
+    width: 110px;
+    height: 13px;
+    margin-bottom: 12px;
+}
+
+.alim-placeholder.number {
+    width: 55px;
+    height: 27px;
+}
+
+.alim-charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.alim-chart-card {
+    min-height: 390px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.alim-chart-header {
+    margin-bottom: 20px;
+}
+
+.alim-placeholder.chart-title {
+    width: 220px;
+    height: 18px;
+    margin-bottom: 10px;
+}
+
+.alim-placeholder.chart-subtitle {
+    width: 280px;
+    height: 12px;
+}
+
+.alim-chart-empty {
+    height: 280px;
+    border-radius: 12px;
+    background: #f3f4f6;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.alim-recent-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.alim-recent-header {
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.alim-recent-header h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+    color: #111827;
+}
+
+.alim-recent-header p {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.alim-outline-button {
+    border: 1px solid #4b2373;
+    background: #ffffff;
+    color: #4b2373;
+
+    padding: 10px 16px;
+    border-radius: 9px;
+
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.alim-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.alim-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.alim-table th {
+    padding: 14px 18px;
+    text-align: left;
+    background: #f9fafb;
+
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.alim-table td {
+    padding: 22px 18px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.alim-table-empty {
+    height: 100px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+
+@keyframes alim-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.55;
+    }
+}
+
+
+@media (max-width: 1100px) {
+    .alim-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .alim-charts {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+    .alim-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .alim-recent-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

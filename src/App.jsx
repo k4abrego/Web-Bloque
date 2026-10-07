@@ -10,6 +10,10 @@ import ArchivosAdmin from "./pages/admin/archivosAdmin";
 import MapaCalorAdmin from "./pages/admin/mapaCalorAdmin";
 import AlimentadoresAdmin from "./pages/admin/alimentadoresAdmin";
 import ConfiguracionAdmin from "./pages/admin/configuracionAdmin";
+import AlimLayout from "./layouts/alimnLayout";
+import ReportesAlim from "./pages/alimentador/reportesAlim";
+import MapaAlim from "./pages/alimentador/mapaAlim";
+import PerfilAlim from "./pages/alimentador/perfilAlim";
 
 
 function App() {
@@ -86,8 +90,28 @@ function App() {
         {/* Panel Alimentador */}
         <Route
           path="/alimentador"
-          element={<InicioAlimentador />}
-        />
+          element={<AlimLayout />}
+        >
+          <Route
+            index
+            element={<InicioAlimentador />}
+          />
+
+          <Route
+            path="reportes"
+            element={<ReportesAlim />}
+          />
+
+          <Route
+            path="mapa"
+            element={<MapaAlim />}
+          />
+
+          <Route
+            path="perfil"
+            element={<PerfilAlim />}
+          />
+        </Route>
 
       </Routes>
 

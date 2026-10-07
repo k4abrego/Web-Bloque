@@ -14,7 +14,7 @@ function Login() {
   const [rol, setRol] = useState("admin");
   const [mostrarContrasena, setMostrarContrasena] = useState(false);
 
-  //Controla lpo que pasa cuando el usuario quiere iniciar sesión
+  // Controla lpo que pasa cuando el usuario quiere iniciar sesión
   const handleSubmit = (e) => {
     e.preventDefault();
 

@@ -1,0 +1,400 @@
+/* Contenedor principal de la página de filtros y etiquetas */
+.filtros-admin {
+  width: 100%;
+}
+
+
+/* Organiza el encabezado principal de la página */
+.filtros-header {
+  margin-bottom: 28px;
+}
+
+
+/* Da formato al título principal */
+.filtros-header h1 {
+  margin: 0 0 6px;
+  color: #1f2937;
+  font-size: 28px;
+}
+
+
+/* Da formato a la descripción principal */
+.filtros-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+
+/* Contenedor principal de la búsqueda avanzada */
+.busqueda-avanzada-card {
+  padding: 24px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+
+/* Organiza el título y la descripción de la búsqueda */
+.busqueda-avanzada-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+
+/* Da formato al icono de la búsqueda avanzada */
+.busqueda-avanzada-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  background: #eee8f7;
+  border-radius: 10px;
+  color: #6735c4;
+}
+
+
+/* Da formato al título de la búsqueda avanzada */
+.busqueda-avanzada-header h2 {
+  margin: 0 0 4px;
+  color: #374151;
+  font-size: 17px;
+}
+
+
+/* Da formato a la descripción de la búsqueda avanzada */
+.busqueda-avanzada-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+
+/* Organiza las diferentes condiciones de búsqueda */
+.condiciones-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+/* Organiza cada condición de búsqueda en una sola fila */
+.condicion-fila {
+  display: grid;
+  grid-template-columns: 90px 210px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+
+/* Da formato al conector AND u OR */
+.condicion-conector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+}
+
+
+/* Da formato al texto de la primera condición */
+.condicion-conector span {
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* Da formato a los campos seleccionables */
+.condicion-conector select,
+.condicion-campo {
+  width: 100%;
+  height: 44px;
+  padding: 0 38px 0 13px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+
+/* Da formato especial al selector AND y OR */
+.condicion-conector select {
+  color: #6735c4;
+  font-weight: 700;
+}
+
+
+/* Resalta los campos seleccionables cuando están siendo utilizados */
+.condicion-campo:focus,
+.condicion-conector select:focus {
+  border-color: #6735c4;
+  border-width: 2px;
+  outline: none;
+}
+
+
+/* Organiza el campo donde se selecciona el valor de la búsqueda */
+.condicion-valor {
+  width: 100%;
+}
+
+
+/* Da formato a los campos utilizados para seleccionar o escribir un valor */
+.condicion-valor input,
+.condicion-valor select {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  color: #374151;
+  font-size: 13px;
+  outline: none;
+}
+
+
+/* Da formato al selector de opciones */
+.condicion-valor select {
+  padding-right: 42px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+}
+
+
+/* Muestra visualmente cuando todavía no se puede seleccionar un valor */
+.condicion-valor input:disabled {
+  background: #f8fafc;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+
+/* Resalta el valor cuando está siendo utilizado */
+.condicion-valor input:focus,
+.condicion-valor select:focus {
+  border-color: #6735c4;
+  border-width: 2px;
+}
+
+
+/* Organiza los botones inferiores de la búsqueda */
+.busqueda-controles {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #f0f1f3;
+}
+
+
+/* Organiza los botones para agregar o eliminar condiciones */
+.condiciones-acciones,
+.busqueda-acciones {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+/* Da formato general a los botones de la búsqueda */
+.busqueda-controles button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 9px;
+  color: #6735c4;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+/* Resalta los botones cuando se pasa el mouse */
+.busqueda-controles button:hover:not(:disabled) {
+  background: #eee8f7;
+  transform: scale(1.03);
+}
+
+
+/* Reduce la visibilidad de los botones desactivados */
+.busqueda-controles button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+
+/* Da formato al botón principal para realizar la búsqueda */
+.busqueda-controles .boton-buscar {
+  padding: 10px 18px;
+  background: #6735c4;
+  color: white;
+}
+
+
+/* Resalta el botón principal al pasar el mouse */
+.busqueda-controles .boton-buscar:hover {
+  background: #5a2eae;
+  transform: scale(1.03);
+}
+
+
+/* Organiza el encabezado de los resultados */
+.filtros-resultados-header {
+  margin: 26px 0 12px;
+}
+
+
+/* Da formato al título de los resultados */
+.filtros-resultados-header h2 {
+  margin: 0 0 4px;
+  color: #374151;
+  font-size: 17px;
+}
+
+
+/* Da formato a la cantidad de resultados */
+.filtros-resultados-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+
+/* Organiza los reportes encontrados */
+.filtros-resultados {
+  overflow: hidden;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+}
+
+
+/* Organiza la información de cada reporte encontrado */
+.resultado-reporte {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px 18px;
+  border-bottom: 1px solid #f0f1f3;
+}
+
+
+/* Elimina la línea inferior del último reporte */
+.resultado-reporte:last-child {
+  border-bottom: none;
+}
+
+
+/* Organiza el folio y el tipo del reporte */
+.resultado-principal {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+
+/* Da formato al folio del reporte */
+.resultado-principal strong {
+  color: #6735c4;
+  font-size: 13px;
+}
+
+
+/* Da formato al tipo del reporte */
+.resultado-principal span {
+  color: #374151;
+  font-size: 13px;
+}
+
+
+/* Organiza el estado y la prioridad del reporte */
+.resultado-datos {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+
+/* Da formato al estado del reporte */
+.resultado-estado {
+  padding: 5px 9px;
+  background: #f3f4f6;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+
+/* Da formato a los reportes pendientes */
+.resultado-estado[data-estado="Pendiente"] {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+
+/* Da formato a los reportes que se encuentran en proceso */
+.resultado-estado[data-estado="En proceso"] {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+
+/* Da formato a los reportes resueltos */
+.resultado-estado[data-estado="Resuelto"] {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+
+/* Muestra un mensaje cuando la búsqueda no encuentra resultados */
+.resultados-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 45px 20px;
+  color: #9ca3af;
+  text-align: center;
+}
+
+
+/* Da formato al título mostrado cuando no existen resultados */
+.resultados-vacio strong {
+  margin-top: 10px;
+  color: #374151;
+  font-size: 14px;
+}
+
+
+/* Da formato al texto mostrado cuando no existen resultados */
+.resultados-vacio p {
+  margin: 5px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}

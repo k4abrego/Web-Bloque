@@ -1,6 +1,3 @@
-// Imports 
-import reportesMock from "../../mocks/reportes";
-import "./filtrosAdmin.css";
 import { useState } from "react";
 import {
   Search,
@@ -8,16 +5,21 @@ import {
   Minus,
   RotateCcw,
   SlidersHorizontal,
+  Tags,
+  Tag,
 } from "lucide-react";
+import reportesMock from "../../mocks/reportes";
+import "./filtrosAdmin.css";
 
 
-
-
-
-// Página donde el administrador puede realizar búsquedas avanzadas y gestionar etiquetas 
+// Página donde el administrador puede realizar búsquedas avanzadas y gestionar etiquetas
 function FiltrosAdmin() {
 
-  // Guarda las condiciones utilizadas dentro de la búsqueda avanzada 
+  // Guarda una copia temporal de los reportes para poder modificar sus etiquetas
+  const [reportes, setReportes] = useState(reportesMock);
+
+
+  // Guarda las condiciones utilizadas dentro de la búsqueda avanzada
   const [condiciones, setCondiciones] = useState([
     {
       id: 1,
@@ -28,11 +30,35 @@ function FiltrosAdmin() {
   ]);
 
 
-  // Guarda los resultados obtenidos después de realizar una búsqueda 
+  // Guarda los resultados obtenidos después de realizar una búsqueda
   const [resultados, setResultados] = useState(reportesMock);
 
 
-  // Agrega una nueva condición a la búsqueda 
+  // Guarda los reportes seleccionados para aplicar etiquetas
+  const [reportesSeleccionados, setReportesSeleccionados] = useState([]);
+
+
+  // Guarda las etiquetas disponibles dentro del sistema
+  const [etiquetasDisponibles, setEtiquetasDisponibles] = useState(
+    [
+      ...new Set(
+        reportesMock.flatMap(
+          (reporte) => reporte.etiquetas
+        )
+      ),
+    ]
+  );
+
+
+  // Guarda la etiqueta seleccionada para aplicarla a los reportes
+  const [etiquetaSeleccionada, setEtiquetaSeleccionada] = useState("");
+
+
+  // Guarda el nombre de una nueva etiqueta
+  const [nuevaEtiqueta, setNuevaEtiqueta] = useState("");
+
+
+  // Agrega una nueva condición a la búsqueda
   const agregarCondicion = () => {
 
     setCondiciones([
@@ -47,7 +73,7 @@ function FiltrosAdmin() {
   };
 
 
-  // Elimina la última condición agregada 
+  // Elimina la última condición agregada
   const eliminarCondicion = () => {
 
     if (condiciones.length > 1) {
@@ -56,7 +82,7 @@ function FiltrosAdmin() {
   };
 
 
-  // Actualiza la información de una condición 
+  // Actualiza la información de una condición
   const actualizarCondicion = (id, propiedad, valor) => {
 
     setCondiciones(
@@ -72,7 +98,7 @@ function FiltrosAdmin() {
   };
 
 
-  // Cambia el campo seleccionado y limpia el valor anterior 
+  // Cambia el campo seleccionado y limpia el valor anterior
   const cambiarCampo = (id, campo) => {
 
     setCondiciones(
@@ -89,23 +115,21 @@ function FiltrosAdmin() {
   };
 
 
-  // Obtiene las opciones disponibles según el campo seleccionado 
+  // Obtiene las opciones disponibles según el campo seleccionado
   const obtenerOpciones = (campo) => {
 
     let opciones = [];
 
 
-    // Reúne todas las etiquetas existentes 
+    // Utiliza las etiquetas que se encuentran disponibles
     if (campo === "etiquetas") {
 
-      opciones = reportesMock.flatMap(
-        (reporte) => reporte.etiquetas
-      );
+      opciones = etiquetasDisponibles;
 
     }
 
 
-    // Obtiene los valores existentes del campo seleccionado 
+    // Obtiene los valores existentes del campo seleccionado
     else if (
       [
         "tipo",
@@ -116,19 +140,19 @@ function FiltrosAdmin() {
       ].includes(campo)
     ) {
 
-      opciones = reportesMock.map(
+      opciones = reportes.map(
         (reporte) => reporte[campo]
       );
 
     }
 
 
-    // Elimina las opciones repetidas 
+    // Elimina las opciones repetidas
     return [...new Set(opciones)];
   };
 
 
-  // Comprueba si un reporte cumple con una condición 
+  // Comprueba si un reporte cumple con una condición
   const cumpleCondicion = (reporte, condicion) => {
 
     const valorBusqueda = condicion.valor
@@ -136,13 +160,13 @@ function FiltrosAdmin() {
       .trim();
 
 
-    // Ignora las condiciones que todavía están incompletas 
+    // Ignora las condiciones que todavía están incompletas
     if (!condicion.campo || !valorBusqueda) {
       return true;
     }
 
 
-    // Permite buscar una parte del folio 
+    // Permite buscar una parte del folio
     if (condicion.campo === "folio") {
 
       return reporte.folio
@@ -151,7 +175,7 @@ function FiltrosAdmin() {
     }
 
 
-    // Comprueba las etiquetas relacionadas con el reporte 
+    // Comprueba las etiquetas relacionadas con el reporte
     if (condicion.campo === "etiquetas") {
 
       return reporte.etiquetas.some(
@@ -161,13 +185,13 @@ function FiltrosAdmin() {
     }
 
 
-    // Compara el valor seleccionado con la información del reporte 
+    // Compara el valor seleccionado con la información del reporte
     return String(reporte[condicion.campo])
       .toLowerCase() === valorBusqueda;
   };
 
 
-  // Realiza la búsqueda combinando las condiciones con AND y OR 
+  // Realiza la búsqueda combinando las condiciones con AND y OR
   const realizarBusqueda = () => {
 
     const condicionesActivas = condiciones.filter(
@@ -177,17 +201,18 @@ function FiltrosAdmin() {
     );
 
 
-    // Muestra todos los reportes si no existen condiciones completas 
+    // Muestra todos los reportes si no existen condiciones completas
     if (condicionesActivas.length === 0) {
 
-      setResultados(reportesMock);
+      setResultados(reportes);
+      setReportesSeleccionados([]);
 
       return;
     }
 
 
-    // Busca los reportes que cumplen con las condiciones seleccionadas 
-    const reportesEncontrados = reportesMock.filter(
+    // Busca los reportes que cumplen con las condiciones seleccionadas
+    const reportesEncontrados = reportes.filter(
       (reporte) => {
 
         let resultado = cumpleCondicion(
@@ -196,7 +221,7 @@ function FiltrosAdmin() {
         );
 
 
-        // Combina las siguientes condiciones utilizando AND u OR 
+        // Combina las siguientes condiciones utilizando AND u OR
         for (
           let i = 1;
           i < condicionesActivas.length;
@@ -229,10 +254,11 @@ function FiltrosAdmin() {
 
 
     setResultados(reportesEncontrados);
+    setReportesSeleccionados([]);
   };
 
 
-  // Restablece la búsqueda y vuelve a mostrar todos los reportes 
+  // Restablece la búsqueda y vuelve a mostrar todos los reportes
   const limpiarBusqueda = () => {
 
     setCondiciones([
@@ -244,14 +270,144 @@ function FiltrosAdmin() {
       },
     ]);
 
-    setResultados(reportesMock);
+    setResultados(reportes);
+    setReportesSeleccionados([]);
+  };
+
+
+  // Selecciona o deselecciona un reporte de los resultados
+  const cambiarSeleccionReporte = (reporteId) => {
+
+    if (reportesSeleccionados.includes(reporteId)) {
+
+      setReportesSeleccionados(
+        reportesSeleccionados.filter(
+          (id) => id !== reporteId
+        )
+      );
+
+    } else {
+
+      setReportesSeleccionados([
+        ...reportesSeleccionados,
+        reporteId,
+      ]);
+    }
+  };
+
+
+  // Crea una nueva etiqueta disponible para utilizar
+  const crearEtiqueta = () => {
+
+    const nombreEtiqueta = nuevaEtiqueta.trim();
+
+
+    // Evita crear etiquetas vacías
+    if (!nombreEtiqueta) {
+      return;
+    }
+
+
+    // Evita crear etiquetas con el mismo nombre
+    const etiquetaExiste = etiquetasDisponibles.some(
+      (etiqueta) =>
+        etiqueta.toLowerCase() ===
+        nombreEtiqueta.toLowerCase()
+    );
+
+
+    if (etiquetaExiste) {
+      return;
+    }
+
+
+    setEtiquetasDisponibles([
+      ...etiquetasDisponibles,
+      nombreEtiqueta,
+    ]);
+
+    setNuevaEtiqueta("");
+  };
+
+
+  // Aplica una etiqueta a todos los reportes seleccionados
+  const aplicarEtiqueta = () => {
+
+    if (
+      !etiquetaSeleccionada ||
+      reportesSeleccionados.length === 0
+    ) {
+      return;
+    }
+
+
+    const reportesActualizados = reportes.map(
+      (reporte) => {
+
+        if (
+          !reportesSeleccionados.includes(reporte.id)
+        ) {
+          return reporte;
+        }
+
+
+        // Evita agregar dos veces la misma etiqueta
+        if (
+          reporte.etiquetas.includes(
+            etiquetaSeleccionada
+          )
+        ) {
+          return reporte;
+        }
+
+
+        return {
+          ...reporte,
+          etiquetas: [
+            ...reporte.etiquetas,
+            etiquetaSeleccionada,
+          ],
+        };
+      }
+    );
+
+
+    setReportes(reportesActualizados);
+
+
+    // Actualiza también los resultados que se encuentran visibles
+    setResultados(
+      resultados.map((resultado) => {
+
+        const reporteActualizado =
+          reportesActualizados.find(
+            (reporte) =>
+              reporte.id === resultado.id
+          );
+
+        return reporteActualizado || resultado;
+      })
+    );
+
+
+    setReportesSeleccionados([]);
+    setEtiquetaSeleccionada("");
+  };
+
+
+  // Calcula cuántos reportes utilizan cada etiqueta
+  const contarEtiqueta = (etiqueta) => {
+
+    return reportes.filter(
+      (reporte) =>
+        reporte.etiquetas.includes(etiqueta)
+    ).length;
   };
 
 
   return (
     <div className="filtros-admin">
 
-      {/* Encabezado principal de la página */}
       <div className="filtros-header">
 
         <div>
@@ -266,7 +422,6 @@ function FiltrosAdmin() {
       </div>
 
 
-      {/* Sección utilizada para construir búsquedas avanzadas */}
       <div className="busqueda-avanzada-card">
 
         <div className="busqueda-avanzada-header">
@@ -287,7 +442,6 @@ function FiltrosAdmin() {
         </div>
 
 
-        {/* Muestra las condiciones utilizadas en la búsqueda */}
         <div className="condiciones-lista">
 
           {condiciones.map((condicion, index) => (
@@ -297,7 +451,6 @@ function FiltrosAdmin() {
               className="condicion-fila"
             >
 
-              {/* Permite seleccionar AND u OR a partir de la segunda condición */}
               <div className="condicion-conector">
 
                 {index === 0 ? (
@@ -330,7 +483,6 @@ function FiltrosAdmin() {
               </div>
 
 
-              {/* Permite seleccionar qué información se desea buscar */}
               <select
                 className="condicion-campo"
                 value={condicion.campo}
@@ -375,12 +527,10 @@ function FiltrosAdmin() {
               </select>
 
 
-              {/* Cambia las opciones dependiendo del campo seleccionado */}
               <div className="condicion-valor">
 
                 {!condicion.campo ? (
 
-                  // Muestra un campo desactivado mientras no se seleccione qué buscar 
                   <input
                     type="text"
                     placeholder="Selecciona primero un campo"
@@ -389,7 +539,6 @@ function FiltrosAdmin() {
 
                 ) : condicion.campo === "folio" ? (
 
-                  // Permite escribir el folio que se desea buscar 
                   <input
                     type="text"
                     placeholder="Ej. REP-003"
@@ -405,7 +554,6 @@ function FiltrosAdmin() {
 
                 ) : (
 
-                  // Muestra únicamente las opciones disponibles para ese campo 
                   <select
                     value={condicion.valor}
                     onChange={(e) =>
@@ -446,7 +594,6 @@ function FiltrosAdmin() {
         </div>
 
 
-        {/* Controles utilizados para modificar las condiciones */}
         <div className="busqueda-controles">
 
           <div className="condiciones-acciones">
@@ -504,7 +651,6 @@ function FiltrosAdmin() {
       </div>
 
 
-      {/* Muestra un resumen de los resultados encontrados */}
       <div className="filtros-resultados-header">
 
         <div>
@@ -520,7 +666,6 @@ function FiltrosAdmin() {
       </div>
 
 
-      {/* Muestra los reportes encontrados */}
       <div className="filtros-resultados">
 
         {resultados.length > 0 ? (
@@ -532,7 +677,20 @@ function FiltrosAdmin() {
               className="resultado-reporte"
             >
 
-              {/* Información principal del reporte */}
+              <input
+                className="resultado-checkbox"
+                type="checkbox"
+                checked={reportesSeleccionados.includes(
+                  reporte.id
+                )}
+                onChange={() =>
+                  cambiarSeleccionReporte(
+                    reporte.id
+                  )
+                }
+              />
+
+
               <div className="resultado-principal">
 
                 <strong>
@@ -546,7 +704,21 @@ function FiltrosAdmin() {
               </div>
 
 
-              {/* Estado y prioridad del reporte */}
+              <div className="resultado-etiquetas">
+
+                {reporte.etiquetas.map(
+                  (etiqueta) => (
+
+                    <span key={etiqueta}>
+                      {etiqueta}
+                    </span>
+
+                  )
+                )}
+
+              </div>
+
+
               <div className="resultado-datos">
 
                 <span
@@ -568,7 +740,6 @@ function FiltrosAdmin() {
 
         ) : (
 
-          // Muestra un mensaje cuando no existen resultados 
           <div className="resultados-vacio">
 
             <Search size={30} />
@@ -584,6 +755,151 @@ function FiltrosAdmin() {
           </div>
 
         )}
+
+      </div>
+
+
+      {resultados.length > 0 && (
+
+        <div className="aplicar-etiqueta">
+
+          <div className="aplicar-etiqueta-info">
+
+            <Tag size={19} />
+
+            <span>
+              <strong>
+                {reportesSeleccionados.length}
+              </strong>{" "}
+              reportes seleccionados
+            </span>
+
+          </div>
+
+
+          <div className="aplicar-etiqueta-acciones">
+
+            <select
+              value={etiquetaSeleccionada}
+              onChange={(e) =>
+                setEtiquetaSeleccionada(
+                  e.target.value
+                )
+              }
+            >
+              <option value="">
+                Selecciona una etiqueta
+              </option>
+
+              {etiquetasDisponibles.map(
+                (etiqueta) => (
+
+                  <option
+                    key={etiqueta}
+                    value={etiqueta}
+                  >
+                    {etiqueta}
+                  </option>
+
+                )
+              )}
+
+            </select>
+
+
+            <button
+              type="button"
+              onClick={aplicarEtiqueta}
+              disabled={
+                reportesSeleccionados.length === 0 ||
+                !etiquetaSeleccionada
+              }
+            >
+              Aplicar etiqueta
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
+
+
+      <div className="etiquetas-card">
+
+        <div className="etiquetas-header">
+
+          <div className="etiquetas-icono">
+            <Tags size={20} />
+          </div>
+
+          <div>
+            <h2>Gestionar etiquetas</h2>
+
+            <p>
+              Crea etiquetas para clasificar y organizar
+              los reportes.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div className="crear-etiqueta">
+
+          <input
+            type="text"
+            placeholder="Nombre de la nueva etiqueta..."
+            value={nuevaEtiqueta}
+            onChange={(e) =>
+              setNuevaEtiqueta(e.target.value)
+            }
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                crearEtiqueta();
+              }
+            }}
+          />
+
+
+          <button
+            type="button"
+            onClick={crearEtiqueta}
+          >
+            <Plus size={17} />
+
+            Crear etiqueta
+          </button>
+
+        </div>
+
+
+        <div className="etiquetas-disponibles">
+
+          {etiquetasDisponibles.map(
+            (etiqueta) => (
+
+              <div
+                key={etiqueta}
+                className="etiqueta-item"
+              >
+
+                <Tag size={15} />
+
+                <span>
+                  {etiqueta}
+                </span>
+
+                <strong>
+                  {contarEtiqueta(etiqueta)}
+                </strong>
+
+              </div>
+
+            )
+          )}
+
+        </div>
 
       </div>
 

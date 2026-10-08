@@ -1,7 +1,8 @@
 .inicio-alim {
     width: 100%;
-    max-width: 1600px;
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 .inicio-alim-header {
@@ -177,6 +178,21 @@
     font-size: 14px;
 }
 
+.alim-layout {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #f8fafc;
+}
+
+.alim-content {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 32px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
 
 @keyframes alim-pulse {
     0%,
@@ -190,19 +206,27 @@
 }
 
 
+/* =========================
+   RESPONSIVE
+   ========================= */
+
 @media (max-width: 1100px) {
     .alim-stats {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .alim-charts {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 
 @media (max-width: 650px) {
+    .alim-content {
+        padding: 20px;
+    }
+
     .alim-stats {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .alim-recent-header {

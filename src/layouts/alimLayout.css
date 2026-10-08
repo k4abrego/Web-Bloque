@@ -1,11 +1,11 @@
 .alim-layout {
-  display: flex;
-  min-height: 100vh;
-  background-color: #f8fafc;
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8fafc;
 }
 
 .alim-content {
-  flex: 1;
-  min-width: 0;
-  padding: 32px;
+    flex: 1;
+    min-width: 0;
+    padding: 32px;
 }

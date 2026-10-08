@@ -1,0 +1,28 @@
+.mapa-alim {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.mapa-alim-header {
+    margin-bottom: 24px;
+}
+
+.mapa-alim-header h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+    color: #111827;
+}
+
+.mapa-alim-header p {
+    margin: 0;
+    color: #6b7280;
+}
+
+.mapa-alim-card {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+}

@@ -1,0 +1,149 @@
+.perfil-alim {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.perfil-alim-header {
+    margin-bottom: 28px;
+}
+
+.perfil-alim-header h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+    color: #111827;
+}
+
+.perfil-alim-header p {
+    margin: 0;
+    color: #6b7280;
+}
+
+.perfil-alim-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.perfil-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 26px;
+}
+
+.perfil-card-header {
+    margin-bottom: 24px;
+}
+
+.perfil-card-header h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+    color: #111827;
+}
+
+.perfil-card-header p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.perfil-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.perfil-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.perfil-field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.perfil-input-empty {
+    height: 44px;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    background: #f3f4f6;
+}
+
+.perfil-activity {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.perfil-activity-item {
+    padding: 20px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.perfil-activity-item span {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.perfil-activity-item strong {
+    font-size: 28px;
+    color: #9ca3af;
+}
+
+.perfil-security-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+.perfil-security-content strong {
+    color: #374151;
+    font-size: 15px;
+}
+
+.perfil-security-content p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.perfil-security-button {
+    flex-shrink: 0;
+    padding: 11px 18px;
+    border: 1px solid #4b2373;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #4b2373;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+@media (max-width: 800px) {
+    .perfil-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .perfil-activity {
+        grid-template-columns: 1fr;
+    }
+
+    .perfil-security-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

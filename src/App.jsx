@@ -9,11 +9,12 @@ import FiltrosAdmin from "./pages/admin/filtrosAdmin";
 import ArchivosAdmin from "./pages/admin/archivosAdmin";
 import MapaCalorAdmin from "./pages/admin/mapaCalorAdmin";
 import AlimentadoresAdmin from "./pages/admin/alimentadoresAdmin";
-import ConfiguracionAdmin from "./pages/admin/configuracionAdmin";
+import ConfiguracionAdmin from "./pages/admin/configuracionAdmin";  
 import AlimLayout from "./layouts/alimnLayout";
 import ReportesAlim from "./pages/alimentador/reportesAlim";
 import MapaAlim from "./pages/alimentador/mapaAlim";
 import PerfilAlim from "./pages/alimentador/perfilAlim";
+import ConfiguracionAlim from "./pages/alimentador/configuracionAlim";
 
 
 function App() {
@@ -21,20 +22,12 @@ function App() {
   return (
     
     <BrowserRouter>
-
       <Routes>
-
         {/* Página de inicio de sesión */}
         <Route
           path="/"
           element={<Login />}
         />
-
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-
 
         {/* Panel de administrador */}
         <Route
@@ -88,33 +81,37 @@ function App() {
 
 
         {/* Panel Alimentador */}
-        <Route
-          path="/alimentador"
-          element={<AlimLayout />}
-        >
           <Route
-            index
-            element={<InicioAlimentador />}
-          />
+              path="/alimentador"
+              element={<AlimLayout />}
+          >
+              <Route
+                  index
+                  element={<InicioAlimentador />}
+              />
 
-          <Route
-            path="reportes"
-            element={<ReportesAlim />}
-          />
+              <Route
+                  path="reportes"
+                  element={<ReportesAlim />}
+              />
 
-          <Route
-            path="mapa"
-            element={<MapaAlim />}
-          />
+              <Route
+                  path="mapa"
+                  element={<MapaAlim />}
+              />
 
-          <Route
-            path="perfil"
-            element={<PerfilAlim />}
-          />
-        </Route>
+              <Route
+                  path="configuracion"
+                  element={<ConfiguracionAlim />}
+              />
+
+              <Route
+                  path="perfil"
+                  element={<PerfilAlim />}
+              />
+          </Route>
 
       </Routes>
-
     </BrowserRouter>
 
   );

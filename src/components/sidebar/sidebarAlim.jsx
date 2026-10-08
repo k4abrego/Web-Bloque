@@ -2,18 +2,16 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import {
-    Inicio,
-    Reportes,
-    Mapa,
+    Home,
+    ClipboardList,
+    Map,
     Settings,
     PanelLeftClose,
     User,
     PanelLeftOpen,
     LogOut,
     ChevronDown,
-}
-
-from "lucide-react";
+} from "lucide-react";
 
 import logoSIPINNA from "../../assets/sipinnalogo.png";
 import "./sidebarAlim.css";
@@ -24,7 +22,6 @@ function SidebarAlim({ isOpen, onToggle }) {
         <aside
         className={`sidebar-alim ${isOpen ? "" : "collapsed"}`}
         >
-            {}
             <div className="sidbar-arriba">
                 <button className="boton-barra-lateral"
                 onClick={onToggle}
@@ -36,10 +33,8 @@ function SidebarAlim({ isOpen, onToggle }) {
                     }
                 </button>
             </div>
-            {}
 
             <nav className="sidebar-menu">
-                {}
                 <NavLink
                 to="/alimentador"
                 end
@@ -49,13 +44,11 @@ function SidebarAlim({ isOpen, onToggle }) {
                     : "sidebar-item"
                 }
                 >
-                    <Inicio size={22}/>
+                    <Home size={22}/>
                     <span className="sidebar-text">
                         Inicio
                     </span>
                 </NavLink>
-
-                {}
 
                 <NavLink
                 to="/alimentador/reportes"
@@ -65,13 +58,11 @@ function SidebarAlim({ isOpen, onToggle }) {
                         : "sidebar-item"
                 }
             >
-                <Reportes size={22}/>
+                <ClipboardList size={22}/>
                 <span className="sidebar-text">
                     Reportes
                 </span>
             </NavLink>
-
-            {}
 
             <NavLink
                 to="/alimentador/mapa"
@@ -81,13 +72,11 @@ function SidebarAlim({ isOpen, onToggle }) {
                         : "sidebar-item"
                 }
             >
-                <Mapa size={22}/>
+                <Map     size={22}/>
                 <span className="sidebar-text">
                     Mapa
                 </span>
             </NavLink>
-
-            {}
 
             <NavLink
                 to="/alimentador/configuracion"
@@ -103,8 +92,6 @@ function SidebarAlim({ isOpen, onToggle }) {
                 </span>
             </NavLink>
 
-            {}
-
             <div className="sidebar-footer">
                 <div className="sidebar-brand">
                     <div className="sidebar-logo-container">
@@ -114,11 +101,9 @@ function SidebarAlim({ isOpen, onToggle }) {
                         className="sidebar-logo"
                         />
                     </div>
-                    {}
                 </div>
 
                 <div className="profile-wrapper">
-                    {}
                     {profileOpen && isOpen && (
                         <div className="profile-dropdown">
                             <span className="profile-name">

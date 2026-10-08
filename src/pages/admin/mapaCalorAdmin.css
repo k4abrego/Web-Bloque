@@ -1,0 +1,463 @@
+/* Contenedor principal de la página del mapa de calor */
+.mapa-calor-admin {
+  width: 100%;
+}
+
+
+/* Organiza el encabezado principal de la página */
+.mapa-calor-header {
+  margin-bottom: 24px;
+}
+
+
+/* Da formato al título principal */
+.mapa-calor-header h1 {
+  margin: 0 0 6px;
+  color: #1f2937;
+  font-size: 28px;
+}
+
+
+/* Da formato a la descripción principal */
+.mapa-calor-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+
+/* Contenedor de los filtros del mapa */
+.mapa-calor-filtros {
+  padding: 20px 24px;
+  margin-bottom: 22px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+
+/* Organiza el encabezado de los filtros */
+.mapa-calor-filtros-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 18px;
+}
+
+
+/* Organiza el icono y el título de los filtros */
+.mapa-calor-filtros-titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #6735c4;
+}
+
+
+/* Da formato al título de los filtros */
+.mapa-calor-filtros-titulo h2 {
+  margin: 0;
+  color: #374151;
+  font-size: 16px;
+}
+
+
+/* Da formato al botón para restablecer los filtros */
+.mapa-calor-limpiar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 9px;
+  color: #6735c4;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+
+/* Resalta el botón cuando se pasa el mouse */
+.mapa-calor-limpiar:hover {
+  background: #eee8f7;
+  transform: scale(1.03);
+}
+
+
+/* Organiza los filtros en tres columnas */
+.mapa-calor-filtros-campos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+
+/* Organiza el nombre y el selector de cada filtro */
+.mapa-calor-filtro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+/* Da formato al nombre de cada filtro */
+.mapa-calor-filtro label {
+  color: #4b5563;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+/* Da formato a los selectores de los filtros */
+.mapa-calor-filtro select {
+  width: 100%;
+  height: 44px;
+  padding: 0 40px 0 13px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  color: #374151;
+  font-size: 13px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+
+/* Resalta los selectores cuando están siendo utilizados */
+.mapa-calor-filtro select:focus {
+  border-color: #6735c4;
+  border-width: 2px;
+  outline: none;
+}
+
+
+/* Contenedor principal del mapa */
+.mapa-calor-card {
+  overflow: hidden;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+
+/* Organiza el encabezado superior del mapa */
+.mapa-calor-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 19px 22px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+
+/* Organiza el título y el icono del mapa */
+.mapa-calor-card-titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+/* Da formato al icono del mapa */
+.mapa-calor-card-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  background: #eee8f7;
+  border-radius: 10px;
+  color: #6735c4;
+}
+
+
+/* Da formato al título de la sección del mapa */
+.mapa-calor-card-titulo h2 {
+  margin: 0 0 4px;
+  color: #374151;
+  font-size: 17px;
+}
+
+
+/* Da formato a la descripción de la sección del mapa */
+.mapa-calor-card-titulo p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+
+/* Muestra la cantidad de reportes que coinciden con los filtros */
+.mapa-calor-contador {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  background: #eee8f7;
+  border-radius: 9px;
+  color: #6735c4;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+
+/* Reserva el espacio donde se integrará Google Maps */
+.mapa-calor-visor {
+  width: 100%;
+  height: 560px;
+  position: relative;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+
+/* Da formato al espacio temporal del mapa */
+.mapa-calor-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+  background: radial-gradient(circle, #f1ecfa 0%, #f8fafc 65%);
+  text-align: center;
+}
+
+
+/* Da formato al icono central del espacio reservado */
+.mapa-calor-placeholder-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  margin-bottom: 20px;
+  background: white;
+  border: 1px solid #e4d9ef;
+  border-radius: 20px;
+  color: #6735c4;
+  box-shadow: 0 4px 16px rgba(103, 53, 196, 0.08);
+}
+
+
+/* Da formato al título del espacio reservado */
+.mapa-calor-placeholder h3 {
+  margin: 0 0 10px;
+  color: #374151;
+  font-size: 20px;
+}
+
+
+/* Da formato a la descripción del espacio reservado */
+.mapa-calor-placeholder p {
+  max-width: 380px;
+  margin: 0 0 20px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+/* Identifica que la integración del mapa está pendiente */
+.mapa-calor-placeholder span {
+  padding: 8px 13px;
+  background: white;
+  border: 1px solid #e4d9ef;
+  border-radius: 20px;
+  color: #6735c4;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+/* Organiza la información inferior del mapa */
+.mapa-calor-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 15px 22px;
+  border-top: 1px solid #e5e7eb;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+
+/* Da formato al icono de información inferior */
+.mapa-calor-card-footer svg {
+  flex-shrink: 0;
+  color: #6735c4;
+}
+
+
+/* Organiza las tarjetas del resumen de reportes */
+.mapa-calor-resumen {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 22px;
+}
+
+
+/* Da formato a cada tarjeta del resumen */
+.mapa-calor-resumen-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+
+/* Da formato general a los iconos del resumen */
+.mapa-calor-resumen-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 11px;
+}
+
+
+/* Identifica el total de reportes */
+.mapa-calor-resumen-icono.total {
+  background: #eee8f7;
+  color: #6735c4;
+}
+
+
+/* Identifica los reportes pendientes */
+.mapa-calor-resumen-icono.pendientes {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+
+/* Identifica los reportes en proceso */
+.mapa-calor-resumen-icono.proceso {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+
+/* Identifica los reportes de prioridad alta */
+.mapa-calor-resumen-icono.alta {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+
+/* Organiza los textos del resumen */
+.mapa-calor-resumen-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+
+/* Da formato al nombre de cada indicador */
+.mapa-calor-resumen-info span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+
+/* Da formato a las cantidades del resumen */
+.mapa-calor-resumen-info strong {
+  color: #1f2937;
+  font-size: 26px;
+}
+
+
+/* Da formato al aviso sobre la privacidad de los reportes */
+.mapa-calor-aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 15px 18px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  color: #6b7280;
+}
+
+
+/* Da formato al icono del aviso */
+.mapa-calor-aviso svg {
+  flex-shrink: 0;
+  color: #6735c4;
+}
+
+
+/* Da formato al texto del aviso */
+.mapa-calor-aviso p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+
+/* Ajusta los filtros y las tarjetas en pantallas medianas */
+@media (max-width: 1000px) {
+  .mapa-calor-resumen {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+
+  .mapa-calor-filtros-campos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* Ajusta la página en pantallas pequeñas */
+@media (max-width: 650px) {
+  .mapa-calor-filtros-campos {
+    grid-template-columns: 1fr;
+  }
+
+
+  .mapa-calor-filtros-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+
+  .mapa-calor-card-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+
+  .mapa-calor-visor {
+    height: 420px;
+  }
+
+
+  .mapa-calor-resumen {
+    grid-template-columns: 1fr;
+  }
+
+
+  .mapa-calor-placeholder h3 {
+    font-size: 17px;
+  }
+}

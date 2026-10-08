@@ -34,11 +34,9 @@
     background: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 16px;
-
     display: flex;
     align-items: center;
     gap: 16px;
-
     box-sizing: border-box;
 }
 
@@ -101,11 +99,9 @@
     height: 280px;
     border-radius: 12px;
     background: #f3f4f6;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     color: #9ca3af;
     font-size: 14px;
 }
@@ -141,10 +137,8 @@
     border: 1px solid #4b2373;
     background: #ffffff;
     color: #4b2373;
-
     padding: 10px 16px;
     border-radius: 9px;
-
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -164,7 +158,6 @@
     padding: 14px 18px;
     text-align: left;
     background: #f9fafb;
-
     color: #6b7280;
     font-size: 13px;
     font-weight: 600;
@@ -177,11 +170,9 @@
 
 .alim-table-empty {
     height: 100px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     color: #9ca3af;
     font-size: 14px;
 }

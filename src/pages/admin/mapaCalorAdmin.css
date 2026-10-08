@@ -89,10 +89,10 @@
 }
 
 
-/* Organiza los filtros en tres columnas */
+/* Organiza los filtros en dos columnas */
 .mapa-calor-filtros-campos {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -302,90 +302,6 @@
 }
 
 
-/* Organiza las tarjetas del resumen de reportes */
-.mapa-calor-resumen {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 22px;
-}
-
-
-/* Da formato a cada tarjeta del resumen */
-.mapa-calor-resumen-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 20px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-
-/* Da formato general a los iconos del resumen */
-.mapa-calor-resumen-icono {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 46px;
-  height: 46px;
-  flex-shrink: 0;
-  border-radius: 11px;
-}
-
-
-/* Identifica el total de reportes */
-.mapa-calor-resumen-icono.total {
-  background: #eee8f7;
-  color: #6735c4;
-}
-
-
-/* Identifica los reportes pendientes */
-.mapa-calor-resumen-icono.pendientes {
-  background: #fff7ed;
-  color: #c2410c;
-}
-
-
-/* Identifica los reportes en proceso */
-.mapa-calor-resumen-icono.proceso {
-  background: #eff6ff;
-  color: #2563eb;
-}
-
-
-/* Identifica los reportes de prioridad alta */
-.mapa-calor-resumen-icono.alta {
-  background: #fef2f2;
-  color: #dc2626;
-}
-
-
-/* Organiza los textos del resumen */
-.mapa-calor-resumen-info {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-
-/* Da formato al nombre de cada indicador */
-.mapa-calor-resumen-info span {
-  color: #6b7280;
-  font-size: 12px;
-}
-
-
-/* Da formato a las cantidades del resumen */
-.mapa-calor-resumen-info strong {
-  color: #1f2937;
-  font-size: 26px;
-}
-
-
 /* Da formato al aviso sobre la privacidad de los reportes */
 .mapa-calor-aviso {
   display: flex;
@@ -415,26 +331,10 @@
 }
 
 
-/* Ajusta los filtros y las tarjetas en pantallas medianas */
-@media (max-width: 1000px) {
-  .mapa-calor-resumen {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-
-  .mapa-calor-filtros-campos {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-
 /* Ajusta la página en pantallas pequeñas */
 @media (max-width: 650px) {
-  .mapa-calor-filtros-campos {
-    grid-template-columns: 1fr;
-  }
 
-
+    
   .mapa-calor-filtros-header {
     align-items: flex-start;
     flex-direction: column;

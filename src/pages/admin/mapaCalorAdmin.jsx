@@ -6,9 +6,6 @@ import {
   SlidersHorizontal,
   RotateCcw,
   FileText,
-  Clock3,
-  AlertTriangle,
-  Activity,
   ShieldCheck,
 } from "lucide-react";
 import reportesMock from "../../mocks/reportes";
@@ -47,18 +44,9 @@ function MapaCalorAdmin() {
   // Guarda los filtros seleccionados por el administrador
   const [filtroEstado, setFiltroEstado] = useState("Todos");
   const [filtroPrioridad, setFiltroPrioridad] = useState("Todas");
-  const [filtroUbicacion, setFiltroUbicacion] = useState("Todas");
 
 
-  // Obtiene las ubicaciones registradas sin repetir opciones
-  const ubicaciones = [
-    ...new Set(
-      reportesMock.map((reporte) => reporte.ubicacion)
-    ),
-  ].filter(Boolean).sort();
-
-
-  // Filtra los reportes según las opciones seleccionadas
+  // Filtra los reportes según el estado y la prioridad seleccionados
   const reportesFiltrados = reportesMock.filter((reporte) => {
 
     const coincideEstado =
@@ -69,32 +57,12 @@ function MapaCalorAdmin() {
       filtroPrioridad === "Todas" ||
       reporte.prioridad === filtroPrioridad;
 
-    const coincideUbicacion =
-      filtroUbicacion === "Todas" ||
-      reporte.ubicacion === filtroUbicacion;
-
-    return (
-      coincideEstado &&
-      coincidePrioridad &&
-      coincideUbicacion
-    );
+    return coincideEstado && coincidePrioridad;
   });
 
 
-  // Calcula las cantidades utilizadas en el resumen de reportes
+  // Calcula la cantidad de reportes que cumplen con los filtros
   const totalReportes = reportesFiltrados.length;
-
-  const reportesPendientes = reportesFiltrados.filter(
-    (reporte) => reporte.estado === "Pendiente"
-  ).length;
-
-  const reportesEnProceso = reportesFiltrados.filter(
-    (reporte) => reporte.estado === "En proceso"
-  ).length;
-
-  const reportesAltaPrioridad = reportesFiltrados.filter(
-    (reporte) => reporte.prioridad === "Alta"
-  ).length;
 
 
   // Restablece los filtros a sus valores originales
@@ -102,7 +70,6 @@ function MapaCalorAdmin() {
 
     setFiltroEstado("Todos");
     setFiltroPrioridad("Todas");
-    setFiltroUbicacion("Todas");
   };
 
 
@@ -188,35 +155,6 @@ function MapaCalorAdmin() {
 
           </div>
 
-
-          <div className="mapa-calor-filtro">
-
-            <label htmlFor="mapa-filtro-ubicacion">
-              Ubicación
-            </label>
-
-            <select
-              id="mapa-filtro-ubicacion"
-              value={filtroUbicacion}
-              onChange={(e) => setFiltroUbicacion(e.target.value)}
-            >
-              <option value="Todas">Todas las ubicaciones</option>
-
-              {ubicaciones.map((ubicacion) => (
-
-                <option
-                  key={ubicacion}
-                  value={ubicacion}
-                >
-                  {ubicacion}
-                </option>
-
-              ))}
-
-            </select>
-
-          </div>
-
         </div>
 
       </div>
@@ -274,78 +212,6 @@ function MapaCalorAdmin() {
             coincidentes. La visualización del mapa se conectará
             posteriormente.
           </span>
-
-        </div>
-
-      </div>
-
-
-      <div className="mapa-calor-resumen">
-
-        <div className="mapa-calor-resumen-card">
-
-          <div className="mapa-calor-resumen-icono total">
-            <FileText size={22} />
-          </div>
-
-          <div className="mapa-calor-resumen-info">
-
-            <span>Total de reportes</span>
-
-            <strong>{totalReportes}</strong>
-
-          </div>
-
-        </div>
-
-
-        <div className="mapa-calor-resumen-card">
-
-          <div className="mapa-calor-resumen-icono pendientes">
-            <Clock3 size={22} />
-          </div>
-
-          <div className="mapa-calor-resumen-info">
-
-            <span>Pendientes</span>
-
-            <strong>{reportesPendientes}</strong>
-
-          </div>
-
-        </div>
-
-
-        <div className="mapa-calor-resumen-card">
-
-          <div className="mapa-calor-resumen-icono proceso">
-            <Activity size={22} />
-          </div>
-
-          <div className="mapa-calor-resumen-info">
-
-            <span>En proceso</span>
-
-            <strong>{reportesEnProceso}</strong>
-
-          </div>
-
-        </div>
-
-
-        <div className="mapa-calor-resumen-card">
-
-          <div className="mapa-calor-resumen-icono alta">
-            <AlertTriangle size={22} />
-          </div>
-
-          <div className="mapa-calor-resumen-info">
-
-            <span>Prioridad alta</span>
-
-            <strong>{reportesAltaPrioridad}</strong>
-
-          </div>
 
         </div>
 

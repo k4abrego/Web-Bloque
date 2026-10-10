@@ -1,3 +1,4 @@
+// Documentación automática de src/pages/admin/archivosAdmin.jsx: Página y estilos de la sección archivosAdmin.
 // Imports
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -13,14 +14,18 @@ import {
 
 
 // Página donde el administrador puede consultar las evidencias de los reportes 
+// Sección: ArchivosAdmin.
 function ArchivosAdmin() {
 
   // Guarda la búsqueda y el tipo de archivo seleccionado 
+// Sección: declaración.
   const [busqueda, setBusqueda] = useState("");
+// Sección: declaración.
   const [filtroTipo, setFiltroTipo] = useState("Todos");
 
 
   // Reúne las evidencias de todos los reportes en una sola lista 
+// Sección: archivos.
   const archivos = reportesMock.flatMap((reporte) =>
     reporte.evidencias.map((evidencia) => ({
       ...evidencia,
@@ -32,15 +37,19 @@ function ArchivosAdmin() {
 
 
   // Filtra los archivos según la búsqueda y el tipo seleccionado 
+// Sección: archivosFiltrados.
   const archivosFiltrados = archivos.filter((archivo) => {
 
+// Sección: textoBusqueda.
     const textoBusqueda = busqueda.toLowerCase();
 
+// Sección: coincideBusqueda.
     const coincideBusqueda =
       archivo.nombre.toLowerCase().includes(textoBusqueda) ||
       archivo.folio.toLowerCase().includes(textoBusqueda) ||
       archivo.tipoReporte.toLowerCase().includes(textoBusqueda);
 
+// Sección: coincideTipo.
     const coincideTipo =
       filtroTipo === "Todos" ||
       archivo.tipo === filtroTipo;

@@ -1,3 +1,4 @@
+// Documentación automática de src/pages/admin/inicioAdmin.jsx: Página y estilos de la sección inicioAdmin.
 // Imports 
 import reportesMock from "../../mocks/reportes";
 import "./inicioAdmin.css";
@@ -5,31 +6,37 @@ import { NavLink } from "react-router-dom";
 
 
 // Página principal del panel de administrador 
+// Sección: InicioAdmin.
 function InicioAdmin() {
 
   // Obtiene la cantidad total de reportes 
+// Sección: totalReportes.
   const totalReportes = reportesMock.length;
 
 
   // Cuenta los reportes que se encuentran pendientes 
+// Sección: reportesPendientes.
   const reportesPendientes = reportesMock.filter(
     (reporte) => reporte.estado === "Pendiente"
   ).length;
 
 
   // Cuenta los reportes que se encuentran en proceso 
+// Sección: reportesEnProceso.
   const reportesEnProceso = reportesMock.filter(
     (reporte) => reporte.estado === "En proceso"
   ).length;
 
 
   // Cuenta los reportes que ya fueron resueltos 
+// Sección: reportesResueltos.
   const reportesResueltos = reportesMock.filter(
     (reporte) => reporte.estado === "Resuelto"
   ).length;
 
 
   // Reportes mas recientes para mostrarlos en el inicio
+// Sección: reportesRecientes.
   const reportesRecientes = [...reportesMock]
     .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
     .slice(0, 5);

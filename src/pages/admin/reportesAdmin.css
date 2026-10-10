@@ -1,4 +1,6 @@
+/* Documentación automática de src/pages/admin/reportesAdmin.css: Página y estilos de la sección reportesAdmin. */
 /* Contenedor principal de la página de reportes */
+/* Regla CSS: .reportes-admin. */
 .reportes-admin {
   width: 100%;
 }
@@ -7,6 +9,7 @@
 /* --- Encabezado --- */
 
 /* Organiza el título y la cantidad de reportes */
+/* Regla CSS: .reportes-admin-header. */
 .reportes-admin-header {
   display: flex;
   justify-content: space-between;
@@ -16,6 +19,7 @@
 
 
 /* Da formato al título principal */
+/* Regla CSS: .reportes-admin-header h1. */
 .reportes-admin-header h1 {
   margin: 0;
   font-size: 30px;
@@ -24,6 +28,7 @@
 
 
 /* Da formato al texto debajo del título */
+/* Regla CSS: .reportes-admin-header p. */
 .reportes-admin-header p {
   margin: 8px 0 0 0;
   color: #6b7280;
@@ -31,6 +36,7 @@
 
 
 /* Muestra la cantidad total de reportes */
+/* Regla CSS: .reportes-total. */
 .reportes-total {
   padding: 9px 14px;
   background: #eee8f7;
@@ -44,6 +50,7 @@
 /* --- Lista de reportes--- */
 
 /* Contenedor visual de la lista completa */
+/* Regla CSS: .reportes-lista. */
 .reportes-lista {
   background: white;
   border-radius: 16px;
@@ -53,6 +60,7 @@
 
 
 /* Permite desplazar la tabla si no tiene suficiente espacio */
+/* Regla CSS: .reportes-lista-tabla-container. */
 .reportes-lista-tabla-container {
   width: 100%;
   overflow-x: auto;
@@ -60,6 +68,7 @@
 
 
 /* Da formato general a la tabla */
+/* Regla CSS: .reportes-lista-tabla. */
 .reportes-lista-tabla {
   width: 100%;
   border-collapse: collapse;
@@ -67,6 +76,7 @@
 
 
 /* Da formato a los encabezados de la tabla */
+/* Regla CSS: .reportes-lista-tabla th. */
 .reportes-lista-tabla th {
   padding: 15px 20px;
   background: #f8fafc;
@@ -78,6 +88,7 @@
 
 
 /* Da formato a la información de cada reporte */
+/* Regla CSS: .reportes-lista-tabla td. */
 .reportes-lista-tabla td {
   padding: 17px 20px;
   border-top: 1px solid #e5e7eb;
@@ -87,12 +98,14 @@
 
 
 /* Resalta ligeramente una fila cuando se pasa el mouse */
+/* Regla CSS: .reportes-lista-tabla tbody tr:hover. */
 .reportes-lista-tabla tbody tr:hover {
   background: #faf8fc;
 }
 
 
 /* Resalta el folio de cada reporte */
+/* Regla CSS: .lista-reporte-folio. */
 .lista-reporte-folio {
   display: inline-flex;
   align-items: center;
@@ -108,6 +121,7 @@
 
 
 /* Resalta el folio cuando se pasa el mouse */
+/* Regla CSS: .lista-reporte-folio:hover. */
 .lista-reporte-folio:hover {
   background-color: #eee8f7;
 
@@ -118,6 +132,7 @@
 /* --- Prioridades --- */
 
 /* Da formato general a la prioridad de cada reporte */
+/* Regla CSS: .prioridad-badge. */
 .prioridad-badge {
   display: inline-block;
   padding: 6px 10px;
@@ -128,6 +143,7 @@
 
 
 /* Identifica los reportes de prioridad alta */
+/* Regla CSS: .prioridad-badge[data-prioridad="Alta"]. */
 .prioridad-badge[data-prioridad="Alta"] {
   background: #fde8e8;
   color: #b42318;
@@ -135,6 +151,7 @@
 
 
 /* Identifica los reportes de prioridad media */
+/* Regla CSS: .prioridad-badge[data-prioridad="Media"]. */
 .prioridad-badge[data-prioridad="Media"] {
   background: #fff4d6;
   color: #9a6700;
@@ -142,6 +159,7 @@
 
 
 /* Identifica los reportes de prioridad baja */
+/* Regla CSS: .prioridad-badge[data-prioridad="Baja"]. */
 .prioridad-badge[data-prioridad="Baja"] {
   background: #e6f6ec;
   color: #287a45;
@@ -151,6 +169,7 @@
 /* --- Estados --- */
 
 /* Da formato general al estado de cada reporte */
+/* Regla CSS: .lista-estado-badge. */
 .lista-estado-badge {
   display: inline-block;
   padding: 6px 10px;
@@ -161,6 +180,7 @@
 
 
 /* Identifica los reportes pendientes */
+/* Regla CSS: .lista-estado-badge[data-estado="Pendiente"]. */
 .lista-estado-badge[data-estado="Pendiente"] {
   background: #fff4d6;
   color: #9a6700;
@@ -168,6 +188,7 @@
 
 
 /* Identifica los reportes que se encuentran en proceso */
+/* Regla CSS: .lista-estado-badge[data-estado="En proceso"]. */
 .lista-estado-badge[data-estado="En proceso"] {
   background: #e8efff;
   color: #3157a4;
@@ -175,6 +196,7 @@
 
 
 /* Identifica los reportes resueltos */
+/* Regla CSS: .lista-estado-badge[data-estado="Resuelto"]. */
 .lista-estado-badge[data-estado="Resuelto"] {
   background: #e6f6ec;
   color: #287a45;
@@ -182,6 +204,7 @@
 
 
 /* Resalta el folio de cada reporte */
+/* Regla CSS: .lista-reporte-folio. */
 .lista-reporte-folio {
   color: #6735c4 !important;
   font-weight: 600;
@@ -190,6 +213,7 @@
 
 
 /* Resalta el folio cuando se pasa el mouse */
+/* Regla CSS: .lista-reporte-folio:hover. */
 .lista-reporte-folio:hover {
   text-decoration: underline;
 }
@@ -199,6 +223,7 @@
 /* --- Busqueda y filtros ---  */
 
 /* Organiza las herramientas utilizadas para buscar y filtrar reportes */
+/* Regla CSS: .reportes-filtros. */
 .reportes-filtros {
   display: flex;
   gap: 14px;
@@ -207,6 +232,7 @@
 
 
 /* Organiza el icono y el campo utilizado para buscar reportes */
+/* Regla CSS: .reportes-buscador. */
 .reportes-buscador {
   display: flex;
   align-items: center;
@@ -221,6 +247,7 @@
 
 
 /* Da formato al campo de búsqueda */
+/* Regla CSS: .reportes-buscador input. */
 .reportes-buscador input {
   width: 100%;
   padding: 12px 0;
@@ -233,6 +260,7 @@
 
 
 /* Da formato a las opciones utilizadas para filtrar */
+/* Regla CSS: .reportes-filtros select. */
 .reportes-filtros select {
   min-width: 170px;
   padding: 0 14px;
@@ -252,6 +280,7 @@
 
 /* Resalta los campos cuando el usuario los selecciona */
 .reportes-buscador:focus-within,
+/* Regla CSS: .reportes-filtros select:focus. */
 .reportes-filtros select:focus {
   border-color: #6735c4;
   border-width: 2px;
@@ -260,6 +289,7 @@
 
 
 /* Muestra un mensaje cuando no existen resultados */
+/* Regla CSS: .reportes-sin-resultados. */
 .reportes-sin-resultados {
   padding: 40px !important;
   color: #6b7280 !important;
@@ -272,6 +302,7 @@
    ========================= */
 
 /* Organiza la información y los controles para cambiar de página */
+/* Regla CSS: .reportes-paginacion. */
 .reportes-paginacion {
   display: flex;
   justify-content: space-between;
@@ -283,6 +314,7 @@
 
 
 /* Muestra cuántos reportes se están visualizando */
+/* Regla CSS: .paginacion-info. */
 .paginacion-info {
   color: #6b7280;
   font-size: 13px;
@@ -290,12 +322,14 @@
 
 
 /* Resalta los números dentro de la información */
+/* Regla CSS: .paginacion-info strong. */
 .paginacion-info strong {
   color: #374151;
 }
 
 
 /* Organiza los botones utilizados para cambiar de página */
+/* Regla CSS: .paginacion-controles. */
 .paginacion-controles {
   display: flex;
   align-items: center;
@@ -305,6 +339,7 @@
 
 /* Da formato a los botones de la paginación */
 .paginacion-numero,
+/* Regla CSS: .paginacion-flecha. */
 .paginacion-flecha {
   display: flex;
   align-items: center;
@@ -329,6 +364,7 @@
 
 /* Resalta los botones cuando se pasa el mouse */
 .paginacion-numero:hover,
+/* Regla CSS: .paginacion-flecha:hover:not(:disabled). */
 .paginacion-flecha:hover:not(:disabled) {
   background: #eee8f7;
   border-color: #6735c4;
@@ -338,6 +374,7 @@
 
 
 /* Identifica la página que se está mostrando */
+/* Regla CSS: .paginacion-numero.activo. */
 .paginacion-numero.activo {
   background: #6735c4;
   border-color: #6735c4;
@@ -346,6 +383,7 @@
 
 
 /* Desactiva las flechas cuando no existe otra página */
+/* Regla CSS: .paginacion-flecha:disabled. */
 .paginacion-flecha:disabled {
   opacity: 0.4;
   cursor: not-allowed;

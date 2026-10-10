@@ -1,16 +1,20 @@
+/* Documentación automática de src/pages/admin/mapaCalorAdmin.css: Página y estilos de la sección mapaCalorAdmin. */
 /* Contenedor principal de la página del mapa de calor */
+/* Regla CSS: .mapa-calor-admin. */
 .mapa-calor-admin {
   width: 100%;
 }
 
 
 /* Organiza el encabezado principal de la página */
+/* Regla CSS: .mapa-calor-header. */
 .mapa-calor-header {
   margin-bottom: 24px;
 }
 
 
 /* Da formato al título principal */
+/* Regla CSS: .mapa-calor-header h1. */
 .mapa-calor-header h1 {
   margin: 0 0 6px;
   color: #1f2937;
@@ -19,6 +23,7 @@
 
 
 /* Da formato a la descripción principal */
+/* Regla CSS: .mapa-calor-header p. */
 .mapa-calor-header p {
   margin: 0;
   color: #6b7280;
@@ -27,6 +32,7 @@
 
 
 /* Contenedor de los filtros del mapa */
+/* Regla CSS: .mapa-calor-filtros. */
 .mapa-calor-filtros {
   padding: 20px 24px;
   margin-bottom: 22px;
@@ -38,6 +44,7 @@
 
 
 /* Organiza el encabezado de los filtros */
+/* Regla CSS: .mapa-calor-filtros-header. */
 .mapa-calor-filtros-header {
   display: flex;
   align-items: center;
@@ -48,6 +55,7 @@
 
 
 /* Organiza el icono y el título de los filtros */
+/* Regla CSS: .mapa-calor-filtros-titulo. */
 .mapa-calor-filtros-titulo {
   display: flex;
   align-items: center;
@@ -57,6 +65,7 @@
 
 
 /* Da formato al título de los filtros */
+/* Regla CSS: .mapa-calor-filtros-titulo h2. */
 .mapa-calor-filtros-titulo h2 {
   margin: 0;
   color: #374151;
@@ -65,6 +74,7 @@
 
 
 /* Da formato al botón para restablecer los filtros */
+/* Regla CSS: .mapa-calor-limpiar. */
 .mapa-calor-limpiar {
   display: inline-flex;
   align-items: center;
@@ -83,6 +93,7 @@
 
 
 /* Resalta el botón cuando se pasa el mouse */
+/* Regla CSS: .mapa-calor-limpiar:hover. */
 .mapa-calor-limpiar:hover {
   background: #eee8f7;
   transform: scale(1.03);
@@ -90,6 +101,7 @@
 
 
 /* Organiza los filtros en dos columnas */
+/* Regla CSS: .mapa-calor-filtros-campos. */
 .mapa-calor-filtros-campos {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -98,6 +110,7 @@
 
 
 /* Organiza el nombre y el selector de cada filtro */
+/* Regla CSS: .mapa-calor-filtro. */
 .mapa-calor-filtro {
   display: flex;
   flex-direction: column;
@@ -106,6 +119,7 @@
 
 
 /* Da formato al nombre de cada filtro */
+/* Regla CSS: .mapa-calor-filtro label. */
 .mapa-calor-filtro label {
   color: #4b5563;
   font-size: 12px;
@@ -114,6 +128,7 @@
 
 
 /* Da formato a los selectores de los filtros */
+/* Regla CSS: .mapa-calor-filtro select. */
 .mapa-calor-filtro select {
   width: 100%;
   height: 44px;
@@ -132,6 +147,7 @@
 
 
 /* Resalta los selectores cuando están siendo utilizados */
+/* Regla CSS: .mapa-calor-filtro select:focus. */
 .mapa-calor-filtro select:focus {
   border-color: #6735c4;
   border-width: 2px;
@@ -140,6 +156,7 @@
 
 
 /* Contenedor principal del mapa */
+/* Regla CSS: .mapa-calor-card. */
 .mapa-calor-card {
   overflow: hidden;
   background: white;
@@ -150,6 +167,7 @@
 
 
 /* Organiza el encabezado superior del mapa */
+/* Regla CSS: .mapa-calor-card-header. */
 .mapa-calor-card-header {
   display: flex;
   align-items: center;
@@ -161,6 +179,7 @@
 
 
 /* Organiza el título y el icono del mapa */
+/* Regla CSS: .mapa-calor-card-titulo. */
 .mapa-calor-card-titulo {
   display: flex;
   align-items: center;
@@ -169,6 +188,7 @@
 
 
 /* Da formato al icono del mapa */
+/* Regla CSS: .mapa-calor-card-icono. */
 .mapa-calor-card-icono {
   display: flex;
   align-items: center;
@@ -183,6 +203,7 @@
 
 
 /* Da formato al título de la sección del mapa */
+/* Regla CSS: .mapa-calor-card-titulo h2. */
 .mapa-calor-card-titulo h2 {
   margin: 0 0 4px;
   color: #374151;
@@ -191,6 +212,7 @@
 
 
 /* Da formato a la descripción de la sección del mapa */
+/* Regla CSS: .mapa-calor-card-titulo p. */
 .mapa-calor-card-titulo p {
   margin: 0;
   color: #6b7280;
@@ -199,6 +221,7 @@
 
 
 /* Muestra la cantidad de reportes que coinciden con los filtros */
+/* Regla CSS: .mapa-calor-contador. */
 .mapa-calor-contador {
   display: inline-flex;
   align-items: center;
@@ -214,6 +237,7 @@
 
 
 /* Reserva el espacio donde se integrará Google Maps */
+/* Regla CSS: .mapa-calor-visor. */
 .mapa-calor-visor {
   width: 100%;
   height: 560px;
@@ -224,6 +248,7 @@
 
 
 /* Da formato al espacio temporal del mapa */
+/* Regla CSS: .mapa-calor-placeholder. */
 .mapa-calor-placeholder {
   display: flex;
   flex-direction: column;
@@ -238,6 +263,7 @@
 
 
 /* Da formato al icono central del espacio reservado */
+/* Regla CSS: .mapa-calor-placeholder-icono. */
 .mapa-calor-placeholder-icono {
   display: flex;
   align-items: center;
@@ -254,6 +280,7 @@
 
 
 /* Da formato al título del espacio reservado */
+/* Regla CSS: .mapa-calor-placeholder h3. */
 .mapa-calor-placeholder h3 {
   margin: 0 0 10px;
   color: #374151;
@@ -262,6 +289,7 @@
 
 
 /* Da formato a la descripción del espacio reservado */
+/* Regla CSS: .mapa-calor-placeholder p. */
 .mapa-calor-placeholder p {
   max-width: 380px;
   margin: 0 0 20px;
@@ -272,6 +300,7 @@
 
 
 /* Identifica que la integración del mapa está pendiente */
+/* Regla CSS: .mapa-calor-placeholder span. */
 .mapa-calor-placeholder span {
   padding: 8px 13px;
   background: white;
@@ -284,6 +313,7 @@
 
 
 /* Organiza la información inferior del mapa */
+/* Regla CSS: .mapa-calor-card-footer. */
 .mapa-calor-card-footer {
   display: flex;
   align-items: center;
@@ -296,6 +326,7 @@
 
 
 /* Da formato al icono de información inferior */
+/* Regla CSS: .mapa-calor-card-footer svg. */
 .mapa-calor-card-footer svg {
   flex-shrink: 0;
   color: #6735c4;
@@ -303,6 +334,7 @@
 
 
 /* Da formato al aviso sobre la privacidad de los reportes */
+/* Regla CSS: .mapa-calor-aviso. */
 .mapa-calor-aviso {
   display: flex;
   align-items: flex-start;
@@ -317,6 +349,7 @@
 
 
 /* Da formato al icono del aviso */
+/* Regla CSS: .mapa-calor-aviso svg. */
 .mapa-calor-aviso svg {
   flex-shrink: 0;
   color: #6735c4;
@@ -324,6 +357,7 @@
 
 
 /* Da formato al texto del aviso */
+/* Regla CSS: .mapa-calor-aviso p. */
 .mapa-calor-aviso p {
   margin: 0;
   font-size: 12px;
@@ -332,31 +366,37 @@
 
 
 /* Ajusta la página en pantallas pequeñas */
+/* Regla CSS: @media (max-width: 650px). */
 @media (max-width: 650px) {
 
     
+/* Regla CSS: .mapa-calor-filtros-header. */
   .mapa-calor-filtros-header {
     align-items: flex-start;
     flex-direction: column;
   }
 
 
+/* Regla CSS: .mapa-calor-card-header. */
   .mapa-calor-card-header {
     align-items: flex-start;
     flex-direction: column;
   }
 
 
+/* Regla CSS: .mapa-calor-visor. */
   .mapa-calor-visor {
     height: 420px;
   }
 
 
+/* Regla CSS: .mapa-calor-resumen. */
   .mapa-calor-resumen {
     grid-template-columns: 1fr;
   }
 
 
+/* Regla CSS: .mapa-calor-placeholder h3. */
   .mapa-calor-placeholder h3 {
     font-size: 17px;
   }

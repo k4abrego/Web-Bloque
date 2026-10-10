@@ -1,4 +1,5 @@
 /* Tarjeta utilizada para mostrar cada evidencia */
+/* Regla CSS: .evidencia-card. */
 .evidencia-card {
   display: flex;
   align-items: center;
@@ -15,6 +16,7 @@
 
 
 /* Resalta ligeramente la evidencia al pasar el mouse */
+/* Regla CSS: .evidencia-card:hover. */
 .evidencia-card:hover {
   background: #faf8fc;
   border-color: #d7c8e8;
@@ -23,6 +25,7 @@
 
 
 /* Da formato al icono de cada evidencia */
+/* Regla CSS: .evidencia-icono. */
 .evidencia-icono {
   display: flex;
   align-items: center;
@@ -37,12 +40,14 @@
 
 
 /* Organiza la información del archivo */
+/* Regla CSS: .evidencia-info. */
 .evidencia-info {
   min-width: 0;
 }
 
 
 /* Da formato al nombre de la evidencia */
+/* Regla CSS: .evidencia-info strong. */
 .evidencia-info strong {
   display: block;
   margin-bottom: 5px;
@@ -53,6 +58,7 @@
 
 
 /* Organiza el tipo y la fecha de la evidencia */
+/* Regla CSS: .evidencia-detalles. */
 .evidencia-detalles {
   display: flex;
   align-items: center;

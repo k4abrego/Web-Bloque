@@ -1,3 +1,4 @@
+// Documentación automática de src/pages/login/login.jsx: Página y estilos de la sección login.
 import { solicitarChallenge, verificarChallenge, guardarSesion } from "../../services/authApi";
 // Imports
 import { ShieldCheck, Eye, EyeOff } from "lucide-react"
@@ -11,13 +12,19 @@ import { useNavigate } from "react-router-dom";
 import { generarHMAC } from "../../services/hmac";
 
 // Crea la panralla de inicio de sesión
+// Sección: Login.
 function Login() {
 
   // Guarda los datos ingresados y opciones del formulario
+// Sección: declaración.
   const [correo, setCorreo] = useState("");
+// Sección: declaración.
   const [contrasena, setContrasena] = useState("");
+// Sección: declaración.
   const [rol, setRol] = useState("admin");
+// Sección: declaración.
   const [mostrarContrasena, setMostrarContrasena] = useState(false);
+// Sección: navigate.
   const navigate = useNavigate();
 
   // Controla lpo que pasa cuando el usuario quiere iniciar sesión
@@ -30,6 +37,7 @@ function Login() {
    * @param {React.FormEvent<HTMLFormElement>} e
    */
 
+// Sección: handleSubmit.
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -38,6 +46,7 @@ function Login() {
 
     try {
       // 1. Solicitar el challenge.
+// Sección: declaración.
       const { challenge, user_id } =
         await solicitarChallenge(correo.trim());
 
@@ -46,12 +55,14 @@ function Login() {
       }
 
       // 2. Calcular la respuesta HMAC-SHA256.
+// Sección: respuestaHMAC.
       const respuestaHMAC = await generarHMAC(
         contrasena,
         challenge
       );
 
       // 3. Verificar el challenge y obtener el JWT.
+// Sección: datos.
       const datos = await verificarChallenge(
         user_id,
         respuestaHMAC
@@ -91,7 +102,9 @@ function Login() {
 
   // const navigate = useNavigate();
 
+// Sección: declaración.
   const [cargando, setCargando] = useState(false);
+// Sección: declaración.
   const [error, setError] = useState("");
 
 
@@ -111,9 +124,10 @@ function Login() {
             />
 
           <h2>
-            texto explicativo
+            <strong>Administrador:</strong> pertene al Sistema de Protección Integral de Niñas, Niños y Adolescentes
             <br />
-            si
+            <br />
+            <strong>Alimentador:</strong> perteneces a una organización que no es SIPINNA, gestionas reportes de una zona específica.
           </h2>
         </div>
       </div>

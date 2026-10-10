@@ -16,7 +16,9 @@ import {
 import logoSIPINNA from "../../assets/sipinnalogo.png";
 import "./sidebarAlim.css";
 
+// Sección: SidebarAlim.
 function SidebarAlim({ isOpen, onToggle }) {
+// Sección: declaración.
     const [profileOpen, setProfileOpen] = useState(false);
     return(
         <aside

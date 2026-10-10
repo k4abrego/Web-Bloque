@@ -1,4 +1,5 @@
 // Datos temporales de las cuentas de alimentadores
+// Sección: alimentadoresMock.
 const alimentadoresMock = [
   {
     id: 1,

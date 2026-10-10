@@ -1,13 +1,17 @@
+/* Documentación automática de src/pages/alimentador/configuracionAlim.css: Página y estilos de la sección configuracionAlim. */
+/* Regla CSS: .config-alim. */
 .config-alim {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
+/* Regla CSS: .config-alim-header. */
 .config-alim-header {
     margin-bottom: 28px;
 }
 
+/* Regla CSS: .config-alim-header h1. */
 .config-alim-header h1 {
     margin: 0 0 8px;
     font-size: 32px;
@@ -15,6 +19,7 @@
     color: #111827;
 }
 
+/* Regla CSS: .config-alim-header p. */
 .config-alim-header p {
     margin: 0;
     color: #6b7280;
@@ -22,6 +27,7 @@
     line-height: 1.5;
 }
 
+/* Regla CSS: .config-alim-section. */
 .config-alim-section {
     margin-bottom: 24px;
     background: #ffffff;
@@ -30,6 +36,7 @@
     overflow: hidden;
 }
 
+/* Regla CSS: .config-alim-section-header. */
 .config-alim-section-header {
     display: flex;
     align-items: center;
@@ -38,6 +45,7 @@
     border-bottom: 1px solid #f0f0f0;
 }
 
+/* Regla CSS: .config-alim-section-icon. */
 .config-alim-section-icon {
     width: 42px;
     height: 42px;
@@ -50,6 +58,7 @@
     color: #6b7280;
 }
 
+/* Regla CSS: .config-alim-section-header h2. */
 .config-alim-section-header h2 {
     margin: 0 0 4px;
     color: #111827;
@@ -57,18 +66,21 @@
     font-weight: 600;
 }
 
+/* Regla CSS: .config-alim-section-header p. */
 .config-alim-section-header p {
     margin: 0;
     color: #9ca3af;
     font-size: 13px;
 }
 
+/* Regla CSS: .config-alim-data-grid. */
 .config-alim-data-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0;
 }
 
+/* Regla CSS: .config-alim-data-item. */
 .config-alim-data-item {
     display: flex;
     flex-direction: column;
@@ -77,22 +89,26 @@
     border-bottom: 1px solid #f0f0f0;
 }
 
+/* Regla CSS: .config-alim-data-item:nth-child(odd). */
 .config-alim-data-item:nth-child(odd) {
     border-right: 1px solid #f0f0f0;
 }
 
+/* Regla CSS: .config-alim-data-item span. */
 .config-alim-data-item span {
     color: #9ca3af;
     font-size: 12px;
     font-weight: 500;
 }
 
+/* Regla CSS: .config-alim-data-item strong. */
 .config-alim-data-item strong {
     color: #6b7280;
     font-size: 14px;
     font-weight: 600;
 }
 
+/* Regla CSS: .config-alim-activity-empty. */
 .config-alim-activity-empty {
     min-height: 220px;
     display: flex;
@@ -105,6 +121,7 @@
     color: #9ca3af;
 }
 
+/* Regla CSS: .config-alim-empty-icon. */
 .config-alim-empty-icon {
     width: 48px;
     height: 48px;
@@ -117,15 +134,18 @@
     color: #9ca3af;
 }
 
+/* Regla CSS: .config-alim-activity-empty strong. */
 .config-alim-activity-empty strong {
     color: #6b7280;
     font-size: 14px;
 }
 
+/* Regla CSS: .config-alim-activity-empty span. */
 .config-alim-activity-empty span {
     font-size: 13px;
 }
 
+/* Regla CSS: .config-alim-security-row. */
 .config-alim-security-row {
     display: flex;
     align-items: center;
@@ -134,6 +154,7 @@
     padding: 22px 24px;
 }
 
+/* Regla CSS: .config-alim-security-row strong. */
 .config-alim-security-row strong {
     display: block;
     margin-bottom: 5px;
@@ -141,6 +162,7 @@
     font-size: 14px;
 }
 
+/* Regla CSS: .config-alim-security-row p. */
 .config-alim-security-row p {
     margin: 0;
     color: #9ca3af;
@@ -148,6 +170,7 @@
     line-height: 1.5;
 }
 
+/* Regla CSS: .config-alim-request-button. */
 .config-alim-request-button {
     display: inline-flex;
     align-items: center;
@@ -167,30 +190,37 @@
         color 0.2s ease;
 }
 
+/* Regla CSS: .config-alim-request-button:hover. */
 .config-alim-request-button:hover {
     background: #4b2373;
     color: #ffffff;
 }
 
+/* Regla CSS: @media (max-width: 700px). */
 @media (max-width: 700px) {
 
+/* Regla CSS: .config-alim-header h1. */
     .config-alim-header h1 {
         font-size: 28px;
     }
 
+/* Regla CSS: .config-alim-data-grid. */
     .config-alim-data-grid {
         grid-template-columns: 1fr;
     }
 
+/* Regla CSS: .config-alim-data-item:nth-child(odd). */
     .config-alim-data-item:nth-child(odd) {
         border-right: none;
     }
 
+/* Regla CSS: .config-alim-security-row. */
     .config-alim-security-row {
         align-items: flex-start;
         flex-direction: column;
     }
 
+/* Regla CSS: .config-alim-request-button. */
     .config-alim-request-button {
         width: 100%;
     }
@@ -198,16 +228,20 @@
 }
 
 
+/* Regla CSS: @media (max-width: 500px). */
 @media (max-width: 500px) {
 
+/* Regla CSS: .config-alim-section-header. */
     .config-alim-section-header {
         padding: 18px;
     }
 
+/* Regla CSS: .config-alim-data-item. */
     .config-alim-data-item {
         padding: 17px 18px;
     }
 
+/* Regla CSS: .config-alim-security-row. */
     .config-alim-security-row {
         padding: 18px;
     }

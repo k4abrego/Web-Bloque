@@ -1,9 +1,12 @@
+// Documentación automática de src/pages/alimentador/mapaAlim.jsx: Página y estilos de la sección mapaAlim.
 import GoogleMap from "../mapa/googleMap";
 
 import "./mapaAlim.css";
 
+// Sección: MapaAlim.
 function MapaAlim() {
 
+// Sección: centroAtizapan.
     const centroAtizapan = {
         lat: 19.557,
         lng: -99.271,

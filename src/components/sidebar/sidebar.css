@@ -1,5 +1,6 @@
 /* --- Sidebar principal --- */
 /* Configuracion general del sidebar */
+/* Regla CSS: .admin-sidebar. */
 .admin-sidebar {
     width: 250px; /* tamaño del sidebar*/ 
     min-height:100vh; /* altura de la pag */
@@ -14,6 +15,7 @@
 
 
 /* Sidebar colapsado */
+/* Regla CSS: .admin-sidebar.collapsed. */
 .admin-sidebar.collapsed {
     width: 90px;
     /* border-radius: 15px; */
@@ -23,6 +25,7 @@
 /* --- Boton Superior --- */
 
 /* Seccion donde esta el boton del sidebar */
+/* Regla CSS: .sidebar-top. */
 .sidebar-top {
     position: relative;
     display: flex;
@@ -32,6 +35,7 @@
 
 
 /* Propiedades del boton para ocultar/mostrar sidebar */
+/* Regla CSS: .sidebar-toggle-inside. */
 .sidebar-toggle-inside {
     width: 38px;
     height: 38px;
@@ -52,12 +56,14 @@
 
 
 /* Toggle al pasar el cursor por el boton del sidebar */
+/* Regla CSS: .sidebar-toggle-inside:hover. */
 .sidebar-toggle-inside:hover {
     transform: scale(1.2);
 }
 
 
 /* Organiza verticalmente todo */
+/* Regla CSS: .sidebar-menu. */
 .sidebar-menu {
     display: flex;
     flex-direction: column;
@@ -68,6 +74,7 @@
 
 
 /* Formato a los titulos reportes y admin */
+/* Regla CSS: .sidebar-section-title. */
 .sidebar-section-title {
     color: rgba(255, 255, 255, 0.6);
     font-size: 11px;
@@ -78,6 +85,7 @@
 
 
 /* Formato a cada opcion del menu */
+/* Regla CSS: .sidebar-item. */
 .sidebar-item {
     display:flex;
     align-items:center;
@@ -99,6 +107,7 @@
 
 
 /* Formato al pasar el mouse sobre las opciones */
+/* Regla CSS: .sidebar-item:hover. */
 .sidebar-item:hover{
     background:rgba(255,255,255,.15);
     transform: scale(1.05)
@@ -113,6 +122,7 @@
 
 
 /* Boton del menu sleeccinado en blanco*/
+/* Regla CSS: .sidebar-item.active. */
 .sidebar-item.active {
     background: white; /*color del menu seleccionado */
     color:#462267; /* Color del texto del menu selec. */
@@ -121,6 +131,7 @@
 
 
 /* Mantiene visible la opcion desabilitada */
+/* Regla CSS: .sidebar-item:disabled. */
 .sidebar-item:disabled {
     opacity: 1;
 }
@@ -129,6 +140,7 @@
 /* --- Footer --- */
 
 /* Organiza logo y perfil abajo en el sidebar */
+/* Regla CSS: .sidebar-footer. */
 .sidebar-footer {
     padding:20px;
     display:flex;
@@ -139,6 +151,7 @@
 
 
 /* Cuadro blanco detras del logo */
+/* Regla CSS: .sidebar-logo-container. */
 .sidebar-logo-container {
     background: white;
     padding:15px;
@@ -147,6 +160,7 @@
 }
 
 /* Ajusta tamaño del logo */
+/* Regla CSS: .sidebar-logo. */
 .sidebar-logo {
     width:100%;
     display: block;
@@ -164,6 +178,7 @@
 /* --- Perfil de administrador --- */
 
 /* Contenedor de la info del perfil */
+/* Regla CSS: .profile-wrapper. */
 .profile-wrapper {
     width: 100%;
     position: relative;
@@ -171,6 +186,7 @@
 
 
 /* Botón del perfil */
+/* Regla CSS: .profile. */
 .profile {
     width: 100%;
     display: flex;
@@ -194,12 +210,14 @@
 
 
 /* Efecto al pasar el cursor */
+/* Regla CSS: .profile:hover. */
 .profile:hover {
     background: rgba(255, 255, 255, 0.15);
 }
 
 
 /* Flecha a la derecha */
+/* Regla CSS: .profile-arrow. */
 .profile-arrow {
     margin-left: auto;
     transition: transform 0.25s ease;
@@ -207,6 +225,7 @@
 
 
 /* Gira la flecha cuando el menú está abierto */
+/* Regla CSS: .profile-arrow.open. */
 .profile-arrow.open {
     transform: rotate(180deg);
 }
@@ -215,6 +234,7 @@
 /* --- Info del perfil --- */
 
 /* Formato al cuadro que despliega info */
+/* Regla CSS: .profile-dropdown. */
 .profile-dropdown {
     display: flex;
     flex-direction: column;
@@ -231,6 +251,7 @@
 
 
 /* Línea divisoria dentro del menú de perfil */
+/* Regla CSS: .profile-divider. */
 .profile-divider {
     width: 100%;
     height: 1px;
@@ -242,6 +263,7 @@
 
 
 /* Botón para cerrar sesión */
+/* Regla CSS: .profile-logout. */
 .profile-logout {
     width: 100%;
 
@@ -266,12 +288,14 @@
 
 
 /* Hover del botón cerrar sesión */
+/* Regla CSS: .profile-logout:hover. */
 .profile-logout:hover {
     background: rgba(255, 255, 255, 0.15);
 }
 
 
 /* Nombre */
+/* Regla CSS: .profile-name. */
 .profile-name {
     font-size: 14px;
     font-weight: 600;
@@ -279,6 +303,7 @@
 
 
 /* Correo */
+/* Regla CSS: .profile-email. */
 .profile-email {
     font-size: 12px;
     opacity: 0.8;
@@ -286,6 +311,7 @@
 
 
 /* Rol */
+/* Regla CSS: .profile-role. */
 .profile-role {
     font-size: 11px;
     opacity: 0.65;
@@ -296,42 +322,49 @@
 
 /* La imagen se esconde en el sidbar colapsado*/
 .admin-sidebar.collapsed .sidebar-logo-container,
+/* Regla CSS: .admin-sidebar.collapsed .sidebar-subtitle. */
 .admin-sidebar.collapsed .sidebar-subtitle {
     opacity: 0;
 }
 
 
 /* Oculta los títulos de sección al colapsar el sidebar */
+/* Regla CSS: .admin-sidebar.collapsed .sidebar-section-title. */
 .admin-sidebar.collapsed .sidebar-section-title {
     display: none;
 }
 
 
 /* Ajusta el espacio inferior cuando se colapsa */
+/* Regla CSS: .admin-sidebar.collapsed .sidebar-footer. */
 .admin-sidebar.collapsed .sidebar-footer {
     padding:20px 10px;
 }
 
 
 /* Centra el perfil al estar colapsado */
+/* Regla CSS: .admin-sidebar.collapsed .profile. */
 .admin-sidebar.collapsed .profile {
     justify-content:center;
 }
 
 
 /* Oculta los textos y deja solo iconos */
+/* Regla CSS: .admin-sidebar.collapsed .sidebar-text. */
 .admin-sidebar.collapsed .sidebar-text {
     display:none;
 }
 
 
 /* Centra los botones del menu */
+/* Regla CSS: .admin-sidebar.collapsed .sidebar-item. */
 .admin-sidebar.collapsed .sidebar-item {
     justify-content:center;
     padding:14px 0;
 }
 
 /* Centrar botón cuando el sidebar está colapsado */
+/* Regla CSS: .admin-sidebar.collapsed .sidebar-top. */
 .admin-sidebar.collapsed .sidebar-top {
 
     justify-content: center;
@@ -340,6 +373,7 @@
 
 
 /* Ajusta la posicion del boton que abre el sidebar */
+/* Regla CSS: .admin-sidebar.collapsed .sidebar-toggle-inside. */
 .admin-sidebar.collapsed .sidebar-toggle-inside {
 
     right: 26px;
@@ -348,17 +382,20 @@
 
 
 /* Centra el botón de perfil cuando el sidebar está cerrado */
+/* Regla CSS: .admin-sidebar.collapsed .profile. */
 .admin-sidebar.collapsed .profile {
     justify-content: center;
 }
 
 
 /* Oculta la flecha */
+/* Regla CSS: .admin-sidebar.collapsed .profile-arrow. */
 .admin-sidebar.collapsed .profile-arrow {
     display: none;
 }
 
 /* Boton ciruclar del perfil */
+/* Regla CSS: .admin-sidebar.collapsed .profile. */
 .admin-sidebar.collapsed .profile {
     width: 58px;
     height: 58px;

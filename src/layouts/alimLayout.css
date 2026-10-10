@@ -1,3 +1,4 @@
+/* Regla CSS: .alim-layout. */
 .alim-layout {
     display: flex;
     width: 100%;
@@ -5,6 +6,7 @@
     background-color: #f8fafc;
 }
 
+/* Regla CSS: .alim-content. */
 .alim-content {
     flex: 1 1 0;
     min-width: 0;

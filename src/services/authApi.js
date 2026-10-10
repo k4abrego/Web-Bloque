@@ -1,3 +1,4 @@
+// Sección: AUTH_API_URL.
 const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL;
 
 /**
@@ -6,7 +7,9 @@ const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL;
  * @param {string} correo - Correo electrónico del usuario.
  * @returns {Promise<object>} Challenge, mensaje y user_id.
  */
+// Sección: solicitarChallenge.
 export async function solicitarChallenge(correo) {
+// Sección: response.
   const response = await fetch(
     `${AUTH_API_URL}/Login/${encodeURIComponent(correo)}`
   );
@@ -25,7 +28,9 @@ export async function solicitarChallenge(correo) {
  * @param {string} respuestaHMAC - Resultado HMAC en Base64.
  * @returns {Promise<object>} Token JWT y rol del usuario.
  */
+// Sección: verificarChallenge.
 export async function verificarChallenge(userId, respuestaHMAC) {
+// Sección: response.
   const response = await fetch(`${AUTH_API_URL}/Login/`, {
     method: "POST",
     headers: {
@@ -50,6 +55,7 @@ export async function verificarChallenge(userId, respuestaHMAC) {
  * @param {string} token - Token JWT.
  * @param {string} rol - Rol verificado por el backend.
  */
+// Sección: guardarSesion.
 export function guardarSesion(token, rol) {
   localStorage.setItem("token", token);
   localStorage.setItem("rol", rol);
@@ -58,6 +64,7 @@ export function guardarSesion(token, rol) {
 /**
  * Elimina la información local de autenticación.
  */
+// Sección: cerrarSesion.
 export function cerrarSesion() {
   localStorage.removeItem("token");
   localStorage.removeItem("rol");

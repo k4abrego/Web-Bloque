@@ -8,9 +8,11 @@ import {
 
 
 // Tarjeta reutilizable para mostrar una evidencia de un reporte
+// Sección: EvidenciaCard.
 function EvidenciaCard({ evidencia }) {
 
 //   Selecciona el icono correspondiente al tipo de archivo 
+// Sección: obtenerIcono.
   const obtenerIcono = () => {
 
     if (evidencia.tipo === "Imagen") {

@@ -1,3 +1,4 @@
+// Documentación automática de src/pages/admin/filtrosAdmin.jsx: Página y estilos de la sección filtrosAdmin.
 import { useState } from "react";
 import {
   Search,
@@ -13,13 +14,16 @@ import "./filtrosAdmin.css";
 
 
 // Página donde el administrador puede realizar búsquedas avanzadas y gestionar etiquetas
+// Sección: FiltrosAdmin.
 function FiltrosAdmin() {
 
   // Guarda una copia temporal de los reportes para poder modificar sus etiquetas
+// Sección: declaración.
   const [reportes, setReportes] = useState(reportesMock);
 
 
   // Guarda las condiciones utilizadas dentro de la búsqueda avanzada
+// Sección: declaración.
   const [condiciones, setCondiciones] = useState([
     {
       id: 1,
@@ -31,14 +35,17 @@ function FiltrosAdmin() {
 
 
   // Guarda los resultados obtenidos después de realizar una búsqueda
+// Sección: declaración.
   const [resultados, setResultados] = useState(reportesMock);
 
 
   // Guarda los reportes seleccionados para aplicar etiquetas
+// Sección: declaración.
   const [reportesSeleccionados, setReportesSeleccionados] = useState([]);
 
 
   // Guarda las etiquetas disponibles dentro del sistema
+// Sección: declaración.
   const [etiquetasDisponibles, setEtiquetasDisponibles] = useState(
     [
       ...new Set(
@@ -51,14 +58,17 @@ function FiltrosAdmin() {
 
 
   // Guarda la etiqueta seleccionada para aplicarla a los reportes
+// Sección: declaración.
   const [etiquetaSeleccionada, setEtiquetaSeleccionada] = useState("");
 
 
   // Guarda el nombre de una nueva etiqueta
+// Sección: declaración.
   const [nuevaEtiqueta, setNuevaEtiqueta] = useState("");
 
 
   // Agrega una nueva condición a la búsqueda
+// Sección: agregarCondicion.
   const agregarCondicion = () => {
 
     setCondiciones([
@@ -74,6 +84,7 @@ function FiltrosAdmin() {
 
 
   // Elimina la última condición agregada
+// Sección: eliminarCondicion.
   const eliminarCondicion = () => {
 
     if (condiciones.length > 1) {
@@ -83,6 +94,7 @@ function FiltrosAdmin() {
 
 
   // Actualiza la información de una condición
+// Sección: actualizarCondicion.
   const actualizarCondicion = (id, propiedad, valor) => {
 
     setCondiciones(
@@ -99,6 +111,7 @@ function FiltrosAdmin() {
 
 
   // Cambia el campo seleccionado y limpia el valor anterior
+// Sección: cambiarCampo.
   const cambiarCampo = (id, campo) => {
 
     setCondiciones(
@@ -116,8 +129,10 @@ function FiltrosAdmin() {
 
 
   // Obtiene las opciones disponibles según el campo seleccionado
+// Sección: obtenerOpciones.
   const obtenerOpciones = (campo) => {
 
+// Sección: opciones.
     let opciones = [];
 
 
@@ -153,8 +168,10 @@ function FiltrosAdmin() {
 
 
   // Comprueba si un reporte cumple con una condición
+// Sección: cumpleCondicion.
   const cumpleCondicion = (reporte, condicion) => {
 
+// Sección: valorBusqueda.
     const valorBusqueda = condicion.valor
       .toLowerCase()
       .trim();
@@ -192,8 +209,10 @@ function FiltrosAdmin() {
 
 
   // Realiza la búsqueda combinando las condiciones con AND y OR
+// Sección: realizarBusqueda.
   const realizarBusqueda = () => {
 
+// Sección: condicionesActivas.
     const condicionesActivas = condiciones.filter(
       (condicion) =>
         condicion.campo !== "" &&
@@ -212,9 +231,11 @@ function FiltrosAdmin() {
 
 
     // Busca los reportes que cumplen con las condiciones seleccionadas
+// Sección: reportesEncontrados.
     const reportesEncontrados = reportes.filter(
       (reporte) => {
 
+// Sección: resultado.
         let resultado = cumpleCondicion(
           reporte,
           condicionesActivas[0]
@@ -223,13 +244,16 @@ function FiltrosAdmin() {
 
         // Combina las siguientes condiciones utilizando AND u OR
         for (
+// Sección: i.
           let i = 1;
           i < condicionesActivas.length;
           i++
         ) {
 
+// Sección: condicion.
           const condicion = condicionesActivas[i];
 
+// Sección: coincide.
           const coincide = cumpleCondicion(
             reporte,
             condicion
@@ -259,6 +283,7 @@ function FiltrosAdmin() {
 
 
   // Restablece la búsqueda y vuelve a mostrar todos los reportes
+// Sección: limpiarBusqueda.
   const limpiarBusqueda = () => {
 
     setCondiciones([
@@ -276,6 +301,7 @@ function FiltrosAdmin() {
 
 
   // Selecciona o deselecciona un reporte de los resultados
+// Sección: cambiarSeleccionReporte.
   const cambiarSeleccionReporte = (reporteId) => {
 
     if (reportesSeleccionados.includes(reporteId)) {
@@ -297,8 +323,10 @@ function FiltrosAdmin() {
 
 
   // Crea una nueva etiqueta disponible para utilizar
+// Sección: crearEtiqueta.
   const crearEtiqueta = () => {
 
+// Sección: nombreEtiqueta.
     const nombreEtiqueta = nuevaEtiqueta.trim();
 
 
@@ -309,6 +337,7 @@ function FiltrosAdmin() {
 
 
     // Evita crear etiquetas con el mismo nombre
+// Sección: etiquetaExiste.
     const etiquetaExiste = etiquetasDisponibles.some(
       (etiqueta) =>
         etiqueta.toLowerCase() ===
@@ -331,6 +360,7 @@ function FiltrosAdmin() {
 
 
   // Aplica una etiqueta a todos los reportes seleccionados
+// Sección: aplicarEtiqueta.
   const aplicarEtiqueta = () => {
 
     if (
@@ -341,6 +371,7 @@ function FiltrosAdmin() {
     }
 
 
+// Sección: reportesActualizados.
     const reportesActualizados = reportes.map(
       (reporte) => {
 
@@ -379,6 +410,7 @@ function FiltrosAdmin() {
     setResultados(
       resultados.map((resultado) => {
 
+// Sección: reporteActualizado.
         const reporteActualizado =
           reportesActualizados.find(
             (reporte) =>
@@ -396,6 +428,7 @@ function FiltrosAdmin() {
 
 
   // Calcula cuántos reportes utilizan cada etiqueta
+// Sección: contarEtiqueta.
   const contarEtiqueta = (etiqueta) => {
 
     return reportes.filter(

@@ -1,3 +1,4 @@
+// Documentación automática de src/pages/admin/detalleReporteAdmin.jsx: Página y estilos de la sección detalleReporteAdmin.
 // Imports
 import { useParams, NavLink } from "react-router-dom";
 import {
@@ -14,13 +15,16 @@ import "./detalleReporteAdmin.css";
 
 
 // Página donde el administrador puede consultar la información de un reporte 
+// Sección: DetalleReporteAdmin.
 function DetalleReporteAdmin() {
 
   // Obtiene el identificador del reporte seleccionado
+// Sección: declaración.
   const { id } = useParams();
 
 
   // Busca el reporte que corresponde con el identificador seleccionado 
+// Sección: reporte.
   const reporte = reportesMock.find(
     (reporte) => reporte.id === Number(id)
   );

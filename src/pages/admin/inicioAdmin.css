@@ -1,4 +1,6 @@
+/* Documentación automática de src/pages/admin/inicioAdmin.css: Página y estilos de la sección inicioAdmin. */
 /* Contenedor principal de la página de inicio del administrador */
+/* Regla CSS: .admin-inicio. */
 .admin-inicio {
   width: 100%;
 }
@@ -7,12 +9,14 @@
 /* --- Encabezado --- */
 
 /* Separa el encabezado del resto del dashboard */
+/* Regla CSS: .admin-inicio-header. */
 .admin-inicio-header {
   margin-bottom: 30px;
 }
 
 
 /* Da formato al título principal */
+/* Regla CSS: .admin-inicio-header h1. */
 .admin-inicio-header h1 {
   margin: 0;
   font-size: 30px;
@@ -21,6 +25,7 @@
 
 
 /* Da formato al texto debajo del título */
+/* Regla CSS: .admin-inicio-header p. */
 .admin-inicio-header p {
   margin-top: 8px;
   color: #6b7280;
@@ -30,6 +35,7 @@
 /* --- Resumen de reportes --- */
 
 /* Organiza las tarjetas de resumen en columnas */
+/* Regla CSS: .admin-resumen. */
 .admin-resumen {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -38,6 +44,7 @@
 
 
 /* Da formato general a cada tarjeta */
+/* Regla CSS: .resumen-card. */
 .resumen-card {
   background: white;
 
@@ -50,6 +57,7 @@
 
 
 /* Da formato al nombre de cada tarjeta */
+/* Regla CSS: .resumen-card h3. */
 .resumen-card h3 {
   margin: 0;
 
@@ -61,6 +69,7 @@
 
 
 /* Resalta la cantidad de reportes */
+/* Regla CSS: .resumen-card p. */
 .resumen-card p {
   margin: 12px 0 0 0;
 
@@ -74,6 +83,7 @@
 /* --- Reportes recientes --- */
 
 /* Crea la sección donde se muestran los últimos reportes */
+/* Regla CSS: .reportes-recientes. */
 .reportes-recientes {
   margin-top: 35px;
   background: white;
@@ -84,6 +94,7 @@
 
 
 /* Organiza el título y el botón para consultar todos los reportes */
+/* Regla CSS: .reportes-recientes-header. */
 .reportes-recientes-header {
   display: flex;
   justify-content: space-between;
@@ -93,6 +104,7 @@
 
 
 /* Da formato al título de la sección */
+/* Regla CSS: .reportes-recientes-header h2. */
 .reportes-recientes-header h2 {
   margin: 0;
   font-size: 20px;
@@ -101,6 +113,7 @@
 
 
 /* Da formato al texto debajo del título */
+/* Regla CSS: .reportes-recientes-header p. */
 .reportes-recientes-header p {
   margin: 5px 0 0 0;
   font-size: 14px;
@@ -109,6 +122,7 @@
 
 
 /* Da formato al enlace para consultar todos los reportes */
+/* Regla CSS: .ver-reportes. */
 .ver-reportes {
   display: inline-flex;
   align-items: center;
@@ -125,6 +139,7 @@
 
 
 /* Resalta el enlace al pasar el mouse */
+/* Regla CSS: .ver-reportes:hover. */
 .ver-reportes:hover {
   background-color: #eee8f7;
   transform: scale(1.05);
@@ -132,6 +147,7 @@
 
 
 /* Permite que la tabla se adapte si no tiene suficiente espacio */
+/* Regla CSS: .reportes-tabla-container. */
 .reportes-tabla-container {
   width: 100%;
   overflow-x: auto;
@@ -139,6 +155,7 @@
 
 
 /* Da formato general a la tabla */
+/* Regla CSS: .reportes-tabla. */
 .reportes-tabla {
   width: 100%;
   border-collapse: collapse;
@@ -146,6 +163,7 @@
 
 
 /* Da formato a los encabezados de la tabla */
+/* Regla CSS: .reportes-tabla th. */
 .reportes-tabla th {
   padding: 14px 20px;
   background: #f8fafc;
@@ -157,6 +175,7 @@
 
 
 /* Da formato a la información de cada reporte */
+/* Regla CSS: .reportes-tabla td. */
 .reportes-tabla td {
   padding: 16px 20px;
   border-top: 1px solid #e5e7eb;
@@ -166,6 +185,7 @@
 
 
 /* Resalta el folio para identificar fácilmente cada reporte */
+/* Regla CSS: .reporte-folio. */
 .reporte-folio {
   color: #6735c4 !important;
   font-weight: 600;
@@ -173,6 +193,7 @@
 
 
 /* Da formato general a los estados de los reportes */
+/* Regla CSS: .estado-badge. */
 .estado-badge {
   display: inline-block;
   padding: 6px 10px;
@@ -183,6 +204,7 @@
 
 
 /* Color utilizado para reportes pendientes */
+/* Regla CSS: .estado-badge[data-estado="Pendiente"]. */
 .estado-badge[data-estado="Pendiente"] {
   background: #fff4d6;
   color: #9a6700;
@@ -190,6 +212,7 @@
 
 
 /* Color utilizado para reportes en proceso */
+/* Regla CSS: .estado-badge[data-estado="En proceso"]. */
 .estado-badge[data-estado="En proceso"] {
   background: #e8efff;
   color: #3157a4;
@@ -197,6 +220,7 @@
 
 
 /* Color utilizado para reportes resueltos */
+/* Regla CSS: .estado-badge[data-estado="Resuelto"]. */
 .estado-badge[data-estado="Resuelto"] {
   background: #e6f6ec;
   color: #287a45;

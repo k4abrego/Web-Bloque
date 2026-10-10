@@ -1,10 +1,13 @@
+/* Documentación automática de src/pages/admin/alimentadoresAdmin.css: Página y estilos de la sección alimentadoresAdmin. */
 /* Contenedor principal de la página de alimentadores */
+/* Regla CSS: .alimentadores-admin. */
 .alimentadores-admin {
   width: 100%;
 }
 
 
 /* Organiza el encabezado principal de la página */
+/* Regla CSS: .alimentadores-header. */
 .alimentadores-header {
   display: flex;
   align-items: center;
@@ -15,6 +18,7 @@
 
 
 /* Da formato al título principal */
+/* Regla CSS: .alimentadores-header h1. */
 .alimentadores-header h1 {
   margin: 0 0 6px;
   color: #1f2937;
@@ -23,6 +27,7 @@
 
 
 /* Da formato a la descripción principal */
+/* Regla CSS: .alimentadores-header p. */
 .alimentadores-header p {
   margin: 0;
   color: #6b7280;
@@ -31,6 +36,7 @@
 
 
 /* Da formato al botón para registrar nuevas cuentas */
+/* Regla CSS: .alimentadores-boton-nuevo. */
 .alimentadores-boton-nuevo {
   display: inline-flex;
   align-items: center;
@@ -49,6 +55,7 @@
 
 
 /* Resalta el botón para registrar cuentas */
+/* Regla CSS: .alimentadores-boton-nuevo:hover. */
 .alimentadores-boton-nuevo:hover {
   background: #5a2eae;
   transform: scale(1.03);
@@ -56,6 +63,7 @@
 
 
 /* Organiza las tarjetas con el resumen de cuentas */
+/* Regla CSS: .alimentadores-resumen. */
 .alimentadores-resumen {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -65,6 +73,7 @@
 
 
 /* Da formato a cada tarjeta del resumen */
+/* Regla CSS: .alimentadores-resumen-card. */
 .alimentadores-resumen-card {
   display: flex;
   align-items: center;
@@ -78,6 +87,7 @@
 
 
 /* Da formato general a los iconos del resumen */
+/* Regla CSS: .alimentadores-resumen-icono. */
 .alimentadores-resumen-icono {
   display: flex;
   align-items: center;
@@ -90,6 +100,7 @@
 
 
 /* Identifica el total de cuentas */
+/* Regla CSS: .alimentadores-resumen-icono.total. */
 .alimentadores-resumen-icono.total {
   background: #eee8f7;
   color: #6735c4;
@@ -97,6 +108,7 @@
 
 
 /* Identifica las cuentas activas */
+/* Regla CSS: .alimentadores-resumen-icono.activas. */
 .alimentadores-resumen-icono.activas {
   background: #ecfdf5;
   color: #059669;
@@ -104,6 +116,7 @@
 
 
 /* Identifica las cuentas inactivas */
+/* Regla CSS: .alimentadores-resumen-icono.inactivas. */
 .alimentadores-resumen-icono.inactivas {
   background: #f3f4f6;
   color: #6b7280;
@@ -111,6 +124,7 @@
 
 
 /* Organiza los textos de las tarjetas del resumen */
+/* Regla CSS: .alimentadores-resumen-card > div:last-child. */
 .alimentadores-resumen-card > div:last-child {
   display: flex;
   flex-direction: column;
@@ -119,6 +133,7 @@
 
 
 /* Da formato a la descripción de cada tarjeta */
+/* Regla CSS: .alimentadores-resumen-card span. */
 .alimentadores-resumen-card span {
   color: #6b7280;
   font-size: 13px;
@@ -126,6 +141,7 @@
 
 
 /* Da formato a la cantidad mostrada en cada tarjeta */
+/* Regla CSS: .alimentadores-resumen-card strong. */
 .alimentadores-resumen-card strong {
   color: #1f2937;
   font-size: 27px;
@@ -133,6 +149,7 @@
 
 
 /* Organiza las herramientas para buscar y filtrar cuentas */
+/* Regla CSS: .alimentadores-herramientas. */
 .alimentadores-herramientas {
   display: flex;
   align-items: center;
@@ -142,6 +159,7 @@
 
 
 /* Da formato al buscador de cuentas */
+/* Regla CSS: .alimentadores-buscador. */
 .alimentadores-buscador {
   display: flex;
   align-items: center;
@@ -157,6 +175,7 @@
 
 
 /* Da formato al campo de búsqueda */
+/* Regla CSS: .alimentadores-buscador input. */
 .alimentadores-buscador input {
   width: 100%;
   border: none;
@@ -168,6 +187,7 @@
 
 
 /* Resalta el buscador cuando se está utilizando */
+/* Regla CSS: .alimentadores-buscador:focus-within. */
 .alimentadores-buscador:focus-within {
   border-color: #6735c4;
   border-width: 2px;
@@ -175,6 +195,7 @@
 
 
 /* Da formato al selector de estado */
+/* Regla CSS: .alimentadores-herramientas select. */
 .alimentadores-herramientas select {
   min-width: 185px;
   height: 44px;
@@ -193,6 +214,7 @@
 
 
 /* Resalta el selector cuando se está utilizando */
+/* Regla CSS: .alimentadores-herramientas select:focus. */
 .alimentadores-herramientas select:focus {
   border-color: #6735c4;
   border-width: 2px;
@@ -201,6 +223,7 @@
 
 
 /* Contenedor principal de la lista de alimentadores */
+/* Regla CSS: .alimentadores-lista. */
 .alimentadores-lista {
   overflow: hidden;
   background: white;
@@ -211,6 +234,7 @@
 
 
 /* Organiza el encabezado de la lista */
+/* Regla CSS: .alimentadores-lista-header. */
 .alimentadores-lista-header {
   display: flex;
   align-items: center;
@@ -222,6 +246,7 @@
 
 
 /* Da formato al título de la lista */
+/* Regla CSS: .alimentadores-lista-header h2. */
 .alimentadores-lista-header h2 {
   margin: 0;
   color: #374151;
@@ -230,6 +255,7 @@
 
 
 /* Da formato al contador de cuentas */
+/* Regla CSS: .alimentadores-lista-header span. */
 .alimentadores-lista-header span {
   color: #6b7280;
   font-size: 13px;
@@ -237,6 +263,7 @@
 
 
 /* Permite desplazar la tabla cuando no existe suficiente espacio */
+/* Regla CSS: .alimentadores-tabla-scroll. */
 .alimentadores-tabla-scroll {
   width: 100%;
   overflow-x: auto;
@@ -244,6 +271,7 @@
 
 
 /* Da formato general a la tabla de alimentadores */
+/* Regla CSS: .alimentadores-tabla. */
 .alimentadores-tabla {
   width: 100%;
   min-width: 850px;
@@ -253,6 +281,7 @@
 
 
 /* Da formato a los encabezados de la tabla */
+/* Regla CSS: .alimentadores-tabla th. */
 .alimentadores-tabla th {
   padding: 15px 18px;
   background: #f8fafc;
@@ -264,6 +293,7 @@
 
 
 /* Da formato a las celdas de la tabla */
+/* Regla CSS: .alimentadores-tabla td. */
 .alimentadores-tabla td {
   padding: 16px 18px;
   border-bottom: 1px solid #f0f1f3;
@@ -273,18 +303,21 @@
 
 
 /* Elimina la línea inferior de la última fila */
+/* Regla CSS: .alimentadores-tabla tbody tr:last-child td. */
 .alimentadores-tabla tbody tr:last-child td {
   border-bottom: none;
 }
 
 
 /* Resalta las filas cuando se pasa el mouse */
+/* Regla CSS: .alimentadores-tabla tbody tr:hover. */
 .alimentadores-tabla tbody tr:hover {
   background: #faf8fc;
 }
 
 
 /* Organiza la identidad del alimentador */
+/* Regla CSS: .alimentador-identidad. */
 .alimentador-identidad {
   display: flex;
   align-items: center;
@@ -293,6 +326,7 @@
 
 
 /* Da formato al círculo con las iniciales */
+/* Regla CSS: .alimentador-avatar. */
 .alimentador-avatar {
   display: flex;
   align-items: center;
@@ -309,6 +343,7 @@
 
 
 /* Organiza el nombre y el identificador del alimentador */
+/* Regla CSS: .alimentador-nombre. */
 .alimentador-nombre {
   display: flex;
   flex-direction: column;
@@ -317,6 +352,7 @@
 
 
 /* Da formato al nombre del alimentador */
+/* Regla CSS: .alimentador-nombre strong. */
 .alimentador-nombre strong {
   color: #374151;
   font-size: 13px;
@@ -324,6 +360,7 @@
 
 
 /* Da formato al identificador del alimentador */
+/* Regla CSS: .alimentador-nombre span. */
 .alimentador-nombre span {
   color: #9ca3af;
   font-size: 12px;
@@ -331,6 +368,7 @@
 
 
 /* Da formato al correo electrónico */
+/* Regla CSS: .alimentador-correo. */
 .alimentador-correo {
   color: #6b7280;
   font-size: 13px;
@@ -338,6 +376,7 @@
 
 
 /* Da formato a la cantidad de reportes asignados */
+/* Regla CSS: .alimentador-reportes. */
 .alimentador-reportes {
   display: inline-flex;
   align-items: center;
@@ -354,6 +393,7 @@
 
 
 /* Da formato general al estado de las cuentas */
+/* Regla CSS: .alimentador-estado. */
 .alimentador-estado {
   display: inline-flex;
   align-items: center;
@@ -365,6 +405,7 @@
 
 
 /* Identifica las cuentas activas */
+/* Regla CSS: .alimentador-estado.activo. */
 .alimentador-estado.activo {
   background: #ecfdf5;
   color: #059669;
@@ -372,6 +413,7 @@
 
 
 /* Identifica las cuentas inactivas */
+/* Regla CSS: .alimentador-estado.inactivo. */
 .alimentador-estado.inactivo {
   background: #f3f4f6;
   color: #6b7280;
@@ -379,6 +421,7 @@
 
 
 /* Organiza los botones disponibles para cada cuenta */
+/* Regla CSS: .alimentador-acciones. */
 .alimentador-acciones {
   display: flex;
   align-items: center;
@@ -387,6 +430,7 @@
 
 
 /* Da formato general a los botones de cada cuenta */
+/* Regla CSS: .alimentador-acciones button. */
 .alimentador-acciones button {
   display: inline-flex;
   align-items: center;
@@ -404,12 +448,14 @@
 
 
 /* Da formato al botón para editar cuentas */
+/* Regla CSS: .alimentador-accion-editar. */
 .alimentador-accion-editar {
   color: #6735c4;
 }
 
 
 /* Resalta el botón para editar cuentas */
+/* Regla CSS: .alimentador-accion-editar:hover. */
 .alimentador-accion-editar:hover {
   background: #eee8f7;
   transform: scale(1.03);
@@ -417,12 +463,14 @@
 
 
 /* Da formato al botón para desactivar cuentas */
+/* Regla CSS: .alimentador-accion-estado.desactivar. */
 .alimentador-accion-estado.desactivar {
   color: #b45309;
 }
 
 
 /* Resalta el botón para desactivar cuentas */
+/* Regla CSS: .alimentador-accion-estado.desactivar:hover. */
 .alimentador-accion-estado.desactivar:hover {
   background: #fff7ed;
   transform: scale(1.03);
@@ -430,12 +478,14 @@
 
 
 /* Da formato al botón para activar cuentas */
+/* Regla CSS: .alimentador-accion-estado.activar. */
 .alimentador-accion-estado.activar {
   color: #059669;
 }
 
 
 /* Resalta el botón para activar cuentas */
+/* Regla CSS: .alimentador-accion-estado.activar:hover. */
 .alimentador-accion-estado.activar:hover {
   background: #ecfdf5;
   transform: scale(1.03);
@@ -443,6 +493,7 @@
 
 
 /* Muestra un mensaje cuando no existen cuentas coincidentes */
+/* Regla CSS: .alimentadores-vacio. */
 .alimentadores-vacio {
   display: flex;
   flex-direction: column;
@@ -454,6 +505,7 @@
 
 
 /* Da formato al título cuando no se encuentran cuentas */
+/* Regla CSS: .alimentadores-vacio strong. */
 .alimentadores-vacio strong {
   margin-top: 10px;
   color: #374151;
@@ -462,6 +514,7 @@
 
 
 /* Da formato a la descripción cuando no se encuentran cuentas */
+/* Regla CSS: .alimentadores-vacio p. */
 .alimentadores-vacio p {
   margin: 5px 0 0;
   color: #6b7280;
@@ -470,6 +523,7 @@
 
 
 /* Da formato a la nota sobre los datos temporales */
+/* Regla CSS: .alimentadores-nota. */
 .alimentadores-nota {
   margin-top: 14px;
   color: #9ca3af;
@@ -478,6 +532,7 @@
 
 
 /* Coloca el formulario sobre el resto de la página */
+/* Regla CSS: .alimentador-modal-fondo. */
 .alimentador-modal-fondo {
   position: fixed;
   inset: 0;
@@ -491,6 +546,7 @@
 
 
 /* Da formato a la ventana para crear o editar cuentas */
+/* Regla CSS: .alimentador-modal. */
 .alimentador-modal {
   width: 100%;
   max-width: 480px;
@@ -502,6 +558,7 @@
 
 
 /* Organiza el encabezado del formulario */
+/* Regla CSS: .alimentador-modal-header. */
 .alimentador-modal-header {
   display: flex;
   align-items: flex-start;
@@ -512,6 +569,7 @@
 
 
 /* Da formato al título del formulario */
+/* Regla CSS: .alimentador-modal-header h2. */
 .alimentador-modal-header h2 {
   margin: 0 0 6px;
   color: #1f2937;
@@ -520,6 +578,7 @@
 
 
 /* Da formato a la descripción del formulario */
+/* Regla CSS: .alimentador-modal-header p. */
 .alimentador-modal-header p {
   margin: 0;
   color: #6b7280;
@@ -528,6 +587,7 @@
 
 
 /* Da formato al botón para cerrar el formulario */
+/* Regla CSS: .alimentador-modal-cerrar. */
 .alimentador-modal-cerrar {
   display: flex;
   align-items: center;
@@ -543,12 +603,14 @@
 
 
 /* Resalta el botón para cerrar el formulario */
+/* Regla CSS: .alimentador-modal-cerrar:hover. */
 .alimentador-modal-cerrar:hover {
   background: #f3f4f6;
 }
 
 
 /* Organiza los campos del formulario */
+/* Regla CSS: .alimentador-formulario-campo. */
 .alimentador-formulario-campo {
   display: flex;
   flex-direction: column;
@@ -558,6 +620,7 @@
 
 
 /* Da formato a las etiquetas de los campos */
+/* Regla CSS: .alimentador-formulario-campo label. */
 .alimentador-formulario-campo label {
   color: #374151;
   font-size: 13px;
@@ -566,6 +629,7 @@
 
 
 /* Da formato a los campos del formulario */
+/* Regla CSS: .alimentador-formulario-campo input. */
 .alimentador-formulario-campo input {
   width: 100%;
   height: 44px;
@@ -580,6 +644,7 @@
 
 
 /* Resalta los campos del formulario cuando están siendo utilizados */
+/* Regla CSS: .alimentador-formulario-campo input:focus. */
 .alimentador-formulario-campo input:focus {
   border-color: #6735c4;
   border-width: 2px;
@@ -587,6 +652,7 @@
 
 
 /* Da formato a los mensajes de error del formulario */
+/* Regla CSS: .alimentador-formulario-error. */
 .alimentador-formulario-error {
   margin: 0 0 15px;
   color: #dc2626;
@@ -595,6 +661,7 @@
 
 
 /* Organiza los botones inferiores del formulario */
+/* Regla CSS: .alimentador-modal-acciones. */
 .alimentador-modal-acciones {
   display: flex;
   justify-content: flex-end;
@@ -604,6 +671,7 @@
 
 
 /* Da formato general a los botones del formulario */
+/* Regla CSS: .alimentador-modal-acciones button. */
 .alimentador-modal-acciones button {
   padding: 11px 16px;
   border: none;
@@ -616,6 +684,7 @@
 
 
 /* Da formato al botón para cancelar cambios */
+/* Regla CSS: .alimentador-boton-cancelar. */
 .alimentador-boton-cancelar {
   background: #f3f4f6;
   color: #4b5563;
@@ -623,12 +692,14 @@
 
 
 /* Resalta el botón para cancelar cambios */
+/* Regla CSS: .alimentador-boton-cancelar:hover. */
 .alimentador-boton-cancelar:hover {
   background: #e5e7eb;
 }
 
 
 /* Da formato al botón para guardar la información */
+/* Regla CSS: .alimentador-boton-guardar. */
 .alimentador-boton-guardar {
   background: #6735c4;
   color: white;
@@ -636,6 +707,7 @@
 
 
 /* Resalta el botón para guardar la información */
+/* Regla CSS: .alimentador-boton-guardar:hover. */
 .alimentador-boton-guardar:hover {
   background: #5a2eae;
   transform: scale(1.03);
@@ -643,24 +715,29 @@
 
 
 /* Ajusta el encabezado y las tarjetas en pantallas pequeñas */
+/* Regla CSS: @media (max-width: 850px). */
 @media (max-width: 850px) {
+/* Regla CSS: .alimentadores-header. */
   .alimentadores-header {
     align-items: flex-start;
     flex-direction: column;
   }
 
 
+/* Regla CSS: .alimentadores-resumen. */
   .alimentadores-resumen {
     grid-template-columns: 1fr;
   }
 
 
+/* Regla CSS: .alimentadores-herramientas. */
   .alimentadores-herramientas {
     flex-direction: column;
     align-items: stretch;
   }
 
 
+/* Regla CSS: .alimentadores-herramientas select. */
   .alimentadores-herramientas select {
     width: 100%;
   }

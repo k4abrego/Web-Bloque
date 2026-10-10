@@ -1,3 +1,4 @@
+// Documentación automática de src/pages/admin/reportesAdmin.jsx: Página y estilos de la sección reportesAdmin.
 // Imports
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -13,40 +14,51 @@ import {
 
 
 // Página donde el administrador puede consultar todos los reportes
+// Sección: ReportesAdmin.
 function ReportesAdmin() {
 
   // Guarda el texto escrito en el buscador
+// Sección: declaración.
   const [busqueda, setBusqueda] = useState("");
 
   // Guarda el estado seleccionado
+// Sección: declaración.
   const [filtroEstado, setFiltroEstado] = useState("Todos");
 
   // Guarda la prioridad seleccionada 
+// Sección: declaración.
   const [filtroPrioridad, setFiltroPrioridad] = useState("Todas");
 
   // Guarda la página que se está mostrando
+// Sección: declaración.
   const [paginaActual, setPaginaActual] = useState(1);
 
 
   // Define cuántos reportes se muestran en cada página 
+// Sección: reportesPorPagina.
   const reportesPorPagina = 5;
 
 
   // Filtra los reportes de acuerdo con las opciones seleccionadas 
+// Sección: reportesFiltrados.
   const reportesFiltrados = reportesMock.filter((reporte) => {
 
+// Sección: textoBusqueda.
     const textoBusqueda = busqueda.toLowerCase();
 
+// Sección: coincideBusqueda.
     const coincideBusqueda =
       reporte.folio.toLowerCase().includes(textoBusqueda) ||
       reporte.tipo.toLowerCase().includes(textoBusqueda) ||
       reporte.alimentador.toLowerCase().includes(textoBusqueda) ||
       reporte.ubicacion.toLowerCase().includes(textoBusqueda);
 
+// Sección: coincideEstado.
     const coincideEstado =
       filtroEstado === "Todos" ||
       reporte.estado === filtroEstado;
 
+// Sección: coincidePrioridad.
     const coincidePrioridad =
       filtroPrioridad === "Todas" ||
       reporte.prioridad === filtroPrioridad;
@@ -60,20 +72,24 @@ function ReportesAdmin() {
 
 
   // Calcula la cantidad de páginas necesarias 
+// Sección: totalPaginas.
   const totalPaginas = Math.ceil(
     reportesFiltrados.length / reportesPorPagina
   );
 
 
   // Calcula qué reportes corresponden a la página seleccionada 
+// Sección: indiceInicial.
   const indiceInicial =
     (paginaActual - 1) * reportesPorPagina;
 
+// Sección: indiceFinal.
   const indiceFinal =
     indiceInicial + reportesPorPagina;
 
 
   // Obtiene únicamente los reportes que se muestran en la página actual 
+// Sección: reportesPaginados.
   const reportesPaginados = reportesFiltrados.slice(
     indiceInicial,
     indiceFinal
@@ -81,6 +97,7 @@ function ReportesAdmin() {
 
 
   // Cambia de página dentro de la lista de reportes 
+// Sección: cambiarPagina.
   const cambiarPagina = (pagina) => {
 
     if (pagina >= 1 && pagina <= totalPaginas) {

@@ -1,3 +1,5 @@
+/* Documentación automática de src/pages/alimentador/reportesAlim.css: Página y estilos de la sección reportesAlim. */
+/* Regla CSS: .reportes-alim. */
 .reportes-alim {
     width: 100%;
     max-width: 1600px;
@@ -5,6 +7,7 @@
 }
 
 
+/* Regla CSS: .reportes-alim-header. */
 .reportes-alim-header {
     display: flex;
     justify-content: space-between;
@@ -13,10 +16,12 @@
     margin-bottom: 24px;
 }
 
+/* Regla CSS: .reportes-alim-title. */
 .reportes-alim-title {
     min-width: 0;
 }
 
+/* Regla CSS: .reportes-alim-header h1. */
 .reportes-alim-header h1 {
     margin: 0 0 8px;
     font-size: 32px;
@@ -24,6 +29,7 @@
     color: #111827;
 }
 
+/* Regla CSS: .reportes-alim-header p. */
 .reportes-alim-header p {
     margin: 0;
     color: #6b7280;
@@ -31,12 +37,14 @@
     line-height: 1.5;
 }
 
+/* Regla CSS: .reportes-alim-actions. */
 .reportes-alim-actions {
     display: flex;
     gap: 10px;
     flex-shrink: 0;
 }
 
+/* Regla CSS: .reportes-button. */
 .reportes-button {
     display: flex;
     align-items: center;
@@ -56,25 +64,30 @@
         transform 0.2s ease;
 }
 
+/* Regla CSS: .reportes-button:hover:not(:disabled). */
 .reportes-button:hover:not(:disabled) {
     background: #4b2373;
     color: #ffffff;
 }
 
+/* Regla CSS: .reportes-button.active. */
 .reportes-button.active {
     background: #4b2373;
     color: #ffffff;
 }
 
+/* Regla CSS: .reportes-button:disabled. */
 .reportes-button:disabled {
     opacity: 0.55;
     cursor: not-allowed;
 }
 
+/* Regla CSS: .reportes-button .rotate. */
 .reportes-button .rotate {
     transform: rotate(180deg);
 }
 
+/* Regla CSS: .reportes-filters. */
 .reportes-filters {
     margin-bottom: 18px;
 
@@ -88,6 +101,7 @@
     box-sizing: border-box;
 }
 
+/* Regla CSS: .reportes-filter-header. */
 .reportes-filter-header {
     display: flex;
     justify-content: space-between;
@@ -98,6 +112,7 @@
     margin-bottom: 20px;
 }
 
+/* Regla CSS: .reportes-filter-header h3. */
 .reportes-filter-header h3 {
     margin: 0 0 5px;
 
@@ -107,6 +122,7 @@
     color: #111827;
 }
 
+/* Regla CSS: .reportes-filter-header p. */
 .reportes-filter-header p {
     margin: 0;
 
@@ -114,6 +130,7 @@
     color: #6b7280;
 }
 
+/* Regla CSS: .reportes-filter-close. */
 .reportes-filter-close {
     width: 34px;
     height: 34px;
@@ -131,23 +148,27 @@
     cursor: pointer;
 }
 
+/* Regla CSS: .reportes-filter-close:hover. */
 .reportes-filter-close:hover {
     background: #e5e7eb;
     color: #111827;
 }
 
+/* Regla CSS: .reportes-filter-grid. */
 .reportes-filter-grid {
     display: grid;
     grid-template-columns: 1.4fr 1fr 1fr;
     gap: 16px;
 }
 
+/* Regla CSS: .reportes-filter-field. */
 .reportes-filter-field {
     display: flex;
     flex-direction: column;
     gap: 7px;
 }
 
+/* Regla CSS: .reportes-filter-field label. */
 .reportes-filter-field label {
     font-size: 13px;
     font-weight: 600;
@@ -155,6 +176,7 @@
 }
 
 .reportes-filter-field input,
+/* Regla CSS: .reportes-filter-field select. */
 .reportes-filter-field select {
     width: 100%;
     height: 42px;
@@ -172,25 +194,30 @@
     outline: none;
 }
 
+/* Regla CSS: .reportes-filter-field input. */
 .reportes-filter-field input {
     padding: 0 12px;
 }
 
+/* Regla CSS: .reportes-filter-field select. */
 .reportes-filter-field select {
     padding: 0 12px;
     cursor: pointer;
 }
 
 .reportes-filter-field input:focus,
+/* Regla CSS: .reportes-filter-field select:focus. */
 .reportes-filter-field select:focus {
     border-color: #4b2373;
     box-shadow: 0 0 0 2px rgba(75, 35, 115, 0.1);
 }
 
+/* Regla CSS: .reportes-input-wrapper. */
 .reportes-input-wrapper {
     position: relative;
 }
 
+/* Regla CSS: .reportes-input-wrapper svg. */
 .reportes-input-wrapper svg {
     position: absolute;
 
@@ -204,10 +231,12 @@
     pointer-events: none;
 }
 
+/* Regla CSS: .reportes-input-wrapper input. */
 .reportes-input-wrapper input {
     padding-left: 38px;
 }
 
+/* Regla CSS: .reportes-filter-footer. */
 .reportes-filter-footer {
     display: flex;
     justify-content: flex-end;
@@ -215,6 +244,7 @@
     margin-top: 18px;
 }
 
+/* Regla CSS: .reportes-clear-button. */
 .reportes-clear-button {
     padding: 9px 14px;
 
@@ -230,10 +260,12 @@
     cursor: pointer;
 }
 
+/* Regla CSS: .reportes-clear-button:hover. */
 .reportes-clear-button:hover {
     background: #f5f1f8;
 }
 
+/* Regla CSS: .reportes-tabs. */
 .reportes-tabs {
     display: flex;
 
@@ -245,6 +277,7 @@
     overflow-x: auto;
 }
 
+/* Regla CSS: .reportes-tab. */
 .reportes-tab {
     flex-shrink: 0;
 
@@ -267,11 +300,13 @@
         background 0.2s ease;
 }
 
+/* Regla CSS: .reportes-tab:hover. */
 .reportes-tab:hover {
     background: #fafafa;
     color: #4b2373;
 }
 
+/* Regla CSS: .reportes-tab.active. */
 .reportes-tab.active {
     color: #4b2373;
     border-bottom-color: #4b2373;
@@ -283,6 +318,7 @@
    TABLA
    ========================= */
 
+/* Regla CSS: .reportes-table-card. */
 .reportes-table-card {
     background: #ffffff;
 
@@ -294,11 +330,13 @@
     overflow: hidden;
 }
 
+/* Regla CSS: .reportes-table-wrapper. */
 .reportes-table-wrapper {
     width: 100%;
     overflow-x: auto;
 }
 
+/* Regla CSS: .reportes-table. */
 .reportes-table {
     width: 100%;
     min-width: 1050px;
@@ -306,6 +344,7 @@
     border-collapse: collapse;
 }
 
+/* Regla CSS: .reportes-table th. */
 .reportes-table th {
     padding: 15px 18px;
 
@@ -321,6 +360,7 @@
     white-space: nowrap;
 }
 
+/* Regla CSS: .reportes-table td. */
 .reportes-table td {
     padding: 16px 18px;
 
@@ -333,16 +373,19 @@
     vertical-align: middle;
 }
 
+/* Regla CSS: .reportes-table tbody tr:hover. */
 .reportes-table tbody tr:hover {
     background: #fafafa;
 }
 
+/* Regla CSS: .reportes-folio. */
 .reportes-folio {
     color: #4b2373 !important;
     font-weight: 700;
     white-space: nowrap;
 }
 
+/* Regla CSS: .reportes-description. */
 .reportes-description {
     max-width: 280px;
 
@@ -356,6 +399,7 @@
    ESTADOS
    ========================= */
 
+/* Regla CSS: .reportes-status. */
 .reportes-status {
     display: inline-flex;
     align-items: center;
@@ -370,16 +414,19 @@
     white-space: nowrap;
 }
 
+/* Regla CSS: .status-pendiente. */
 .status-pendiente {
     background: #fff7ed;
     color: #c2410c;
 }
 
+/* Regla CSS: .status-en-proceso. */
 .status-en-proceso {
     background: #eff6ff;
     color: #1d4ed8;
 }
 
+/* Regla CSS: .status-atendido. */
 .status-atendido {
     background: #ecfdf5;
     color: #047857;
@@ -390,6 +437,7 @@
    ACCIONES
    ========================= */
 
+/* Regla CSS: .reportes-view-button. */
 .reportes-view-button {
     display: inline-flex;
     align-items: center;
@@ -415,6 +463,7 @@
         color 0.2s ease;
 }
 
+/* Regla CSS: .reportes-view-button:hover. */
 .reportes-view-button:hover {
     background: #4b2373;
     color: #ffffff;
@@ -425,6 +474,7 @@
    ESTADO VACÍO
    ========================= */
 
+/* Regla CSS: .reportes-empty. */
 .reportes-empty {
     min-height: 350px;
 
@@ -445,6 +495,7 @@
     text-align: center;
 }
 
+/* Regla CSS: .reportes-empty-icon. */
 .reportes-empty-icon {
     width: 52px;
     height: 52px;
@@ -462,12 +513,14 @@
     color: #9ca3af;
 }
 
+/* Regla CSS: .reportes-empty strong. */
 .reportes-empty strong {
     color: #6b7280;
 
     font-size: 15px;
 }
 
+/* Regla CSS: .reportes-empty span. */
 .reportes-empty span {
     font-size: 13px;
 }
@@ -477,21 +530,26 @@
    RESPONSIVE
    ========================= */
 
+/* Regla CSS: @media (max-width: 900px). */
 @media (max-width: 900px) {
 
+/* Regla CSS: .reportes-alim-header. */
     .reportes-alim-header {
         align-items: flex-start;
         flex-direction: column;
     }
 
+/* Regla CSS: .reportes-alim-actions. */
     .reportes-alim-actions {
         width: 100%;
     }
 
+/* Regla CSS: .reportes-button. */
     .reportes-button {
         flex: 1;
     }
 
+/* Regla CSS: .reportes-filter-grid. */
     .reportes-filter-grid {
         grid-template-columns: 1fr 1fr;
     }
@@ -499,37 +557,46 @@
 }
 
 
+/* Regla CSS: @media (max-width: 650px). */
 @media (max-width: 650px) {
 
+/* Regla CSS: .reportes-alim-header h1. */
     .reportes-alim-header h1 {
         font-size: 27px;
     }
 
+/* Regla CSS: .reportes-alim-header p. */
     .reportes-alim-header p {
         font-size: 14px;
     }
 
+/* Regla CSS: .reportes-alim-actions. */
     .reportes-alim-actions {
         flex-direction: column;
     }
 
+/* Regla CSS: .reportes-button. */
     .reportes-button {
         width: 100%;
     }
 
+/* Regla CSS: .reportes-filter-grid. */
     .reportes-filter-grid {
         grid-template-columns: 1fr;
     }
 
+/* Regla CSS: .reportes-tabs. */
     .reportes-tabs {
         border-radius: 10px 10px 0 0;
     }
 
+/* Regla CSS: .reportes-tab. */
     .reportes-tab {
         padding: 13px 18px;
         font-size: 13px;
     }
 
+/* Regla CSS: .reportes-empty. */
     .reportes-empty {
         min-height: 280px;
     }

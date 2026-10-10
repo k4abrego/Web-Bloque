@@ -14,12 +14,15 @@ import sidebarConfig from "./sidebarConfig";
 
 
 // Crea el menu lateral y decidee si se muestra abierto o cerrado
+// Sección: Sidebar.
 function Sidebar({ role, isOpen, onToggle }) {
 
 // Guarda la info del perfil
+// Sección: declaración.
   const [profileOpen, setProfileOpen] = useState(false);
 
 // Opciones del menu correspondiente al rol
+// Sección: menuItems.
   const menuItems = sidebarConfig[role] || [];
 
   return (
@@ -61,6 +64,7 @@ function Sidebar({ role, isOpen, onToggle }) {
           }
 
           /* Obtiene el icono correspondiente a cada opción */
+// Sección: Icon.
           const Icon = item.icon;
 
           /* Crea cada opción del menú según el rol */

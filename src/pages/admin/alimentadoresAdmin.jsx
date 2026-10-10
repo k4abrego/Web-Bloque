@@ -1,3 +1,4 @@
+// Documentación automática de src/pages/admin/alimentadoresAdmin.jsx: Página y estilos de la sección alimentadoresAdmin.
 import { useState } from "react";
 import {
   Users,
@@ -15,49 +16,64 @@ import "./alimentadoresAdmin.css";
 
 
 // Página donde el administrador puede gestionar las cuentas de alimentadores
+// Sección: AlimentadoresAdmin.
 function AlimentadoresAdmin() {
 
   // Guarda las cuentas para poder realizar cambios temporales
+// Sección: declaración.
   const [alimentadores, setAlimentadores] = useState(alimentadoresMock);
 
 
   // Guarda la búsqueda y el filtro seleccionado
+// Sección: declaración.
   const [busqueda, setBusqueda] = useState("");
+// Sección: declaración.
   const [filtroEstado, setFiltroEstado] = useState("Todos");
 
 
   // Controla el formulario para crear o editar cuentas
+// Sección: declaración.
   const [modalAbierto, setModalAbierto] = useState(false);
+// Sección: declaración.
   const [cuentaEditando, setCuentaEditando] = useState(null);
+// Sección: declaración.
   const [formulario, setFormulario] = useState({
     nombre: "",
     correo: "",
   });
+// Sección: declaración.
   const [errorFormulario, setErrorFormulario] = useState("");
 
 
   // Calcula la cantidad de cuentas registradas según su estado
+// Sección: totalCuentas.
   const totalCuentas = alimentadores.length;
 
+// Sección: cuentasActivas.
   const cuentasActivas = alimentadores.filter(
     (alimentador) => alimentador.estado === "Activo"
   ).length;
 
+// Sección: cuentasInactivas.
   const cuentasInactivas = alimentadores.filter(
     (alimentador) => alimentador.estado === "Inactivo"
   ).length;
 
 
   // Filtra las cuentas según la búsqueda y el estado seleccionado
+// Sección: alimentadoresFiltrados.
   const alimentadoresFiltrados = alimentadores.filter((alimentador) => {
 
+// Sección: textoBusqueda.
     const textoBusqueda = busqueda.toLowerCase().trim();
 
+// Sección: coincideBusqueda.
     const coincideBusqueda =
       alimentador.nombre.toLowerCase().includes(textoBusqueda) ||
       alimentador.correo.toLowerCase().includes(textoBusqueda) ||
       alimentador.alias.toLowerCase().includes(textoBusqueda);
 
+// Sección: coincideEstado.
     const coincideEstado =
       filtroEstado === "Todos" ||
       alimentador.estado === filtroEstado;
@@ -67,6 +83,7 @@ function AlimentadoresAdmin() {
 
 
   // Obtiene las iniciales para identificar visualmente a cada alimentador
+// Sección: obtenerIniciales.
   const obtenerIniciales = (nombre) => {
 
     return nombre
@@ -79,6 +96,7 @@ function AlimentadoresAdmin() {
 
 
   // Calcula los reportes asignados a cada alimentador
+// Sección: contarReportes.
   const contarReportes = (alias) => {
 
     return reportesMock.filter(
@@ -88,6 +106,7 @@ function AlimentadoresAdmin() {
 
 
   // Abre el formulario para registrar una nueva cuenta
+// Sección: abrirCrearCuenta.
   const abrirCrearCuenta = () => {
 
     setCuentaEditando(null);
@@ -103,6 +122,7 @@ function AlimentadoresAdmin() {
 
 
   // Abre el formulario con la información de una cuenta existente
+// Sección: abrirEditarCuenta.
   const abrirEditarCuenta = (alimentador) => {
 
     setCuentaEditando(alimentador.id);
@@ -118,6 +138,7 @@ function AlimentadoresAdmin() {
 
 
   // Cierra el formulario sin guardar cambios
+// Sección: cerrarFormulario.
   const cerrarFormulario = () => {
 
     setModalAbierto(false);
@@ -127,6 +148,7 @@ function AlimentadoresAdmin() {
 
 
   // Actualiza los campos del formulario
+// Sección: actualizarFormulario.
   const actualizarFormulario = (campo, valor) => {
 
     setFormulario({
@@ -139,11 +161,14 @@ function AlimentadoresAdmin() {
 
 
   // Guarda una cuenta nueva o los cambios de una cuenta existente
+// Sección: guardarCuenta.
   const guardarCuenta = (e) => {
 
     e.preventDefault();
 
+// Sección: nombre.
     const nombre = formulario.nombre.trim();
+// Sección: correo.
     const correo = formulario.correo.trim().toLowerCase();
 
 
@@ -156,6 +181,7 @@ function AlimentadoresAdmin() {
 
 
     // Evita registrar dos cuentas con el mismo correo
+// Sección: correoExiste.
     const correoExiste = alimentadores.some(
       (alimentador) =>
         alimentador.correo.toLowerCase() === correo &&
@@ -188,9 +214,11 @@ function AlimentadoresAdmin() {
     } else {
 
       // Crea una cuenta temporal con un identificador nuevo
+// Sección: nuevoId.
       const nuevoId =
         Math.max(0, ...alimentadores.map((alimentador) => alimentador.id)) + 1;
 
+// Sección: nuevaCuenta.
       const nuevaCuenta = {
         id: nuevoId,
         nombre,
@@ -211,6 +239,7 @@ function AlimentadoresAdmin() {
 
 
   // Permite activar o desactivar una cuenta temporalmente
+// Sección: cambiarEstadoCuenta.
   const cambiarEstadoCuenta = (id) => {
 
     setAlimentadores(

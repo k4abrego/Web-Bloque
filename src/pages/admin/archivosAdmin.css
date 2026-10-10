@@ -1,10 +1,13 @@
+/* Documentación automática de src/pages/admin/archivosAdmin.css: Página y estilos de la sección archivosAdmin. */
 /* Contenedor principal de la página de archivos */
+/* Regla CSS: .archivos-admin. */
 .archivos-admin {
   width: 100%;
 }
 
 
 /* Organiza el título y el total de archivos */
+/* Regla CSS: .archivos-header. */
 .archivos-header {
   display: flex;
   align-items: center;
@@ -15,6 +18,7 @@
 
 
 /* Da formato al título principal */
+/* Regla CSS: .archivos-header h1. */
 .archivos-header h1 {
   margin: 0 0 6px;
   color: #1f2937;
@@ -23,6 +27,7 @@
 
 
 /* Da formato a la descripción de la página */
+/* Regla CSS: .archivos-header p. */
 .archivos-header p {
   margin: 0;
   color: #6b7280;
@@ -31,6 +36,7 @@
 
 
 /* Muestra la cantidad total de archivos registrados */
+/* Regla CSS: .archivos-total. */
 .archivos-total {
   display: flex;
   align-items: center;
@@ -44,6 +50,7 @@
 
 
 /* Organiza el buscador y los filtros */
+/* Regla CSS: .archivos-herramientas. */
 .archivos-herramientas {
   display: flex;
   align-items: center;
@@ -53,6 +60,7 @@
 
 
 /* Da formato al buscador de archivos */
+/* Regla CSS: .archivos-buscador. */
 .archivos-buscador {
   display: flex;
   align-items: center;
@@ -67,6 +75,7 @@
 
 
 /* Da formato al campo de búsqueda */
+/* Regla CSS: .archivos-buscador input. */
 .archivos-buscador input {
   width: 100%;
   padding: 12px 0;
@@ -79,6 +88,7 @@
 
 
 /* Da formato al filtro por tipo de archivo */
+/* Regla CSS: .archivos-herramientas select. */
 .archivos-herramientas select {
   min-width: 190px;
   padding: 12px 45px 12px 14px;
@@ -97,6 +107,7 @@
 
 /* Resalta los campos cuando están siendo utilizados */
 .archivos-buscador:focus-within,
+/* Regla CSS: .archivos-herramientas select:focus. */
 .archivos-herramientas select:focus {
   border-color: #6735c4;
   border-width: 2px;
@@ -105,6 +116,7 @@
 
 
 /* Muestra la cantidad de resultados encontrados */
+/* Regla CSS: .archivos-resultados. */
 .archivos-resultados {
   margin-bottom: 18px;
   color: #6b7280;
@@ -113,6 +125,7 @@
 
 
 /* Organiza las evidencias dentro de la página */
+/* Regla CSS: .archivos-grid. */
 .archivos-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -121,6 +134,7 @@
 
 
 /* Agrupa la evidencia con el reporte al que pertenece */
+/* Regla CSS: .archivo-contenedor. */
 .archivo-contenedor {
   padding: 14px;
   background: white;
@@ -131,6 +145,7 @@
 
 
 /* Muestra el reporte relacionado con cada evidencia */
+/* Regla CSS: .archivo-reporte. */
 .archivo-reporte {
   display: flex;
   align-items: center;
@@ -142,6 +157,7 @@
 
 
 /* Da formato al folio relacionado con la evidencia */
+/* Regla CSS: .archivo-reporte a. */
 .archivo-reporte a {
   padding: 4px 7px;
   border-radius: 7px;
@@ -155,6 +171,7 @@
 
 
 /* Resalta el folio cuando se pasa el mouse */
+/* Regla CSS: .archivo-reporte a:hover. */
 .archivo-reporte a:hover {
   background-color: #eee8f7;
   transform: scale(1.04);
@@ -162,6 +179,7 @@
 
 
 /* Muestra un mensaje cuando no existen resultados */
+/* Regla CSS: .archivos-vacio. */
 .archivos-vacio {
   padding: 60px 20px;
   background: white;
@@ -173,6 +191,7 @@
 
 
 /* Da formato al título del mensaje sin resultados */
+/* Regla CSS: .archivos-vacio h2. */
 .archivos-vacio h2 {
   margin: 12px 0 6px;
   color: #374151;
@@ -181,6 +200,7 @@
 
 
 /* Da formato al texto del mensaje sin resultados */
+/* Regla CSS: .archivos-vacio p. */
 .archivos-vacio p {
   margin: 0;
   font-size: 13px;

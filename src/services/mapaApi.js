@@ -1,6 +1,8 @@
 import { apiFetch } from "./api";
 
+// Sección: obtenerPuntosMapa.
 export async function obtenerPuntosMapa(params = {}) {
+// Sección: query.
     const query = new URLSearchParams();
 
     Object.entries(params).forEach(([key, value]) => {
@@ -9,6 +11,7 @@ export async function obtenerPuntosMapa(params = {}) {
         }
     });
 
+// Sección: url.
     const url = query.toString()
         ? `/mapa/reportes?${query.toString()}`
         : "/mapa/reportes";

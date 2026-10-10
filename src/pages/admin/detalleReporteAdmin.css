@@ -1,10 +1,13 @@
+/* Documentación automática de src/pages/admin/detalleReporteAdmin.css: Página y estilos de la sección detalleReporteAdmin. */
 /* Contenedor principal de la página de detalle */
+/* Regla CSS: .detalle-reporte. */
 .detalle-reporte {
   width: 100%;
 }
 
 
 /* Permite regresar a la lista de reportes */
+/* Regla CSS: .detalle-volver. */
 .detalle-volver {
   display: inline-flex;
   align-items: center;
@@ -23,6 +26,7 @@
 
 
 /* Resalta el botón para regresar cuando se pasa el mouse */
+/* Regla CSS: .detalle-volver:hover. */
 .detalle-volver:hover {
   background-color: #eee8f7;
   transform: scale(1.08) ;
@@ -32,6 +36,7 @@
 /* --- Encabezado --- */
 
 /* Organiza la información principal y los estados del reporte */
+/* Regla CSS: .detalle-header. */
 .detalle-header {
   display: flex;
   justify-content: space-between;
@@ -42,6 +47,7 @@
 
 
 /* Muestra el folio del reporte */
+/* Regla CSS: .detalle-folio. */
 .detalle-folio {
   display: inline-block;
   margin-bottom: 7px;
@@ -52,6 +58,7 @@
 
 
 /* Da formato al título principal */
+/* Regla CSS: .detalle-header h1. */
 .detalle-header h1 {
   margin: 0;
   color: #1f2937;
@@ -60,6 +67,7 @@
 
 
 /* Da formato al texto debajo del título */
+/* Regla CSS: .detalle-header p. */
 .detalle-header p {
   margin: 8px 0 0 0;
   color: #6b7280;
@@ -67,6 +75,7 @@
 
 
 /* Organiza el estado y la prioridad del reporte */
+/* Regla CSS: .detalle-badges. */
 .detalle-badges {
   display: flex;
   align-items: center;
@@ -76,6 +85,7 @@
 
 /* Da formato general al estado del reporte */
 .detalle-estado-badge,
+/* Regla CSS: .detalle-prioridad-badge. */
 .detalle-prioridad-badge {
   display: inline-block;
   padding: 7px 12px;
@@ -87,6 +97,7 @@
 
 
 /* Identifica los reportes pendientes */
+/* Regla CSS: .detalle-estado-badge[data-estado="Pendiente"]. */
 .detalle-estado-badge[data-estado="Pendiente"] {
   background: #fff4d6;
   color: #9a6700;
@@ -94,6 +105,7 @@
 
 
 /* Identifica los reportes en proceso */
+/* Regla CSS: .detalle-estado-badge[data-estado="En proceso"]. */
 .detalle-estado-badge[data-estado="En proceso"] {
   background: #e8efff;
   color: #3157a4;
@@ -101,6 +113,7 @@
 
 
 /* Identifica los reportes resueltos */
+/* Regla CSS: .detalle-estado-badge[data-estado="Resuelto"]. */
 .detalle-estado-badge[data-estado="Resuelto"] {
   background: #e6f6ec;
   color: #287a45;
@@ -108,6 +121,7 @@
 
 
 /* Identifica los reportes de prioridad alta */
+/* Regla CSS: .detalle-prioridad-badge[data-prioridad="Alta"]. */
 .detalle-prioridad-badge[data-prioridad="Alta"] {
   background: #fde8e8;
   color: #b42318;
@@ -115,6 +129,7 @@
 
 
 /* Identifica los reportes de prioridad media */
+/* Regla CSS: .detalle-prioridad-badge[data-prioridad="Media"]. */
 .detalle-prioridad-badge[data-prioridad="Media"] {
   background: #fff4d6;
   color: #9a6700;
@@ -122,6 +137,7 @@
 
 
 /* Identifica los reportes de prioridad baja */
+/* Regla CSS: .detalle-prioridad-badge[data-prioridad="Baja"]. */
 .detalle-prioridad-badge[data-prioridad="Baja"] {
   background: #e6f6ec;
   color: #287a45;
@@ -131,6 +147,7 @@
 /* --- Tarjetas --- */
 
 /* Crea los bloques donde se muestra la información del reporte */
+/* Regla CSS: .detalle-card. */
 .detalle-card {
   margin-bottom: 24px;
   padding: 24px;
@@ -141,12 +158,14 @@
 
 
 /* Separa el encabezado del contenido de cada tarjeta */
+/* Regla CSS: .detalle-card-header. */
 .detalle-card-header {
   margin-bottom: 24px;
 }
 
 
 /* Da formato al título de cada sección */
+/* Regla CSS: .detalle-card-header h2. */
 .detalle-card-header h2 {
   margin: 0;
   color: #1f2937;
@@ -155,6 +174,7 @@
 
 
 /* Da formato a la descripción de cada sección */
+/* Regla CSS: .detalle-card-header p. */
 .detalle-card-header p {
   margin: 5px 0 0 0;
   color: #6b7280;
@@ -165,6 +185,7 @@
 /* --- Info general --- */
 
 /* Organiza la información general en columnas */
+/* Regla CSS: .detalle-info-grid. */
 .detalle-info-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -173,6 +194,7 @@
 
 
 /* Organiza cada dato junto con su icono */
+/* Regla CSS: .detalle-info-item. */
 .detalle-info-item {
   display: flex;
   align-items: center;
@@ -184,6 +206,7 @@
 
 
 /* Da formato a los iconos de la información */
+/* Regla CSS: .detalle-info-icon. */
 .detalle-info-icon {
   display: flex;
   align-items: center;
@@ -198,6 +221,7 @@
 
 
 /* Da formato al nombre de cada dato */
+/* Regla CSS: .detalle-info-item span. */
 .detalle-info-item span {
   display: block;
   margin-bottom: 4px;
@@ -207,6 +231,7 @@
 
 
 /* Resalta la información del reporte */
+/* Regla CSS: .detalle-info-item strong. */
 .detalle-info-item strong {
   color: #374151;
   font-size: 14px;
@@ -216,6 +241,7 @@
 /* --- Etiquetas --- */
 
 /* Organiza las etiquetas asignadas al reporte */
+/* Regla CSS: .detalle-etiquetas. */
 .detalle-etiquetas {
   display: flex;
   flex-wrap: wrap;
@@ -224,6 +250,7 @@
 
 
 /* Da formato a cada etiqueta */
+/* Regla CSS: .detalle-etiqueta. */
 .detalle-etiqueta {
   padding: 7px 12px;
   background: #eee8f7;
@@ -235,6 +262,7 @@
 
 
 /* Muestra cuando el reporte no tiene etiquetas */
+/* Regla CSS: .detalle-sin-etiquetas. */
 .detalle-sin-etiquetas {
   color: #6b7280;
   font-size: 14px;
@@ -242,6 +270,7 @@
 
 
 /* Muestra el mensaje cuando un reporte no existe */
+/* Regla CSS: .detalle-no-encontrado. */
 .detalle-no-encontrado {
   padding: 30px;
   background: white;
@@ -253,6 +282,7 @@
 /* --- Evidencias --- */
 
 /* Organiza las evidencias asociadas al reporte */
+/* Regla CSS: .detalle-evidencias. */
 .detalle-evidencias {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -261,6 +291,7 @@
 
 
 /* Muestra cuando un reporte todavía no tiene evidencias */
+/* Regla CSS: .detalle-sin-evidencias. */
 .detalle-sin-evidencias {
   display: flex;
   align-items: center;
@@ -273,6 +304,7 @@
 
 
 /* Da formato al título mostrado cuando no existen evidencias */
+/* Regla CSS: .detalle-sin-evidencias strong. */
 .detalle-sin-evidencias strong {
   display: block;
   margin-bottom: 4px;
@@ -282,6 +314,7 @@
 
 
 /* Da formato al texto mostrado cuando no existen evidencias */
+/* Regla CSS: .detalle-sin-evidencias p. */
 .detalle-sin-evidencias p {
   margin: 0;
   font-size: 13px;

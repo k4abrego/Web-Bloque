@@ -1,3 +1,4 @@
+// Documentación automática de src/pages/alimentador/reportesAlim.jsx: Página y estilos de la sección reportesAlim.
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,12 +12,19 @@ import {
 
 import "./reportesAlim.css";
 
+// Sección: ReportesAlim.
 function ReportesAlim() {
+// Sección: navigate.
     const navigate = useNavigate();
+// Sección: declaración.
     const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
+// Sección: declaración.
     const [estadoActivo, setEstadoActivo] = useState("Todos");
+// Sección: declaración.
     const [estadoFiltro, setEstadoFiltro] = useState("");
+// Sección: declaración.
     const [localidadFiltro, setLocalidadFiltro] = useState("");
+// Sección: declaración.
     const [busqueda, setBusqueda] = useState("");
 
     /*
@@ -33,6 +41,7 @@ function ReportesAlim() {
      }
 
      */
+// Sección: reportes.
     const reportes = [];
 
     // const [reportes, setReportes] = useState([]); con los enpoints 
@@ -41,21 +50,26 @@ function ReportesAlim() {
 //     // aquí irá la llamada al backend
 // }, []);
 
+// Sección: reportesFiltrados.
     const reportesFiltrados = useMemo(() => {
         return reportes.filter((reporte) => {
+// Sección: coincideBusqueda.
             const coincideBusqueda =
                 !busqueda ||
                 String(reporte.folio ?? "")
                     .toLowerCase()
                     .includes(busqueda.toLowerCase());
 
+// Sección: coincideEstado.
             const coincideEstado =
                 !estadoFiltro || reporte.estado === estadoFiltro;
 
+// Sección: coincideLocalidad.
             const coincideLocalidad =
                 !localidadFiltro ||
                 reporte.localidad === localidadFiltro;
 
+// Sección: coincideTab.
             const coincideTab =
                 estadoActivo === "Todos" ||
                 reporte.estado === estadoActivo;
@@ -75,6 +89,7 @@ function ReportesAlim() {
         estadoActivo,
     ]);
 
+// Sección: limpiarFiltros.
     const limpiarFiltros = () => {
         setEstadoFiltro("");
         setLocalidadFiltro("");
@@ -82,6 +97,7 @@ function ReportesAlim() {
         setEstadoActivo("Todos");
     };
 
+// Sección: verReporte.
     const verReporte = (folio) => {
         navigate(`/alimentador/reportes/${folio}`);
     };

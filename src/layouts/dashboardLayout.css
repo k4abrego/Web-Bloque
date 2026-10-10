@@ -1,4 +1,5 @@
 /* Contenedor principal de los paneles del sistema */
+/* Regla CSS: .dashboard-layout. */
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
@@ -7,6 +8,7 @@
 
 
 /* Área donde se muestra la página seleccionada */
+/* Regla CSS: .dashboard-content. */
 .dashboard-content {
   flex: 1;
   min-width: 0;

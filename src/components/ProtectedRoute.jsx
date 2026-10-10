@@ -6,8 +6,11 @@ import { Navigate, Outlet } from "react-router-dom";
  * @param {Object} props - Propiedades del componente.
  * @param {string} props.rolPermitido - Rol necesario.
  */
+// Sección: ProtectedRoute.
 function ProtectedRoute({ rolPermitido }) {
+// Sección: token.
   const token = localStorage.getItem("token");
+// Sección: rol.
   const rol = localStorage.getItem("rol");
 
   // Si no hay sesión, regresar al login.

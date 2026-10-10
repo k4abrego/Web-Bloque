@@ -1,4 +1,6 @@
+/* Documentación automática de src/pages/login/login.css: Página y estilos de la sección login. */
 /* Config la pag completa de login */
+/* Regla CSS: .login-page. */
 .login-page {
   min-height: 100vh;
   display: flex;
@@ -9,6 +11,7 @@
 /* LADO IZQUIERDO */
 
 /* Panel izq de la pantalla */
+/* Regla CSS: .login-side. */
 .login-side {
   width: 30%; /* 30% de la pantalla */
   min-height: 100vh;
@@ -30,6 +33,7 @@
 
 
 /* Degradado de la parte izquierda */
+/* Regla CSS: .login-side::after. */
  .login-side::after {
   content: "";
 
@@ -67,12 +71,14 @@
 
 
 /* Contenedor del logo y nombre de SIPINNA */
+/* Regla CSS: .login-brand. */
 .login-brand {
   text-align: center;
 }
 
 
 /* Formato del titulo principal sipinna */
+/* Regla CSS: .login-brand h1. */
 .login-brand h1 {
   color: #368bc1;
   margin-bottom: 15px;
@@ -80,17 +86,19 @@
 
 
 /* Formato del texto sec. sipinna */
+/* Regla CSS: .login-brand h2. */
 .login-brand h2 {
-  color: #111827;
+  color: #3c404b;
   font-size: 22px;
+  padding: 0 20px;
 }
 
 
 /* PARTE DERECHA */
 /* Contenedor del lado derecho */
+/* Regla CSS: .login-main. */
 .login-main {
   width: 70%; /*70 de pantalla*/
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -98,6 +106,7 @@
 
 
 /* Tarjeta que contiene todo el formulario */
+/* Regla CSS: .login-card. */
 .login-card {
   width: 100%;
   max-width: 500px;
@@ -113,6 +122,7 @@
 
 
 /* Icono superior del login */
+/* Regla CSS: .login-icon. */
 .login-icon {
   text-align: center;
   font-size: 30px;
@@ -121,6 +131,7 @@
 
 
 /* Titulo de inicio de sesion */
+/* Regla CSS: .login-card h1. */
 .login-card h1 {
   text-align: center;
   margin: 0;
@@ -129,6 +140,7 @@
 
 
 /* Texto debajo del titulo */
+/* Regla CSS: .login-description. */
 .login-description {
   text-align: center;
   color: #6b7280;
@@ -139,6 +151,7 @@
 
 /* FORMULARIO */
 /* Grupos de cajas de texto */
+/* Regla CSS: .form-group. */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -147,6 +160,7 @@
 
 
 /* Correo y contraseña */
+/* Regla CSS: .form-group label. */
 .form-group label {
   margin-bottom: 8px;
   font-weight: 600;
@@ -156,6 +170,7 @@
 
 
 /* Campos de entrada */
+/* Regla CSS: .form-group input. */
 .form-group input {
   padding: 13px 14px;
 
@@ -167,6 +182,7 @@
 
 
 /* Cambios cuando el usuario selecciona un input */
+/* Regla CSS: .form-group input:focus. */
 .form-group input:focus {
   border-color: #6735c4;
   box-shadow: 0 0 0 3px rgba(103,53,196,0.35)
@@ -175,6 +191,7 @@
 
 /* OLVIDASTE CONTRASEÑA */
 /* contenedor y posicion*/
+/* Regla CSS: .forgot-password. */
 .forgot-password {
   display: flex;
   justify-content: flex-end;
@@ -185,6 +202,7 @@
 
 
 /* Boton olvide contraseña */
+/* Regla CSS: .forgot-password button. */
 .forgot-password button {
   background: none;
   border: none;
@@ -199,6 +217,7 @@
 
 /* BOTÓN LOGIN */
 /* Formato del boton de iniciar sesion */
+/* Regla CSS: .login-button. */
 .login-button {
   width: 100%;
 
@@ -218,6 +237,7 @@
 
 
 /* Cambio de color al pasar el mouse */
+/* Regla CSS: .login-button:hover. */
 .login-button:hover {
   background-color: #300a77;
 }
@@ -225,6 +245,7 @@
 
 /* SELECTOR DE ROL */
 /* Contenedor de botones admin y alim */
+/* Regla CSS: .role-selector. */
 .role-selector {
   display: flex;
   justify-content: center;
@@ -236,6 +257,7 @@
 
 
 /* Estilo de los botones de rol */
+/* Regla CSS: .role. */
 .role {
   padding: 7px 14px;
 
@@ -251,6 +273,7 @@
 
 
 /* Borde que indica que boton esta seleccionado */
+/* Regla CSS: .role.active. */
 .role.active {
   border-color: #6735c4;
 
@@ -261,6 +284,7 @@
 
 
 /* imagen del logo de sipinna, temporal */
+/* Regla CSS: .sipinna-logo. */
 .sipinna-logo{
     width: 300px;
     height: auto;
@@ -269,12 +293,14 @@
 
 
 /* Contenedor que envuelve el input de contraseña y el botón del ojo */
+/* Regla CSS: .password-input-container. */
 .password-input-container {
   position: relative;
 }
 
 
 /* Campo de entrada de contraseña */
+/* Regla CSS: .password-input-container input. */
 .password-input-container input {
   width: 100%;
 
@@ -283,6 +309,7 @@
 
 
 /* Botón que muestra u oculta la contraseña */
+/* Regla CSS: .password-toggle. */
 .password-toggle {
   position: absolute;
 
@@ -309,6 +336,7 @@
 
 
 /* Efecto cuando el mouse pasa sobre el botón del ojo */
+/* Regla CSS: .password-toggle:hover. */
 .password-toggle:hover {
   color: #6735c4;
 }

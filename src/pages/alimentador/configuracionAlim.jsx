@@ -1,3 +1,4 @@
+// Documentación automática de src/pages/alimentador/configuracionAlim.jsx: Página y estilos de la sección configuracionAlim.
 import {
     User,
     Activity,
@@ -7,6 +8,7 @@ import {
 
 import "./configuracionAlim.css";
 
+// Sección: ConfiguracionAlim.
 function ConfiguracionAlim() {
     return (
         <div className="config-alim">

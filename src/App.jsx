@@ -1,4 +1,4 @@
-// Imports
+//Imports
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/login/login";
 import InicioAdmin from "./pages/admin/inicioAdmin";
@@ -18,6 +18,7 @@ import DashboardLayout from "./layouts/dashboardLayout";
 import DetalleReporteAdmin from "./pages/admin/detalleReporteAdmin";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+// Sección: App.
 function App() {
 
   return (

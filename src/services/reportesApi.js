@@ -1,6 +1,8 @@
 import { apiFetch } from "./api";
 
+// Sección: obtenerReporte.
 export async function obtenerReporte(params = {}) {
+// Sección: query.
     const query = new URLSearchParams();
 
     Object.entries(params).forEach(([Key, value]) => {
@@ -9,6 +11,7 @@ export async function obtenerReporte(params = {}) {
         }
     });
 
+// Sección: url.
     const url = query.toString()
         ? `/reportes?${query.toString()}`
         : "/reportes";
@@ -16,10 +19,12 @@ export async function obtenerReporte(params = {}) {
     return apiFetch(url);
 }
 
+// Sección: obtenerReportePorId.
 export async function obtenerReportePorId(folio){
     return apiFetch(`/reportes/${folio}`);
 }
 
+// Sección: actualizarEstadoReporte.
 export async function actualizarEstadoReporte(folio, datos) {
     return apiFetch(`/reportes/${folio}`, {
         method: "POST",
@@ -27,6 +32,7 @@ export async function actualizarEstadoReporte(folio, datos) {
     });
 }
 
+// Sección: asignarReporte.
 export async function asignarReporte(folio, idAlimentador) {
     return apiFetch(`/reportes/asignar/${folio}`, {
         method: "POST",

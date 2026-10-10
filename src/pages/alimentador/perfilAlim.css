@@ -1,30 +1,37 @@
+/* Documentación automática de src/pages/alimentador/perfilAlim.css: Página y estilos de la sección perfilAlim. */
+/* Regla CSS: .perfil-alim. */
 .perfil-alim {
     width: 100%;
     max-width: 1600px;
     margin: 0 auto;
 }
 
+/* Regla CSS: .perfil-alim-header. */
 .perfil-alim-header {
     margin-bottom: 28px;
 }
 
+/* Regla CSS: .perfil-alim-header h1. */
 .perfil-alim-header h1 {
     margin: 0 0 8px;
     font-size: 32px;
     color: #111827;
 }
 
+/* Regla CSS: .perfil-alim-header p. */
 .perfil-alim-header p {
     margin: 0;
     color: #6b7280;
 }
 
+/* Regla CSS: .perfil-alim-grid. */
 .perfil-alim-grid {
     display: flex;
     flex-direction: column;
     gap: 24px;
 }
 
+/* Regla CSS: .perfil-card. */
 .perfil-card {
     background: #ffffff;
     border: 1px solid #e5e7eb;
@@ -32,40 +39,47 @@
     padding: 26px;
 }
 
+/* Regla CSS: .perfil-card-header. */
 .perfil-card-header {
     margin-bottom: 24px;
 }
 
+/* Regla CSS: .perfil-card-header h2. */
 .perfil-card-header h2 {
     margin: 0 0 6px;
     font-size: 20px;
     color: #111827;
 }
 
+/* Regla CSS: .perfil-card-header p. */
 .perfil-card-header p {
     margin: 0;
     color: #6b7280;
     font-size: 14px;
 }
 
+/* Regla CSS: .perfil-fields. */
 .perfil-fields {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
 
+/* Regla CSS: .perfil-field. */
 .perfil-field {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
+/* Regla CSS: .perfil-field label. */
 .perfil-field label {
     font-size: 13px;
     font-weight: 600;
     color: #374151;
 }
 
+/* Regla CSS: .perfil-input-empty. */
 .perfil-input-empty {
     height: 44px;
     border: 1px solid #e5e7eb;
@@ -73,12 +87,14 @@
     background: #f3f4f6;
 }
 
+/* Regla CSS: .perfil-activity. */
 .perfil-activity {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
 }
 
+/* Regla CSS: .perfil-activity-item. */
 .perfil-activity-item {
     padding: 20px;
     background: #f9fafb;
@@ -89,16 +105,19 @@
     gap: 12px;
 }
 
+/* Regla CSS: .perfil-activity-item span. */
 .perfil-activity-item span {
     font-size: 14px;
     color: #6b7280;
 }
 
+/* Regla CSS: .perfil-activity-item strong. */
 .perfil-activity-item strong {
     font-size: 28px;
     color: #9ca3af;
 }
 
+/* Regla CSS: .perfil-security-content. */
 .perfil-security-content {
     display: flex;
     align-items: center;
@@ -110,17 +129,20 @@
     border-radius: 12px;
 }
 
+/* Regla CSS: .perfil-security-content strong. */
 .perfil-security-content strong {
     color: #374151;
     font-size: 15px;
 }
 
+/* Regla CSS: .perfil-security-content p. */
 .perfil-security-content p {
     margin: 6px 0 0;
     color: #6b7280;
     font-size: 14px;
 }
 
+/* Regla CSS: .perfil-security-button. */
 .perfil-security-button {
     flex-shrink: 0;
     padding: 11px 18px;
@@ -133,15 +155,19 @@
 }
 
 
+/* Regla CSS: @media (max-width: 800px). */
 @media (max-width: 800px) {
+/* Regla CSS: .perfil-fields. */
     .perfil-fields {
         grid-template-columns: 1fr;
     }
 
+/* Regla CSS: .perfil-activity. */
     .perfil-activity {
         grid-template-columns: 1fr;
     }
 
+/* Regla CSS: .perfil-security-content. */
     .perfil-security-content {
         flex-direction: column;
         align-items: flex-start;

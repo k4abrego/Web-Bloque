@@ -1,4 +1,5 @@
 // Datos temporales utilizados mientras se conecta el sistema con el backend 
+// Sección: reportesMock.
 const reportesMock = [
     // #1    
   {

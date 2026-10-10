@@ -1,3 +1,4 @@
+// Documentación automática de src/pages/alimentador/inicioAlim.jsx: Página y estilos de la sección inicioAlim.
 import "./inicioAlim.css";
 import { NavLink } from "react-router-dom";
 import {
@@ -8,7 +9,9 @@ import {
 } from "lucide-react";
 
 
+// Sección: InicioAlim.
 function InicioAlim() {
+// Sección: estadisticas.
     const estadisticas = [
         {
             titulo: "Casos asignados",
@@ -39,6 +42,7 @@ function InicioAlim() {
 
             <section className="alim-stats">
                 {estadisticas.map((estadistica) => {
+// Sección: Icon.
                     const Icon = estadistica.icono;
                     return (
                         <div className="alim-stat-card"

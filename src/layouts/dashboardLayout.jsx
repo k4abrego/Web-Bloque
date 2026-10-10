@@ -5,9 +5,11 @@ import "./dashboardLayout.css";
 
 
 /* Layout reutilizable para los paneles de Administrador y Alimentador */
+// Sección: DashboardLayout.
 function DashboardLayout({ role }) {
 
   /* Guarda si el menú lateral está abierto o cerrado */
+// Sección: declaración.
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (

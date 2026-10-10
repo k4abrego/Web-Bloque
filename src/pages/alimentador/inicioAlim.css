@@ -1,3 +1,5 @@
+/* Documentación automática de src/pages/alimentador/inicioAlim.css: Página y estilos de la sección inicioAlim. */
+/* Regla CSS: .inicio-alim. */
 .inicio-alim {
     width: 100%;
     max-width: 1600px;
@@ -5,10 +7,12 @@
     box-sizing: border-box;
 }
 
+/* Regla CSS: .inicio-alim-header. */
 .inicio-alim-header {
     margin-bottom: 28px;
 }
 
+/* Regla CSS: .inicio-alim-header h1. */
 .inicio-alim-header h1 {
     margin: 0 0 8px;
     font-size: 32px;
@@ -16,12 +20,14 @@
     color: #111827;
 }
 
+/* Regla CSS: .inicio-alim-header p. */
 .inicio-alim-header p {
     margin: 0;
     color: #6b7280;
     font-size: 16px;
 }
 
+/* Regla CSS: .alim-stats. */
 .alim-stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -29,6 +35,7 @@
     margin-bottom: 24px;
 }
 
+/* Regla CSS: .alim-stat-card. */
 .alim-stat-card {
     min-height: 120px;
     padding: 22px;
@@ -41,6 +48,7 @@
     box-sizing: border-box;
 }
 
+/* Regla CSS: .alim-stat-icon. */
 .alim-stat-icon {
     width: 52px;
     height: 52px;
@@ -53,10 +61,12 @@
     justify-content: center;
 }
 
+/* Regla CSS: .alim-stat-content. */
 .alim-stat-content {
     min-width: 0;
 }
 
+/* Regla CSS: .alim-stat-title. */
 .alim-stat-title {
     margin-bottom: 8px;
     color: #6b7280;
@@ -64,12 +74,14 @@
     font-weight: 500;
 }
 
+/* Regla CSS: .alim-stat-number. */
 .alim-stat-number {
     color: #9ca3af;
     font-size: 28px;
     font-weight: 700;
 }
 
+/* Regla CSS: .alim-charts. */
 .alim-charts {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -77,6 +89,7 @@
     margin-bottom: 24px;
 }
 
+/* Regla CSS: .alim-chart-card. */
 .alim-chart-card {
     min-height: 390px;
     padding: 24px;
@@ -86,10 +99,12 @@
     box-sizing: border-box;
 }
 
+/* Regla CSS: .alim-chart-header. */
 .alim-chart-header {
     margin-bottom: 20px;
 }
 
+/* Regla CSS: .alim-chart-header h2. */
 .alim-chart-header h2 {
     margin: 0 0 6px;
     color: #111827;
@@ -97,12 +112,14 @@
     font-weight: 600;
 }
 
+/* Regla CSS: .alim-chart-header p. */
 .alim-chart-header p {
     margin: 0;
     color: #9ca3af;
     font-size: 13px;
 }
 
+/* Regla CSS: .alim-chart-empty. */
 .alim-chart-empty {
     height: 280px;
     border-radius: 12px;
@@ -114,6 +131,7 @@
     font-size: 14px;
 }
 
+/* Regla CSS: .alim-recent-card. */
 .alim-recent-card {
     width: 100%;
     background: #ffffff;
@@ -122,6 +140,7 @@
     overflow: hidden;
 }
 
+/* Regla CSS: .alim-recent-header. */
 .alim-recent-header {
     padding: 24px;
     display: flex;
@@ -130,28 +149,33 @@
     gap: 20px;
 }
 
+/* Regla CSS: .alim-recent-header h2. */
 .alim-recent-header h2 {
     margin: 0 0 6px;
     color: #111827;
     font-size: 20px;
 }
 
+/* Regla CSS: .alim-recent-header p. */
 .alim-recent-header p {
     margin: 0;
     color: #9ca3af;
     font-size: 14px;
 }
 
+/* Regla CSS: .alim-table-wrapper. */
 .alim-table-wrapper {
     width: 100%;
     overflow-x: auto;
 }
 
+/* Regla CSS: .alim-table. */
 .alim-table {
     width: 100%;
     border-collapse: collapse;
 }
 
+/* Regla CSS: .alim-table th. */
 .alim-table th {
     padding: 14px 18px;
     text-align: left;
@@ -162,11 +186,13 @@
     white-space: nowrap;
 }
 
+/* Regla CSS: .alim-table td. */
 .alim-table td {
     padding: 0;
     border-top: 1px solid #f0f0f0;
 }
 
+/* Regla CSS: .alim-table-empty. */
 .alim-table-empty {
     min-height: 100px;
     display: flex;
@@ -176,6 +202,7 @@
     font-size: 14px;
 }
 
+/* Regla CSS: .alim-outline-button. */
 .alim-outline-button {
     display: inline-flex;
     align-items: center;
@@ -192,17 +219,21 @@
     transition: background 0.2s ease, color 0.2s ease;
 }
 
+/* Regla CSS: .alim-outline-button:hover. */
 .alim-outline-button:hover {
     background: #4b2373;
     color: #ffffff;
 }
 
+/* Regla CSS: @media (max-width: 1100px). */
 @media (max-width: 1100px) {
 
+/* Regla CSS: .alim-stats. */
     .alim-stats {
         grid-template-columns: repeat(2, 1fr);
     }
 
+/* Regla CSS: .alim-charts. */
     .alim-charts {
         grid-template-columns: 1fr;
     }
@@ -210,17 +241,21 @@
 }
 
 
+/* Regla CSS: @media (max-width: 650px). */
 @media (max-width: 650px) {
 
+/* Regla CSS: .alim-stats. */
     .alim-stats {
         grid-template-columns: 1fr;
     }
 
+/* Regla CSS: .alim-recent-header. */
     .alim-recent-header {
         flex-direction: column;
         align-items: flex-start;
     }
 
+/* Regla CSS: .inicio-alim-header h1. */
     .inicio-alim-header h1 {
         font-size: 28px;
     }
@@ -228,15 +263,19 @@
 }
 
 
+/* Regla CSS: @media (max-width: 480px). */
 @media (max-width: 480px) {
+/* Regla CSS: .alim-stat-card. */
     .alim-stat-card {
         padding: 18px;
     }
 
+/* Regla CSS: .alim-chart-card. */
     .alim-chart-card {
         padding: 18px;
     }
 
+/* Regla CSS: .alim-recent-header. */
     .alim-recent-header {
         padding: 18px;
     }

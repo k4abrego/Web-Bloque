@@ -5,16 +5,20 @@
  * @param {string} challengeBase64 - Challenge recibido.
  * @returns {Promise<string>} HMAC codificado en Base64.
  */
+// Sección: generarHMAC.
 export async function generarHMAC(contrasena, challengeBase64) {
+// Sección: encoder.
   const encoder = new TextEncoder();
 
   // 1. Obtener SHA-256 de la contraseña.
+// Sección: hash.
   const hash = await crypto.subtle.digest(
     "SHA-256",
     encoder.encode(contrasena)
   );
 
   // 2. Importar el hash como clave HMAC.
+// Sección: clave.
   const clave = await crypto.subtle.importKey(
     "raw",
     hash,
@@ -27,14 +31,17 @@ export async function generarHMAC(contrasena, challengeBase64) {
   );
 
   // 3. Decodificar el challenge Base64.
+// Sección: challengeBinario.
   const challengeBinario = atob(challengeBase64);
 
+// Sección: challengeBytes.
   const challengeBytes = Uint8Array.from(
     challengeBinario,
     (caracter) => caracter.charCodeAt(0)
   );
 
   // 4. Calcular HMAC-SHA256.
+// Sección: firma.
   const firma = await crypto.subtle.sign(
     "HMAC",
     clave,
@@ -42,8 +49,10 @@ export async function generarHMAC(contrasena, challengeBase64) {
   );
 
   // 5. Convertir el resultado a Base64.
+// Sección: firmaBytes.
   const firmaBytes = new Uint8Array(firma);
 
+// Sección: firmaBinaria.
   const firmaBinaria = Array.from(
     firmaBytes,
     (byte) => String.fromCharCode(byte)

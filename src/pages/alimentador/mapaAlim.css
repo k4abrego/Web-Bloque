@@ -1,3 +1,5 @@
+/* Documentación automática de src/pages/alimentador/mapaAlim.css: Página y estilos de la sección mapaAlim. */
+/* Regla CSS: .mapa-alim. */
 .mapa-alim {
     width: 100%;
     max-width: 1600px;
@@ -6,10 +8,12 @@
 }
 
 
+/* Regla CSS: .mapa-alim-header. */
 .mapa-alim-header {
     margin-bottom: 24px;
 }
 
+/* Regla CSS: .mapa-alim-header h1. */
 .mapa-alim-header h1 {
     margin: 0 0 8px;
     font-size: 32px;
@@ -17,6 +21,7 @@
     color: #111827;
 }
 
+/* Regla CSS: .mapa-alim-header p. */
 .mapa-alim-header p {
     margin: 0;
     color: #6b7280;
@@ -24,6 +29,7 @@
     line-height: 1.5;
 }
 
+/* Regla CSS: .mapa-alim-card. */
 .mapa-alim-card {
     width: 100%;
     background: #ffffff;
@@ -33,17 +39,21 @@
     box-sizing: border-box;
 }
 
+/* Regla CSS: .mapa-alim-map. */
 .mapa-alim-map {
     width: 100%;
     height: 600px;
 }
 
+/* Regla CSS: @media (max-width: 900px). */
 @media (max-width: 900px) {
 
+/* Regla CSS: .mapa-alim-header h1. */
     .mapa-alim-header h1 {
         font-size: 28px;
     }
 
+/* Regla CSS: .mapa-alim-map. */
     .mapa-alim-map {
         height: 500px;
     }
@@ -51,20 +61,25 @@
 }
 
 
+/* Regla CSS: @media (max-width: 650px). */
 @media (max-width: 650px) {
 
+/* Regla CSS: .mapa-alim-header h1. */
     .mapa-alim-header h1 {
         font-size: 26px;
     }
 
+/* Regla CSS: .mapa-alim-header p. */
     .mapa-alim-header p {
         font-size: 14px;
     }
 
+/* Regla CSS: .mapa-alim-card. */
     .mapa-alim-card {
         border-radius: 12px;
     }
 
+/* Regla CSS: .mapa-alim-map. */
     .mapa-alim-map {
         height: 420px;
     }

@@ -1,5 +1,7 @@
+// Documentación automática de src/pages/alimentador/perfilAlim.jsx: Página y estilos de la sección perfilAlim.
 import "./perfilAlim.css";
 
+// Sección: PerfilAlim.
 function PerfilAlim() {
     return (
         <div className="perfil-alim">

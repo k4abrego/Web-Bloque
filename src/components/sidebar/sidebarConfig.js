@@ -13,6 +13,7 @@ import {
 
 
 // Opciones del sidebar que corresponden a cada tipo de usuario 
+// Sección: sidebarConfig.
 const sidebarConfig = {
 
 //   --- Administrador --- 

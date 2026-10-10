@@ -1,0 +1,288 @@
+/* Contenedor principal de la página de detalle */
+.detalle-reporte {
+  width: 100%;
+}
+
+
+/* Permite regresar a la lista de reportes */
+.detalle-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 24px;
+  padding: 9px 13px;
+  border-radius: 99px;
+  color: #6735c4;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+/* Resalta el botón para regresar cuando se pasa el mouse */
+.detalle-volver:hover {
+  background-color: #eee8f7;
+  transform: scale(1.08) ;
+}
+
+
+/* --- Encabezado --- */
+
+/* Organiza la información principal y los estados del reporte */
+.detalle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+
+/* Muestra el folio del reporte */
+.detalle-folio {
+  display: inline-block;
+  margin-bottom: 7px;
+  color: #6735c4;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+/* Da formato al título principal */
+.detalle-header h1 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 30px;
+}
+
+
+/* Da formato al texto debajo del título */
+.detalle-header p {
+  margin: 8px 0 0 0;
+  color: #6b7280;
+}
+
+
+/* Organiza el estado y la prioridad del reporte */
+.detalle-badges {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+/* Da formato general al estado del reporte */
+.detalle-estado-badge,
+.detalle-prioridad-badge {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+
+/* Identifica los reportes pendientes */
+.detalle-estado-badge[data-estado="Pendiente"] {
+  background: #fff4d6;
+  color: #9a6700;
+}
+
+
+/* Identifica los reportes en proceso */
+.detalle-estado-badge[data-estado="En proceso"] {
+  background: #e8efff;
+  color: #3157a4;
+}
+
+
+/* Identifica los reportes resueltos */
+.detalle-estado-badge[data-estado="Resuelto"] {
+  background: #e6f6ec;
+  color: #287a45;
+}
+
+
+/* Identifica los reportes de prioridad alta */
+.detalle-prioridad-badge[data-prioridad="Alta"] {
+  background: #fde8e8;
+  color: #b42318;
+}
+
+
+/* Identifica los reportes de prioridad media */
+.detalle-prioridad-badge[data-prioridad="Media"] {
+  background: #fff4d6;
+  color: #9a6700;
+}
+
+
+/* Identifica los reportes de prioridad baja */
+.detalle-prioridad-badge[data-prioridad="Baja"] {
+  background: #e6f6ec;
+  color: #287a45;
+}
+
+
+/* --- Tarjetas --- */
+
+/* Crea los bloques donde se muestra la información del reporte */
+.detalle-card {
+  margin-bottom: 24px;
+  padding: 24px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Separa el encabezado del contenido de cada tarjeta */
+.detalle-card-header {
+  margin-bottom: 24px;
+}
+
+
+/* Da formato al título de cada sección */
+.detalle-card-header h2 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 20px;
+}
+
+
+/* Da formato a la descripción de cada sección */
+.detalle-card-header p {
+  margin: 5px 0 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+
+/* --- Info general --- */
+
+/* Organiza la información general en columnas */
+.detalle-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+
+/* Organiza cada dato junto con su icono */
+.detalle-info-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+
+/* Da formato a los iconos de la información */
+.detalle-info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  background: #eee8f7;
+  border-radius: 10px;
+  color: #6735c4;
+}
+
+
+/* Da formato al nombre de cada dato */
+.detalle-info-item span {
+  display: block;
+  margin-bottom: 4px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+
+/* Resalta la información del reporte */
+.detalle-info-item strong {
+  color: #374151;
+  font-size: 14px;
+}
+
+
+/* --- Etiquetas --- */
+
+/* Organiza las etiquetas asignadas al reporte */
+.detalle-etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+
+/* Da formato a cada etiqueta */
+.detalle-etiqueta {
+  padding: 7px 12px;
+  background: #eee8f7;
+  border-radius: 99px;
+  color: #6735c4;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* Muestra cuando el reporte no tiene etiquetas */
+.detalle-sin-etiquetas {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+
+/* Muestra el mensaje cuando un reporte no existe */
+.detalle-no-encontrado {
+  padding: 30px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+/* --- Evidencias --- */
+
+/* Organiza las evidencias asociadas al reporte */
+.detalle-evidencias {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+
+/* Muestra cuando un reporte todavía no tiene evidencias */
+.detalle-sin-evidencias {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  background: #f8fafc;
+  border-radius: 12px;
+  color: #6b7280;
+}
+
+
+/* Da formato al título mostrado cuando no existen evidencias */
+.detalle-sin-evidencias strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #374151;
+  font-size: 14px;
+}
+
+
+/* Da formato al texto mostrado cuando no existen evidencias */
+.detalle-sin-evidencias p {
+  margin: 0;
+  font-size: 13px;
+}

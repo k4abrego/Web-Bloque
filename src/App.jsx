@@ -1,6 +1,6 @@
+// Imports
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import AdminLayout from "./layouts/adminLayout";
+import AdminLayout from "./layouts/dashboardLayout";
 import Login from "./pages/login/login";
 import InicioAdmin from "./pages/admin/inicioAdmin";
 import InicioAlimentador from "./pages/alimentador/inicioAlim";
@@ -9,6 +9,7 @@ import FiltrosAdmin from "./pages/admin/filtrosAdmin";
 import ArchivosAdmin from "./pages/admin/archivosAdmin";
 import MapaCalorAdmin from "./pages/admin/mapaCalorAdmin";
 import AlimentadoresAdmin from "./pages/admin/alimentadoresAdmin";
+<<<<<<< HEAD
 import ConfiguracionAdmin from "./pages/admin/configuracionAdmin";  
 import AlimLayout from "./layouts/alimLayout";
 import ReportesAlim from "./pages/alimentador/reportesAlim";
@@ -16,6 +17,11 @@ import MapaAlim from "./pages/alimentador/mapaAlim";
 import PerfilAlim from "./pages/alimentador/perfilAlim";
 import ConfiguracionAlim from "./pages/alimentador/configuracionAlim";
 
+=======
+import ConfiguracionAdmin from "./pages/admin/configuracionAdmin";
+import DashboardLayout from "./layouts/dashboardLayout";
+import DetalleReporteAdmin from "./pages/admin/detalleReporteAdmin";
+>>>>>>> origin/main
 
 function App() {
 
@@ -32,7 +38,7 @@ function App() {
         {/* Panel de administrador */}
         <Route
           path="/admin"
-          element={<AdminLayout />}
+          element={<DashboardLayout role = "admin"/>}
         >
 
           {/* Inicio */}
@@ -45,6 +51,11 @@ function App() {
           <Route
             path="reportes"
             element={<ReportesAdmin />}
+          />
+
+          <Route
+            path="reportes/:id"
+            element = {<DetalleReporteAdmin/>}
           />
 
           {/* Filtros y etiquetas */}
@@ -81,6 +92,7 @@ function App() {
 
 
         {/* Panel Alimentador */}
+<<<<<<< HEAD
           <Route
               path="/alimentador"
               element={<AlimLayout />}
@@ -110,6 +122,15 @@ function App() {
                   element={<PerfilAlim />}
               />
           </Route>
+=======
+        <Route
+          path="/alimentador"
+          element={<DashboardLayout role = "alimentador" />}
+        >
+          <Route index element = {<InicioAlimentador />} />
+        </Route>
+      
+>>>>>>> origin/main
 
       </Routes>
     </BrowserRouter>

@@ -1,0 +1,14 @@
+/* Contenedor principal de los paneles del sistema */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8fafc;
+}
+
+
+/* Área donde se muestra la página seleccionada */
+.dashboard-content {
+  flex: 1;
+  min-width: 0;
+  padding: 32px;
+}

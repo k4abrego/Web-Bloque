@@ -1,6 +1,5 @@
 // Imports
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AdminLayout from "./layouts/dashboardLayout";
 import Login from "./pages/login/login";
 import InicioAdmin from "./pages/admin/inicioAdmin";
 import InicioAlimentador from "./pages/alimentador/inicioAlim";
@@ -9,19 +8,15 @@ import FiltrosAdmin from "./pages/admin/filtrosAdmin";
 import ArchivosAdmin from "./pages/admin/archivosAdmin";
 import MapaCalorAdmin from "./pages/admin/mapaCalorAdmin";
 import AlimentadoresAdmin from "./pages/admin/alimentadoresAdmin";
-<<<<<<< HEAD
 import ConfiguracionAdmin from "./pages/admin/configuracionAdmin";  
 import AlimLayout from "./layouts/alimLayout";
 import ReportesAlim from "./pages/alimentador/reportesAlim";
 import MapaAlim from "./pages/alimentador/mapaAlim";
 import PerfilAlim from "./pages/alimentador/perfilAlim";
 import ConfiguracionAlim from "./pages/alimentador/configuracionAlim";
-
-=======
-import ConfiguracionAdmin from "./pages/admin/configuracionAdmin";
 import DashboardLayout from "./layouts/dashboardLayout";
 import DetalleReporteAdmin from "./pages/admin/detalleReporteAdmin";
->>>>>>> origin/main
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
 
@@ -92,12 +87,11 @@ function App() {
 
 
         {/* Panel Alimentador */}
-<<<<<<< HEAD
-          <Route
-              path="/alimentador"
-              element={<AlimLayout />}
-          >
-              <Route
+        <Route
+            path="/alimentador"
+            element={<AlimLayout />}
+        >
+            <Route
                   index
                   element={<InicioAlimentador />}
               />
@@ -122,15 +116,31 @@ function App() {
                   element={<PerfilAlim />}
               />
           </Route>
-=======
         <Route
           path="/alimentador"
           element={<DashboardLayout role = "alimentador" />}
         >
           <Route index element = {<InicioAlimentador />} />
         </Route>
-      
->>>>>>> origin/main
+
+        <Route element={<ProtectedRoute rolPermitido="admin" />}>
+
+            <Route
+              path="/admin"
+              element={<DashboardLayout role="admin" />}
+            >
+              {/* Aquí permanecen todas tus rutas actuales de admin */}
+            </Route>
+          </Route>
+
+          <Route element={<ProtectedRoute rolPermitido="alimentador" />}>
+          <Route
+            path="/alimentador"
+            element={<AlimLayout />}
+          >
+            {/* Aquí permanecen todas tus rutas actuales de alimentador */}
+          </Route>
+        </Route>
 
       </Routes>
     </BrowserRouter>

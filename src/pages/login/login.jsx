@@ -3,7 +3,8 @@ import { ShieldCheck, Eye, EyeOff } from "lucide-react"
 import { useState } from "react";
 import "./login.css";
 import logoSIPINNA from "../../assets/sipinnalogo.png"
-
+// import { useNavigate } from "react-router-dom";
+import { solicitarChallenge } from "../../services/authApi";
 
 // Crea la panralla de inicio de sesión
 function Login() {
@@ -15,17 +16,47 @@ function Login() {
   const [mostrarContrasena, setMostrarContrasena] = useState(false);
 
   // Controla lpo que pasa cuando el usuario quiere iniciar sesión
-  const handleSubmit = (e) => {
+  
+
+  /**
+   * Controla el envío del formulario de inicio de sesión.
+   * Solicita el challenge al backend de autenticación.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e
+   */
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
+    setError("");
+    setCargando(true);
 
-      // Pendiente: conectar con Auth API.
-      // El backend validará las credenciales y el rol.
-};
-    // Después aquí se coencta el backend
+    try {
+      // Solicitar challenge al backend
+      const datos = await solicitarChallenge(correo.trim());
+
+      // Verificar que el backend devolvió los datos esperados
+      if (!datos.challenge || datos.user_id == null) {
+        throw new Error("Respuesta inválida del servidor.");
+      }
+
+      // Autenticación HMAC pendiente de implementar
+      setError(
+        "Conexión con Auth API correcta. Falta completar la autenticación HMAC."
+      );
+
+    } catch (err) {
+      setError(err.message || "Error al conectar con Auth API.");
+    } finally {
+      setCargando(false);
+    }
   };
+
+
+
+  // const navigate = useNavigate();
+
+  const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState("");
 
 
   return (
@@ -140,13 +171,20 @@ function Login() {
               </button>
             </div>
 
+            {/* Mensaje de error o estado de autenticación */}
+            {error && (
+              <p className="login-error" role="alert">
+                {error}
+              </p>
+            )}
 
             {/* Boton para enviar el formulario */}
             <button
               className="login-button"
               type="submit"
+              disabled={cargando}
             >
-              Iniciar sesión
+              {cargando ? "Iniciando sesión..." : "Iniciar sesión"}
             </button>
 
 

@@ -1,10 +1,14 @@
+import { solicitarChallenge, verificarChallenge, guardarSesion } from "../../services/authApi";
 // Imports
 import { ShieldCheck, Eye, EyeOff } from "lucide-react"
 import { useState } from "react";
 import "./login.css";
 import logoSIPINNA from "../../assets/sipinnalogo.png"
 // import { useNavigate } from "react-router-dom";
-import { solicitarChallenge } from "../../services/authApi";
+
+import { useNavigate } from "react-router-dom";
+
+import { generarHMAC } from "../../services/hmac";
 
 // Crea la panralla de inicio de sesión
 function Login() {
@@ -14,6 +18,7 @@ function Login() {
   const [contrasena, setContrasena] = useState("");
   const [rol, setRol] = useState("admin");
   const [mostrarContrasena, setMostrarContrasena] = useState(false);
+  const navigate = useNavigate();
 
   // Controla lpo que pasa cuando el usuario quiere iniciar sesión
   
@@ -24,6 +29,7 @@ function Login() {
    *
    * @param {React.FormEvent<HTMLFormElement>} e
    */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -31,25 +37,55 @@ function Login() {
     setCargando(true);
 
     try {
-      // Solicitar challenge al backend
-      const datos = await solicitarChallenge(correo.trim());
+      // 1. Solicitar el challenge.
+      const { challenge, user_id } =
+        await solicitarChallenge(correo.trim());
 
-      // Verificar que el backend devolvió los datos esperados
-      if (!datos.challenge || datos.user_id == null) {
-        throw new Error("Respuesta inválida del servidor.");
+      if (!challenge || user_id == null) {
+        throw new Error("Respuesta inválida de Auth API.");
       }
 
-      // Autenticación HMAC pendiente de implementar
-      setError(
-        "Conexión con Auth API correcta. Falta completar la autenticación HMAC."
+      // 2. Calcular la respuesta HMAC-SHA256.
+      const respuestaHMAC = await generarHMAC(
+        contrasena,
+        challenge
       );
 
+      // 3. Verificar el challenge y obtener el JWT.
+      const datos = await verificarChallenge(
+        user_id,
+        respuestaHMAC
+      );
+
+      // 4. Verificar la respuesta de autenticación.
+      if (!datos.token) {
+        throw new Error("El servidor no devolvió un token.");
+      }
+
+      // 5. Comprobar el rol.
+      if (!["admin", "alimentador"].includes(datos.rol)) {
+        throw new Error(
+          "El servidor no devolvió un rol reconocido."
+        );
+      }
+
+      // 6. Guardar la sesión.
+      guardarSesion(datos.token, datos.rol);
+
+      // 7. Redirigir al panel correspondiente.
+      if (datos.rol === "admin") {
+        navigate("/admin", { replace: true });
+      } else {
+        navigate("/alimentador", { replace: true });
+      }
+
     } catch (err) {
-      setError(err.message || "Error al conectar con Auth API.");
+      setError(err.message || "Error al iniciar sesión.");
     } finally {
       setCargando(false);
     }
   };
+
 
 
 

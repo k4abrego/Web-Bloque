@@ -26,7 +26,7 @@ export async function solicitarChallenge(correo) {
  * @returns {Promise<object>} Token JWT y rol del usuario.
  */
 export async function verificarChallenge(userId, respuestaHMAC) {
-  const response = await fetch(`${AUTH_API_URL}/Login`, {
+  const response = await fetch(`${AUTH_API_URL}/Login/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

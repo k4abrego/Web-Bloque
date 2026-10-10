@@ -44,3 +44,26 @@ export async function apiFetch(endpoint, options = {}) {
 export async function authFetch(endpoint, options = {}) {
   return request(AUTH_API_URL, endpoint, options);
 }
+
+
+export async function verificarChallenge(userId, respuestaHMAC) {
+  const response = await fetch(
+    `${import.meta.env.VITE_AUTH_API_URL}/Login/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        response: respuestaHMAC,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Correo o contraseña incorrectos.");
+  }
+
+  return response.json();
+}

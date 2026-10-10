@@ -1,24 +1,11 @@
 import GoogleMap from "../mapa/googleMap";
-// Imports
-import { useState } from "react";
-import {
-  MapPin,
-  SlidersHorizontal,
-  RotateCcw,
-  FileText,
-  ShieldCheck,
-} from "lucide-react";
-import reportesMock from "../../mocks/reportes";
-import "./mapaCalorAdmin.css";
 
-
-// Página donde el administrador puede consultar la distribución geográfica de reportes
 function MapaCalorAdmin() {
-
   const centro = {
     lat: 19.557,
     lng: -99.271,
   };
+
 
   const reportesPrueba = [
     { id: 1, latitud: 19.5570, longitud: -99.2710, municipio: "Atizapán de Zaragoza", peso: 3 },
@@ -59,6 +46,65 @@ function MapaCalorAdmin() {
     { id: 28, latitud: 19.5450, longitud: -99.2500, municipio: "Atizapán de Zaragoza", peso: 1 },
   ];
 
+
+  return (
+    <div>
+      <h1>Mapa de calor</h1>
+      <p>
+        Visualización geográfica de los reportes registrados.
+      </p>
+      <GoogleMap
+          center={centro}
+          zoom={12}
+          reportes={reportesPrueba}
+      />
+      
+// Imports
+import { useState } from "react";
+import {
+  Map,
+  MapPin,
+  SlidersHorizontal,
+  RotateCcw,
+  FileText,
+  ShieldCheck,
+} from "lucide-react";
+import reportesMock from "../../mocks/reportes";
+import "./mapaCalorAdmin.css";
+
+
+// Espacio temporal donde posteriormente se integrará Google Maps
+function MapaPendiente() {
+
+  return (
+    <div className="mapa-calor-placeholder">
+
+      <div className="mapa-calor-placeholder-icono">
+        <Map size={38} />
+      </div>
+
+      <h3>Espacio reservado para Google Maps</h3>
+
+      <p>
+        Aquí se integrará la visualización geográfica
+        de los reportes mediante el mapa de calor.
+      </p>
+
+      <span>
+        Pendiente de integración
+      </span>
+
+      <span>
+        origin/main
+      </span>
+    </div>
+  );
+}
+
+
+
+// Página donde el administrador puede consultar la distribución geográfica de reportes
+function MapaCalorAdmin() {
 
   // Guarda los filtros seleccionados por el administrador
   const [filtroEstado, setFiltroEstado] = useState("Todos");
@@ -217,7 +263,7 @@ function MapaCalorAdmin() {
 
         <div className="mapa-calor-visor">
 
-          <GoogleMap center={centro} zoom={12} reportes={reportesPrueba} />
+          <MapaPendiente />
 
         </div>
 

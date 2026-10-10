@@ -2,7 +2,9 @@
     width: 100%;
     max-width: 1600px;
     margin: 0 auto;
+    box-sizing: border-box;
 }
+
 
 .mapa-alim-header {
     margin-bottom: 24px;
@@ -11,12 +13,15 @@
 .mapa-alim-header h1 {
     margin: 0 0 8px;
     font-size: 32px;
+    font-weight: 700;
     color: #111827;
 }
 
 .mapa-alim-header p {
     margin: 0;
     color: #6b7280;
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 .mapa-alim-card {
@@ -25,4 +30,43 @@
     border: 1px solid #e5e7eb;
     border-radius: 16px;
     overflow: hidden;
+    box-sizing: border-box;
+}
+
+.mapa-alim-map {
+    width: 100%;
+    height: 600px;
+}
+
+@media (max-width: 900px) {
+
+    .mapa-alim-header h1 {
+        font-size: 28px;
+    }
+
+    .mapa-alim-map {
+        height: 500px;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .mapa-alim-header h1 {
+        font-size: 26px;
+    }
+
+    .mapa-alim-header p {
+        font-size: 14px;
+    }
+
+    .mapa-alim-card {
+        border-radius: 12px;
+    }
+
+    .mapa-alim-map {
+        height: 420px;
+    }
+
 }

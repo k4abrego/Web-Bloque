@@ -21,13 +21,16 @@ function MapaAlim() {
                 </div>
             </div>
 
+
             <div className="mapa-alim-card">
-                <GoogleMap
-                    center={centroAtizapan}
-                    zoom={13}
-                    reportes={[]}
-                />
+                <div className="mapa-alim-map">
+                    <GoogleMap
+                        center={centroAtizapan}
+                        zoom={13}
+                    />
+                </div>
             </div>
+
         </div>
     );
 }

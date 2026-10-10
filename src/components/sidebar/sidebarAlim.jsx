@@ -40,7 +40,7 @@ function SidebarAlim({ isOpen, onToggle }) {
                 end
                 className={({ isActive }) =>
                     isActive
-                    ? "sidebar active"
+                    ? "sidebar-item active"
                     : "sidebar-item"
                 }
                 >
@@ -54,7 +54,7 @@ function SidebarAlim({ isOpen, onToggle }) {
                 to="/alimentador/reportes"
                 className={({isActive}) =>
                     isActive
-                        ? "sidebar active"
+                        ? "sidebar-item active"
                         : "sidebar-item"
                 }
             >
@@ -68,7 +68,7 @@ function SidebarAlim({ isOpen, onToggle }) {
                 to="/alimentador/mapa"
                 className={({isActive}) =>
                     isActive
-                        ? "sidebar active"
+                        ? "sidebar-item active"
                         : "sidebar-item"
                 }
             >
@@ -82,7 +82,7 @@ function SidebarAlim({ isOpen, onToggle }) {
                 to="/alimentador/configuracion"
                 className={({isActive}) =>
                     isActive
-                        ? "sidebar active"
+                        ? "sidebar-item active"
                         : "sidebar-item"
                 }
             >

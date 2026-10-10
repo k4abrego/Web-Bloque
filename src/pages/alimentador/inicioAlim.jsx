@@ -1,120 +1,133 @@
 import "./inicioAlim.css";
 
-function InicioAlimentador() {
-  return (
-<div className="inicio-alim">
-  <div className="inicio-alim-header">
-              <h1>Panel de Alimentador</h1>
+import {
+    ClipboardList,
+    Clock3,
+    LoaderCircle,
+    CheckCircle2,
+} from "lucide-react";
+
+
+function InicioAlim() {
+    const estadisticas = [
+        {
+            titulo: "Casos asignados",
+            icono: ClipboardList,
+        },
+        {
+            titulo: "Pendientes",
+            icono: Clock3,
+        },
+        {
+            titulo: "En proceso",
+            icono: LoaderCircle,
+        },
+        {
+            titulo: "Atendidos",
+            icono: CheckCircle2,
+        },
+    ];
+
+    return (
+        <div className="inicio-alim">
+            <header className="inicio-alim-header">
+                <h1>Inicio</h1>
                 <p>
-                    Resumen de los reportes asignados a tu municipio.
+                    Resumen de los reportes asignados.
                 </p>
-            </div>
-          
+            </header>
+
             <section className="alim-stats">
-              
-                <div className="alim-stat-card">
-                    <div className="alim-stat-icon placeholder" />
-                    <div>
-                        <div className="alim-placeholder title" />
-                        <div className="alim-placeholder number" />
-                    </div>
-                </div>
+                {estadisticas.map((estadistica) => {
+                    const Icon = estadistica.icono;
+                    return (
+                        <div className="alim-stat-card"
+                            key={estadistica.titulo}>
+                            <div className="alim-stat-icon">
+                                <Icon size={24} />
+                            </div>
 
-                <div className="alim-stat-card">
-                    <div className="alim-stat-icon placeholder" />
-                    <div>
-                        <div className="alim-placeholder title" />
-                        <div className="alim-placeholder number" />
-                    </div>
-                </div>
+                            <div className="alim-stat-content">
+                                <div className="alim-stat-title">
+                                    {estadistica.titulo}
+                                </div>
 
-                <div className="alim-stat-card">
-                    <div className="alim-stat-icon placeholder" />
-                    <div>
-                        <div className="alim-placeholder title" />
-                        <div className="alim-placeholder number" />
-                    </div>
-                </div>
-
-                <div className="alim-stat-card">
-                    <div className="alim-stat-icon placeholder" />
-                    <div>
-                        <div className="alim-placeholder title" />
-                        <div className="alim-placeholder number" />
-                    </div>
-                </div>
-
+                                <div className="alim-stat-number">
+                                    —
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
             </section>
 
             <section className="alim-charts">
-
                 <div className="alim-chart-card">
                     <div className="alim-chart-header">
-                        <div className="alim-placeholder chart-title" />
-                        <div className="alim-placeholder chart-subtitle" />
-                    </div>
-
-                    <div className="alim-chart-empty">
-                        <span>Sin datos disponibles</span>
-                    </div>
-                </div>
-
-                <div className="alim-chart-card">
-                    <div className="alim-chart-header">
-                        <div className="alim-placeholder chart-title" />
-                        <div className="alim-placeholder chart-subtitle" />
-                    </div>
-
-                    <div className="alim-chart-empty">
-                        <span>Sin datos disponibles</span>
-                    </div>
-                </div>
-
-            </section>
-
-            <section className="alim-recent-card">
-
-                <div className="alim-recent-header">
-                    <div>
-                        <h2>Reportes recientes asignados</h2>
+                        <h2>Reportes por localidad</h2>
                         <p>
-                            Casos asignados.
+                            Distribución de los reportes asignados por localidad.
                         </p>
                     </div>
 
-                    <button className="alim-outline-button">
-                        Ver todos mis reportes
-                    </button>
+                    <div className="alim-chart-empty">
+                        Sin información disponible
+                    </div>
                 </div>
 
+
+                <div className="alim-chart-card">
+                    <div className="alim-chart-header">
+                        <h2>Estado de los reportes</h2>
+                        <p>
+                            Distribución de los reportes según su estado.
+                        </p>
+                    </div>
+
+                    <div className="alim-chart-empty">
+                        Sin información disponible
+                    </div>
+                </div>
+            </section>
+
+
+            <section className="alim-recent-card">
+                <div className="alim-recent-header">
+                    <div>
+                        <h2>Reportes recién asignados</h2>
+                        <p>
+                            Reportes asignados recientemente para seguimiento.
+                        </p>
+                    </div>
+                </div>
 
                 <div className="alim-table-wrapper">
                     <table className="alim-table">
                         <thead>
                             <tr>
                                 <th>Folio</th>
-                                <th>Fecha</th>
                                 <th>Categoría</th>
-                                <th>Descripción</th>
-                                <th>Colonia / Localidad</th>
+                                <th>Localidad</th>
                                 <th>Estado</th>
-                                <th>Prioridad</th>
+                                <th>Fecha</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             <tr>
-                                <td colSpan="7">
+                                <td colSpan="5">
                                     <div className="alim-table-empty">
-                                        No hay reportes para mostrar.
+                                        Sin reportes disponibles
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+
                 </div>
             </section>
-    </div>
-  );
+        </div>
+    );
 }
 
-export default InicioAlimentador;
+export default InicioAlim;

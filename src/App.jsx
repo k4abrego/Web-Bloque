@@ -10,7 +10,7 @@ import ArchivosAdmin from "./pages/admin/archivosAdmin";
 import MapaCalorAdmin from "./pages/admin/mapaCalorAdmin";
 import AlimentadoresAdmin from "./pages/admin/alimentadoresAdmin";
 import ConfiguracionAdmin from "./pages/admin/configuracionAdmin";  
-import AlimLayout from "./layouts/alimnLayout";
+import AlimLayout from "./layouts/alimLayout";
 import ReportesAlim from "./pages/alimentador/reportesAlim";
 import MapaAlim from "./pages/alimentador/mapaAlim";
 import PerfilAlim from "./pages/alimentador/perfilAlim";

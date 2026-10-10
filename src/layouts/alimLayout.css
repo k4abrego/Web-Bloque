@@ -1,27 +1,15 @@
 .alim-layout {
     display: flex;
-
     width: 100%;
     min-height: 100vh;
-
     background-color: #f8fafc;
-
-    align-items: stretch;
-
-    overflow-x: hidden;
 }
-
 
 .alim-content {
     flex: 1 1 0;
-
     min-width: 0;
-
     width: 0;
-
     padding: 32px;
-
     box-sizing: border-box;
-
     overflow-x: hidden;
 }

@@ -1,0 +1,273 @@
+.sidebar-alim {
+    width: 250px;
+    min-width: 250px;
+    height: 100vh;
+    min-height: 100vh;
+    position: sticky;
+    top: 0;
+    background-color: #4b2373;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    transition:
+        width 600ms ease,
+        min-width 600ms ease;
+}
+
+.sidebar-alim.collapsed {
+    width: 90px;
+    min-width: 90px;
+}
+
+.sidebar-alim .sidbar-arriba {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    padding: 25px 20px 40px 20px;
+    box-sizing: border-box;
+}
+
+
+.sidebar-alim .boton-barra-lateral {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    transition: transform 0.2s ease;
+}
+
+
+.sidebar-alim .boton-barra-lateral:hover {
+    transform: scale(1.2);
+}
+
+.sidebar-alim .sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px 18px;
+    flex: 1;
+    box-sizing: border-box;
+}
+
+.sidebar-alim .sidebar-item,
+.sidebar-alim .sidebar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px;
+    width: 100%;
+    border: none;
+    border-radius: 99px;
+    background: transparent;
+    color: white;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.sidebar-alim .sidebar-item:hover,
+.sidebar-alim .sidebar:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+}
+
+.sidebar-alim .sidebar-item.active {
+    background: white;
+    color: #462267;
+    font-weight: 600;
+}
+
+.sidebar-alim .sidebar-text {
+    white-space: nowrap;
+}
+
+.sidebar-alim .sidebar-footer {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: auto;
+    box-sizing: border-box;
+}
+
+.sidebar-alim .sidebar-brand {
+    width: 100%;
+}
+
+
+.sidebar-alim .sidebar-logo-container {
+    width: 100%;
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-sizing: border-box;
+}
+
+
+.sidebar-alim .sidebar-logo {
+    width: 100%;
+    display: block;
+}
+
+.sidebar-alim .profile-wrapper {
+    width: 100%;
+    position: relative;
+}
+
+.sidebar-alim .perfil {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    border-radius: 99px;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background 0.2s ease;
+}
+
+
+.sidebar-alim .perfil:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-alim .profile-arrow {
+    margin-left: auto;
+    transition: transform 0.25s ease;
+}
+
+
+.sidebar-alim .profile-arrow.open {
+    transform: rotate(180deg);
+}
+
+.sidebar-alim .profile-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    color: white;
+    box-sizing: border-box;
+}
+
+
+.sidebar-alim .profile-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.sidebar-alim .profile-email {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+
+.sidebar-alim .profile-roel,
+.sidebar-alim .profile-institu {
+    font-size: 11px;
+    opacity: 0.65;
+}
+
+.sidebar-alim .profile-divider {
+    width: 100%;
+    height: 1px;
+    margin: 7px 0;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-alim .profile-logout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 8px;
+    background: transparent;
+    border: none;
+    border-radius: 99px;
+    color: white;
+    font-size: 13px;
+    text-decoration: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background 0.2s ease;
+}
+
+
+.sidebar-alim .profile-logout:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-alim.collapsed .sidebar-text {
+    display: none;
+}
+
+
+.sidebar-alim.collapsed .sidebar-item,
+.sidebar-alim.collapsed .sidebar {
+    justify-content: center;
+    padding: 14px 0;
+}
+
+
+.sidebar-alim.collapsed .sidbar-arriba {
+    justify-content: center;
+}
+
+
+.sidebar-alim.collapsed .boton-barra-lateral {
+    right: 26px;
+}
+
+
+.sidebar-alim.collapsed .sidebar-footer {
+    padding: 20px 10px;
+}
+
+
+.sidebar-alim.collapsed .sidebar-logo-container {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+.sidebar-alim.collapsed .perfil {
+    width: 58px;
+    height: 58px;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+
+.sidebar-alim.collapsed .profile-arrow {
+    display: none;
+}

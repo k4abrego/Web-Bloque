@@ -1,0 +1,215 @@
+.config-alim {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.config-alim-header {
+    margin-bottom: 28px;
+}
+
+.config-alim-header h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.config-alim-header p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.config-alim-section {
+    margin-bottom: 24px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.config-alim-section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 22px 24px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.config-alim-section-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.config-alim-section-header h2 {
+    margin: 0 0 4px;
+    color: #111827;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.config-alim-section-header p {
+    margin: 0;
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+.config-alim-data-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+}
+
+.config-alim-data-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.config-alim-data-item:nth-child(odd) {
+    border-right: 1px solid #f0f0f0;
+}
+
+.config-alim-data-item span {
+    color: #9ca3af;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.config-alim-data-item strong {
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.config-alim-activity-empty {
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 30px;
+    text-align: center;
+    color: #9ca3af;
+}
+
+.config-alim-empty-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    color: #9ca3af;
+}
+
+.config-alim-activity-empty strong {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.config-alim-activity-empty span {
+    font-size: 13px;
+}
+
+.config-alim-security-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 24px;
+}
+
+.config-alim-security-row strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #374151;
+    font-size: 14px;
+}
+
+.config-alim-security-row p {
+    margin: 0;
+    color: #9ca3af;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.config-alim-request-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex-shrink: 0;
+    padding: 10px 15px;
+    border: 1px solid #4b2373;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #4b2373;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.config-alim-request-button:hover {
+    background: #4b2373;
+    color: #ffffff;
+}
+
+@media (max-width: 700px) {
+
+    .config-alim-header h1 {
+        font-size: 28px;
+    }
+
+    .config-alim-data-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .config-alim-data-item:nth-child(odd) {
+        border-right: none;
+    }
+
+    .config-alim-security-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .config-alim-request-button {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .config-alim-section-header {
+        padding: 18px;
+    }
+
+    .config-alim-data-item {
+        padding: 17px 18px;
+    }
+
+    .config-alim-security-row {
+        padding: 18px;
+    }
+
+}

@@ -176,6 +176,27 @@
     font-size: 14px;
 }
 
+.alim-outline-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #4b2373;
+    background: #ffffff;
+    color: #4b2373;
+    padding: 10px 16px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.alim-outline-button:hover {
+    background: #4b2373;
+    color: #ffffff;
+}
+
 @media (max-width: 1100px) {
 
     .alim-stats {

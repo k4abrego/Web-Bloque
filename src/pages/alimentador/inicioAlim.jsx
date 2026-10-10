@@ -1,5 +1,5 @@
 import "./inicioAlim.css";
-
+import { NavLink } from "react-router-dom";
 import {
     ClipboardList,
     Clock3,
@@ -90,7 +90,6 @@ function InicioAlim() {
                 </div>
             </section>
 
-
             <section className="alim-recent-card">
                 <div className="alim-recent-header">
                     <div>
@@ -99,6 +98,12 @@ function InicioAlim() {
                             Reportes asignados recientemente para seguimiento.
                         </p>
                     </div>
+
+                    <NavLink
+                        to="/alimentador/reportes"
+                        className="alim-outline-button">
+                        Ver todos mis reportes
+                    </NavLink>
                 </div>
 
                 <div className="alim-table-wrapper">
@@ -123,9 +128,9 @@ function InicioAlim() {
                             </tr>
                         </tbody>
                     </table>
-
                 </div>
             </section>
+            
         </div>
     );
 }

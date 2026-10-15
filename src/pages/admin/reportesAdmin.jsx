@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import reportesMock from "../../mocks/reportes";
+import { MUNICIPIOS_SIPINNA } from "../../services/territoriosApi";
 import "./reportesAdmin.css";
 import {
   Search,
@@ -10,55 +11,78 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-
-
+const MUNICIPIOS_SIPINNA_DEFAULT = MUNICIPIOS_SIPINNA || [
+  "Atizapán de Zaragoza",
+  "Cuautitlán",
+  "Cuautitlán Izcalli",
+  "Ecatepec",
+  "Huixquilucan",
+  "Isidro Fabela",
+  "Jilotzingo",
+  "Melchor Ocampo",
+  "Naucalpan de Juárez",
+  "Nicolás Romero",
+  "Teoloyucan",
+  "Tepotzotlán",
+  "Tlalnepantla de Baz",
+  "Tultitlán",
+  "Villa del Carbón",
+];
 
 // Página donde el administrador puede consultar todos los reportes
 // Sección: ReportesAdmin.
 function ReportesAdmin() {
 
   // Guarda el texto escrito en el buscador
-// Sección: declaración.
+  // Sección: declaración.
   const [busqueda, setBusqueda] = useState("");
 
   // Guarda el estado seleccionado
-// Sección: declaración.
+  // Sección: declaración.
   const [filtroEstado, setFiltroEstado] = useState("Todos");
 
+  // Guarda el municipio seleccionado
+  // Sección: declaración.
+  const [filtroMunicipio, setFiltroMunicipio] = useState("Todos");
+
   // Guarda la prioridad seleccionada 
-// Sección: declaración.
+  // Sección: declaración.
   const [filtroPrioridad, setFiltroPrioridad] = useState("Todas");
 
   // Guarda la página que se está mostrando
-// Sección: declaración.
+  // Sección: declaración.
   const [paginaActual, setPaginaActual] = useState(1);
 
-
   // Define cuántos reportes se muestran en cada página 
-// Sección: reportesPorPagina.
+  // Sección: reportesPorPagina.
   const reportesPorPagina = 5;
 
-
   // Filtra los reportes de acuerdo con las opciones seleccionadas 
-// Sección: reportesFiltrados.
+  // Sección: reportesFiltrados.
   const reportesFiltrados = reportesMock.filter((reporte) => {
 
-// Sección: textoBusqueda.
+    // Sección: textoBusqueda.
     const textoBusqueda = busqueda.toLowerCase();
 
-// Sección: coincideBusqueda.
+    // Sección: coincideBusqueda.
     const coincideBusqueda =
       reporte.folio.toLowerCase().includes(textoBusqueda) ||
       reporte.tipo.toLowerCase().includes(textoBusqueda) ||
       reporte.alimentador.toLowerCase().includes(textoBusqueda) ||
       reporte.ubicacion.toLowerCase().includes(textoBusqueda);
 
-// Sección: coincideEstado.
+    // Sección: coincideEstado.
     const coincideEstado =
       filtroEstado === "Todos" ||
       reporte.estado === filtroEstado;
 
-// Sección: coincidePrioridad.
+    // Sección: coincideMunicipio.
+    const coincideMunicipio =
+      filtroMunicipio === "Todos" ||
+      reporte.municipio === filtroMunicipio ||
+      reporte.ubicacion === filtroMunicipio;
+
+    // Sección: coincidePrioridad.
     const coincidePrioridad =
       filtroPrioridad === "Todas" ||
       reporte.prioridad === filtroPrioridad;
@@ -66,56 +90,48 @@ function ReportesAdmin() {
     return (
       coincideBusqueda &&
       coincideEstado &&
+      coincideMunicipio &&
       coincidePrioridad
     );
   });
 
-
   // Calcula la cantidad de páginas necesarias 
-// Sección: totalPaginas.
+  // Sección: totalPaginas.
   const totalPaginas = Math.ceil(
     reportesFiltrados.length / reportesPorPagina
   );
 
-
   // Calcula qué reportes corresponden a la página seleccionada 
-// Sección: indiceInicial.
+  // Sección: indiceInicial.
   const indiceInicial =
     (paginaActual - 1) * reportesPorPagina;
 
-// Sección: indiceFinal.
+  // Sección: indiceFinal.
   const indiceFinal =
     indiceInicial + reportesPorPagina;
 
-
   // Obtiene únicamente los reportes que se muestran en la página actual 
-// Sección: reportesPaginados.
+  // Sección: reportesPaginados.
   const reportesPaginados = reportesFiltrados.slice(
     indiceInicial,
     indiceFinal
   );
 
-
   // Cambia de página dentro de la lista de reportes 
-// Sección: cambiarPagina.
+  // Sección: cambiarPagina.
   const cambiarPagina = (pagina) => {
-
     if (pagina >= 1 && pagina <= totalPaginas) {
       setPaginaActual(pagina);
     }
-
   };
-
 
   return (
     <div className="reportes-admin">
 
       {/* Encabezado de la página */}
       <div className="reportes-admin-header">
-
         <div>
           <h1>Lista de reportes</h1>
-
           <p>
             Consulta y administra los reportes registrados en el sistema.
           </p>
@@ -125,18 +141,14 @@ function ReportesAdmin() {
         <div className="reportes-total">
           {reportesFiltrados.length} de {reportesMock.length} reportes
         </div>
-
       </div>
-
 
       {/* Herramientas para buscar y filtrar reportes */}
       <div className="reportes-filtros">
 
         {/* Buscador de reportes */}
         <div className="reportes-buscador">
-
           <Search size={19} />
-
           <input
             type="text"
             placeholder="Buscar por folio, tipo, ubicación o alimentador..."
@@ -146,9 +158,7 @@ function ReportesAdmin() {
               setPaginaActual(1);
             }}
           />
-
         </div>
-
 
         {/* Filtro por estado */}
         <select
@@ -164,6 +174,21 @@ function ReportesAdmin() {
           <option value="Resuelto">Resuelto</option>
         </select>
 
+        {/* Filtro por municipio (SIPINNA) */}
+        <select
+          value={filtroMunicipio}
+          onChange={(e) => {
+            setFiltroMunicipio(e.target.value);
+            setPaginaActual(1);
+          }}
+        >
+          <option value="Todos">Todos los municipios</option>
+          {MUNICIPIOS_SIPINNA_DEFAULT.map((mun) => (
+            <option key={mun} value={mun}>
+              {mun}
+            </option>
+          ))}
+        </select>
 
         {/* Filtro por prioridad */}
         <select
@@ -181,15 +206,12 @@ function ReportesAdmin() {
 
       </div>
 
-
       {/* Contenedor principal de la lista */}
       <div className="reportes-lista">
 
         {/* Tabla con los reportes encontrados */}
         <div className="reportes-lista-tabla-container">
-
           <table className="reportes-lista-tabla">
-
             <thead>
               <tr>
                 <th>Folio</th>
@@ -202,13 +224,9 @@ function ReportesAdmin() {
               </tr>
             </thead>
 
-
             <tbody>
-
               {reportesPaginados.map((reporte) => (
-
                 <tr key={reporte.id}>
-
                   {/* Permite abrir el detalle del reporte seleccionado */}
                   <td>
                     <NavLink
@@ -219,13 +237,8 @@ function ReportesAdmin() {
                     </NavLink>
                   </td>
 
-                  <td>
-                    {reporte.tipo}
-                  </td>
-
-                  <td>
-                    {reporte.fecha}
-                  </td>
+                  <td>{reporte.tipo}</td>
+                  <td>{reporte.fecha}</td>
 
                   <td>
                     <span
@@ -245,22 +258,13 @@ function ReportesAdmin() {
                     </span>
                   </td>
 
-                  <td>
-                    {reporte.alimentador}
-                  </td>
-
-                  <td>
-                    {reporte.evidencias.length}
-                  </td>
-
+                  <td>{reporte.alimentador}</td>
+                  <td>{reporte.evidencias.length}</td>
                 </tr>
-
               ))}
-
 
               {/* Mensaje mostrado cuando ningún reporte coincide */}
               {reportesFiltrados.length === 0 && (
-
                 <tr>
                   <td
                     colSpan="7"
@@ -269,49 +273,27 @@ function ReportesAdmin() {
                     No se encontraron reportes con los filtros seleccionados.
                   </td>
                 </tr>
-
               )}
-
             </tbody>
-
           </table>
-
         </div>
-
 
         {/* Paginación de la lista de reportes */}
         {reportesFiltrados.length > 0 && (
-
           <div className="reportes-paginacion">
 
             {/* Muestra qué reportes se están visualizando */}
             <div className="paginacion-info">
-
               Mostrando{" "}
-
-              <strong>
-                {indiceInicial + 1}
-              </strong>
-
+              <strong>{indiceInicial + 1}</strong>
               {" - "}
-
               <strong>
-                {Math.min(
-                  indiceFinal,
-                  reportesFiltrados.length
-                )}
+                {Math.min(indiceFinal, reportesFiltrados.length)}
               </strong>
-
               {" de "}
-
-              <strong>
-                {reportesFiltrados.length}
-              </strong>
-
+              <strong>{reportesFiltrados.length}</strong>
               {" reportes"}
-
             </div>
-
 
             {/* Controles para cambiar de página */}
             <div className="paginacion-controles">
@@ -319,21 +301,17 @@ function ReportesAdmin() {
               {/* Página anterior */}
               <button
                 className="paginacion-flecha"
-                onClick={() =>
-                  cambiarPagina(paginaActual - 1)
-                }
+                onClick={() => cambiarPagina(paginaActual - 1)}
                 disabled={paginaActual === 1}
               >
                 <ChevronLeft size={18} />
               </button>
-
 
               {/* Botones de cada página */}
               {Array.from(
                 { length: totalPaginas },
                 (_, index) => index + 1
               ).map((pagina) => (
-
                 <button
                   key={pagina}
                   className={
@@ -341,25 +319,17 @@ function ReportesAdmin() {
                       ? "paginacion-numero activo"
                       : "paginacion-numero"
                   }
-                  onClick={() =>
-                    cambiarPagina(pagina)
-                  }
+                  onClick={() => cambiarPagina(pagina)}
                 >
                   {pagina}
                 </button>
-
               ))}
-
 
               {/* Página siguiente */}
               <button
                 className="paginacion-flecha"
-                onClick={() =>
-                  cambiarPagina(paginaActual + 1)
-                }
-                disabled={
-                  paginaActual === totalPaginas
-                }
+                onClick={() => cambiarPagina(paginaActual + 1)}
+                disabled={paginaActual === totalPaginas}
               >
                 <ChevronRight size={18} />
               </button>
@@ -367,7 +337,6 @@ function ReportesAdmin() {
             </div>
 
           </div>
-
         )}
 
       </div>
@@ -375,7 +344,6 @@ function ReportesAdmin() {
     </div>
   );
 }
-
 
 // Permite utilizar esta página dentro de las rutas del administrador 
 export default ReportesAdmin;

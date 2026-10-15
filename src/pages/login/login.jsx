@@ -167,7 +167,7 @@ function Login() {
     throw new Error(
         "El servidor no devolvió un token de autenticación."
     );
-            }
+    }
 
             /**
              * Normaliza el rol recibido desde Auth API.
@@ -180,20 +180,13 @@ function Login() {
                 );
             }
 
-            /**
-             * Guarda la sesión utilizando el rol validado por el backend.
-             */
             guardarSesion(datos.token, rolBackend);
 
-            /**
-             * Redirige al panel correspondiente.
-             */
             if (rolBackend === "admin") {
                 navigate("/admin", { replace: true });
             } else {
                 navigate("/alimentador", { replace: true });
             }
-
 
         } catch (err) {
             /**

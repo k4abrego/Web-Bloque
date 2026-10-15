@@ -127,7 +127,7 @@ function SidebarAlim({ isOpen, onToggle }) {
                             <div className="profile-divider">                            </div>
 
                             <NavLink
-                                to="/login"
+                                to="/"
                                 className="profile-logout"
                             >
                                 <LogOut size={18}/>

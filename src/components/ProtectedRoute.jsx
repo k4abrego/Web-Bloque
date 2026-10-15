@@ -1,25 +1,16 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-/**
- * Protege las rutas según la sesión y el rol.
- *
- * @param {Object} props - Propiedades del componente.
- * @param {string} props.rolPermitido - Rol necesario.
- */
-// Sección: ProtectedRoute.
 function ProtectedRoute({ rolPermitido }) {
-// Sección: token.
   const token = localStorage.getItem("token");
-// Sección: rol.
   const rol = localStorage.getItem("rol");
 
-  // Si no hay sesión, regresar al login.
   if (!token) {
     return <Navigate to="/" replace />;
   }
 
-  // Si el rol no coincide, impedir el acceso.
-  if (rol !== rolPermitido) {
+  if (
+    rol?.toLowerCase() !== rolPermitido?.toLowerCase()
+  ) {
     return <Navigate to="/" replace />;
   }
 

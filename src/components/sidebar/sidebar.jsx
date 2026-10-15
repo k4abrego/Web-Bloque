@@ -140,7 +140,7 @@ function Sidebar({ role, isOpen, onToggle }) {
 
               {/* Cerrar sesión */}
               <NavLink
-                to="/login"
+                to="/"
                 className="profile-logout"
               >
                 <LogOut size={18}/>

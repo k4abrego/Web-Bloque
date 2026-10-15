@@ -21,7 +21,7 @@ import ConfiguracionAlim from "./pages/alimentador/configuracionAlim";
 import AlimLayout from "./layouts/alimLayout";
 import DashboardLayout from "./layouts/dashboardLayout";
 
-import ProtectedRoute from "./components/ProtectedRoute";
+// import ProtectedRoute from "./components/ProtectedRoute";
 import ConnectionBanner from "./components/ConnectionBanner";
 
 // Sección: App.
@@ -33,106 +33,87 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          {/* Página de inicio de sesión */}
           <Route
             path="/"
             element={<Login />}
           />
 
-          {/* ==================== ADMIN ==================== */}
-
-          <Route element={<ProtectedRoute rolPermitido="admin" />}>
+          {/* ADMIN */}
+          <Route
+            path="/admin"
+            element={<DashboardLayout role="admin" />}
+          >
             <Route
-              path="/admin"
-              element={<DashboardLayout role="admin" />}
-            >
-              {/* Inicio */}
-              <Route
-                index
-                element={<InicioAdmin />}
-              />
+              index
+              element={<InicioAdmin />}
+            />
 
-              {/* Lista de reportes */}
-              <Route
-                path="reportes"
-                element={<ReportesAdmin />}
-              />
+            <Route
+              path="reportes"
+              element={<ReportesAdmin />}
+            />
 
-              {/* Detalle de reporte */}
-              <Route
-                path="reportes/:id"
-                element={<DetalleReporteAdmin />}
-              />
+            <Route
+              path="reportes/:id"
+              element={<DetalleReporteAdmin />}
+            />
 
-              {/* Filtros y etiquetas */}
-              <Route
-                path="filtros"
-                element={<FiltrosAdmin />}
-              />
+            <Route
+              path="filtros"
+              element={<FiltrosAdmin />}
+            />
 
-              {/* Archivos */}
-              <Route
-                path="archivos"
-                element={<ArchivosAdmin />}
-              />
+            <Route
+              path="archivos"
+              element={<ArchivosAdmin />}
+            />
 
-              {/* Mapa de calor */}
-              <Route
-                path="mapa-calor"
-                element={<MapaCalorAdmin />}
-              />
+            <Route
+              path="mapa-calor"
+              element={<MapaCalorAdmin />}
+            />
 
-              {/* Cuentas de alimentadores */}
-              <Route
-                path="alimentadores"
-                element={<AlimentadoresAdmin />}
-              />
+            <Route
+              path="alimentadores"
+              element={<AlimentadoresAdmin />}
+            />
 
-              {/* Configuración */}
-              <Route
-                path="configuracion"
-                element={<ConfiguracionAdmin />}
-              />
-            </Route>
+            <Route
+              path="configuracion"
+              element={<ConfiguracionAdmin />}
+            />
           </Route>
 
-          {/* ==================== ALIMENTADOR ==================== */}
 
-          <Route element={<ProtectedRoute rolPermitido="alimentador" />}>
+          {/* ALIMENTADOR */}
+          <Route
+            path="/alimentador"
+            element={<AlimLayout />}
+          >
             <Route
-              path="/alimentador"
-              element={<AlimLayout />}
-            >
-              {/* Inicio */}
-              <Route
-                index
-                element={<InicioAlimentador />}
-              />
+              index
+              element={<InicioAlimentador />}
+            />
 
-              {/* Reportes */}
-              <Route
-                path="reportes"
-                element={<ReportesAlim />}
-              />
+            <Route
+              path="reportes"
+              element={<ReportesAlim />}
+            />
 
-              {/* Mapa */}
-              <Route
-                path="mapa"
-                element={<MapaAlim />}
-              />
+            <Route
+              path="mapa"
+              element={<MapaAlim />}
+            />
 
-              {/* Configuración */}
-              <Route
-                path="configuracion"
-                element={<ConfiguracionAlim />}
-              />
+            <Route
+              path="configuracion"
+              element={<ConfiguracionAlim />}
+            />
 
-              {/* Perfil */}
-              <Route
-                path="perfil"
-                element={<PerfilAlim />}
-              />
-            </Route>
+            <Route
+              path="perfil"
+              element={<PerfilAlim />}
+            />
           </Route>
 
         </Routes>

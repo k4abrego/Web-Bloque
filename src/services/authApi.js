@@ -1,71 +1,70 @@
-// Sección: AUTH_API_URL.
-const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL;
+import { authApiFetch } from "./api";
 
 /**
  * Solicita un reto de autenticación al backend.
  *
+ * Este es el primer paso del proceso de inicio de sesión.
+ * El backend recibe el correo y devuelve un challenge junto
+ * con el identificador del usuario.
+ *
+ * Endpoint:
+ * GET /Login/:correo
+ *
  * @param {string} correo - Correo electrónico del usuario.
- * @returns {Promise<object>} Challenge, mensaje y user_id.
+ * @returns {Promise<object>} Información del challenge y del usuario.
+ * @throws {Error} Si el backend rechaza la solicitud.
  */
-// Sección: solicitarChallenge.
 export async function solicitarChallenge(correo) {
-// Sección: response.
-  const response = await fetch(
-    `${AUTH_API_URL}/Login/${encodeURIComponent(correo)}`
-  );
-
-  if (!response.ok) {
-    throw new Error("No se pudo verificar el correo electrónico.");
-  }
-
-  return response.json();
+    return authApiFetch(
+        `/Login/${encodeURIComponent(correo)}`
+    );
 }
 
 /**
- * Envía la respuesta HMAC para validar la autenticación.
+ * Envía la respuesta calculada al challenge para completar
+ * el proceso de autenticación.
+ *
+ * Endpoint:
+ * POST /Login/
  *
  * @param {number} userId - Identificador del usuario.
- * @param {string} respuestaHMAC - Resultado HMAC en Base64.
- * @returns {Promise<object>} Token JWT y rol del usuario.
+ * @param {string} respuestaHMAC - Respuesta calculada al challenge.
+ * @returns {Promise<object>} Respuesta del backend que contiene el token JWT.
+ * @throws {Error} Si las credenciales no son válidas.
  */
-// Sección: verificarChallenge.
 export async function verificarChallenge(userId, respuestaHMAC) {
-// Sección: response.
-  const response = await fetch(`${AUTH_API_URL}/Login/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      user_id: userId,
-      response: respuestaHMAC,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error("No se pudo iniciar sesión. Verifica tus datos.");
-  }
-
-  return response.json();
+    return authApiFetch("/Login/", {
+        method: "POST",
+        body: JSON.stringify({
+            user_id: userId,
+            response: respuestaHMAC,
+        }),
+    });
 }
 
 /**
- * Guarda la sesión después de una autenticación exitosa.
+ * Guarda la información de sesión del usuario en localStorage.
  *
- * @param {string} token - Token JWT.
- * @param {string} rol - Rol verificado por el backend.
+ * El token es utilizado posteriormente por apiFetch y authApiFetch
+ * para enviar automáticamente el encabezado Authorization.
+ *
+ * @param {string} token - Token JWT proporcionado por el backend.
+ * @param {string} [rol] - Rol del usuario, si se encuentra disponible.
  */
-// Sección: guardarSesion.
 export function guardarSesion(token, rol) {
-  localStorage.setItem("token", token);
-  localStorage.setItem("rol", rol);
+    localStorage.setItem("token", token);
+
+    if (rol) {
+        localStorage.setItem("rol", rol);
+    }
 }
 
 /**
- * Elimina la información local de autenticación.
+ * Elimina la información de autenticación almacenada localmente.
+ *
+ * Se utiliza para cerrar la sesión del usuario.
  */
-// Sección: cerrarSesion.
 export function cerrarSesion() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("rol");
+    localStorage.removeItem("token");
+    localStorage.removeItem("rol");
 }

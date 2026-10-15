@@ -206,8 +206,7 @@ function MapaCalorAdmin() {
 
           <span>
             Los filtros seleccionados muestran {totalReportes} reportes
-            coincidentes. La visualización del mapa se conectará
-            posteriormente.
+            coincidentes en el mapa.
           </span>
 
         </div>

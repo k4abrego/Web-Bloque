@@ -4,6 +4,8 @@ import reportesMock from "../../mocks/reportes";
 import "./inicioAdmin.css";
 import { NavLink } from "react-router-dom";
 
+import { useEffect } from "react";
+import { obtenerInstituciones } from "../../services/institucionesApi";
 
 // Página principal del panel de administrador 
 // Sección: InicioAdmin.
@@ -40,6 +42,19 @@ function InicioAdmin() {
   const reportesRecientes = [...reportesMock]
     .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
     .slice(0, 5);
+
+    useEffect(() => {
+    async function cargarInstituciones() {
+        try {
+            const datos = await obtenerInstituciones();
+            console.log("Instituciones desde apiFetch:", datos);
+        } catch (error) {
+            console.error("Error al obtener instituciones:", error);
+        }
+    }
+
+    cargarInstituciones();
+}, []);
 
   
   return (

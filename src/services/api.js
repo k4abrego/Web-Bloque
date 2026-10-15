@@ -57,10 +57,22 @@ function createApiFetch(baseURL) {
         /**
          * Ejecuta la petición HTTP.
          */
-        const response = await fetch(`${baseURL}${endpoint}`, {
-            ...options,
-            headers,
-        });
+        let response;
+
+        try {
+            response = await fetch(`${baseURL}${endpoint}`, {
+                ...options,
+                headers,
+            });
+        } catch {
+            const connectionError = new Error(
+                "No se pudo conectar con el servidor. Verifica que el servicio esté disponible."
+            );
+
+            connectionError.code = "CONNECTION_ERROR";
+
+            throw connectionError;
+        }
 
         /**
          * Si el servidor devuelve un código HTTP de error,

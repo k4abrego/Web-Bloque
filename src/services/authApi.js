@@ -1,70 +1,98 @@
-import { authApiFetch } from "./api";
+/**
+ * URL base del servicio de autenticación.
+ * Se obtiene de la variable de entorno VITE_AUTH_API_URL.
+ */
+const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL;
 
 /**
- * Solicita un reto de autenticación al backend.
+ * Solicita un challenge de autenticación al backend.
  *
- * Este es el primer paso del proceso de inicio de sesión.
- * El backend recibe el correo y devuelve un challenge junto
- * con el identificador del usuario.
- *
- * Endpoint:
- * GET /Login/:correo
+ * El backend recibe el correo del usuario, verifica que exista
+ * y genera un challenge que posteriormente será utilizado para
+ * calcular la respuesta HMAC.
  *
  * @param {string} correo - Correo electrónico del usuario.
- * @returns {Promise<object>} Información del challenge y del usuario.
+ * @returns {Promise<{challenge: string, message: string, user_id: number}>}
+ *          Challenge generado por el backend e identificador del usuario.
  * @throws {Error} Si el backend rechaza la solicitud.
  */
 export async function solicitarChallenge(correo) {
-    return authApiFetch(
-        `/Login/${encodeURIComponent(correo)}`
-    );
+  const response = await fetch(
+    `${AUTH_API_URL}/auth/${encodeURIComponent(correo)}`
+  );
+
+  if (!response.ok) {
+    let mensaje = "No se pudo verificar el correo electrónico.";
+
+    try {
+      const errorData = await response.json();
+      mensaje = errorData.error || mensaje;
+    } catch {
+      // La respuesta no contiene JSON.
+    }
+
+    throw new Error(mensaje);
+  }
+
+  return response.json();
 }
 
 /**
- * Envía la respuesta calculada al challenge para completar
- * el proceso de autenticación.
+ * Envía la respuesta HMAC del challenge al backend.
  *
- * Endpoint:
- * POST /Login/
+ * El backend valida la respuesta calculada a partir del challenge
+ * y, si las credenciales son correctas, devuelve un token JWT
+ * y el rol correspondiente al usuario.
  *
  * @param {number} userId - Identificador del usuario.
- * @param {string} respuestaHMAC - Respuesta calculada al challenge.
- * @returns {Promise<object>} Respuesta del backend que contiene el token JWT.
- * @throws {Error} Si las credenciales no son válidas.
+ * @param {string} respuestaHMAC - Respuesta HMAC-SHA256 codificada en Base64.
+ * @returns {Promise<{token: string, rol: string}>}
+ *          Token JWT y rol del usuario autenticado.
+ * @throws {Error} Si las credenciales son inválidas o el backend rechaza la solicitud.
  */
 export async function verificarChallenge(userId, respuestaHMAC) {
-    return authApiFetch("/Login/", {
-        method: "POST",
-        body: JSON.stringify({
-            user_id: userId,
-            response: respuestaHMAC,
-        }),
-    });
+  const response = await fetch(`${AUTH_API_URL}/auth`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      user_id: userId,
+      response: respuestaHMAC,
+    }),
+  });
+
+  if (!response.ok) {
+    let mensaje = "No se pudo iniciar sesión. Verifica tus datos.";
+
+    try {
+      const errorData = await response.json();
+      mensaje = errorData.error || mensaje;
+    } catch {
+      // La respuesta no contiene JSON.
+    }
+
+    throw new Error(mensaje);
+  }
+
+  return response.json();
 }
 
 /**
- * Guarda la información de sesión del usuario en localStorage.
- *
- * El token es utilizado posteriormente por apiFetch y authApiFetch
- * para enviar automáticamente el encabezado Authorization.
+ * Guarda la información de la sesión autenticada en localStorage.
  *
  * @param {string} token - Token JWT proporcionado por el backend.
- * @param {string} [rol] - Rol del usuario, si se encuentra disponible.
+ * @param {string} rol - Rol del usuario autenticado.
  */
 export function guardarSesion(token, rol) {
-    localStorage.setItem("token", token);
-
-    if (rol) {
-        localStorage.setItem("rol", rol);
-    }
+  localStorage.setItem("token", token);
+  localStorage.setItem("rol", rol);
 }
 
 /**
  * Elimina la información de autenticación almacenada localmente.
- *
- * Se utiliza para cerrar la sesión del usuario.
  */
 export function cerrarSesion() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("rol");
+  localStorage.removeItem("token");
+  localStorage.removeItem("rol");
 }

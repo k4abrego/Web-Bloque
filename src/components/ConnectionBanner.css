@@ -1,0 +1,39 @@
+.connection-banner {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: min(500px, calc(100% - 32px));
+    padding: 14px 18px;
+
+    background: #fff4e5;
+    border: 1px solid #f0c36d;
+    border-radius: 10px;
+
+    color: #7a4b00;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.connection-banner svg {
+    flex-shrink: 0;
+}
+
+.connection-banner div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.connection-banner strong {
+    font-size: 14px;
+}
+
+.connection-banner span {
+    font-size: 13px;
+}

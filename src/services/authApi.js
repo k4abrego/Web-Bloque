@@ -4,6 +4,7 @@
  */
 const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL;
 
+
 /**
  * Solicita un challenge de autenticación al backend.
  *

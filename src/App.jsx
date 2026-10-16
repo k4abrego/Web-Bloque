@@ -1,4 +1,4 @@
-// Imports
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/login/login";
@@ -18,13 +18,14 @@ import MapaAlim from "./pages/alimentador/mapaAlim";
 import PerfilAlim from "./pages/alimentador/perfilAlim";
 import ConfiguracionAlim from "./pages/alimentador/configuracionAlim";
 
+import InicioReportante from "./pages/reportante/inicioReportante";
+
 import AlimLayout from "./layouts/alimLayout";
 import DashboardLayout from "./layouts/dashboardLayout";
 
-// import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import ConnectionBanner from "./components/ConnectionBanner";
 
-// Sección: App.
 function App() {
   return (
     <>
@@ -32,90 +33,46 @@ function App() {
 
       <BrowserRouter>
         <Routes>
+          {/* LOGIN */}
+          <Route path="/" element={<Login />} />
 
-          <Route
-            path="/"
-            element={<Login />}
-          />
-
-          {/* ADMIN */}
-          <Route
-            path="/admin"
-            element={<DashboardLayout role="admin" />}
-          >
+          {/* ADMINISTRADOR */}
+          <Route element={<ProtectedRoute rolPermitido="admin" />}>
             <Route
-              index
-              element={<InicioAdmin />}
-            />
-
-            <Route
-              path="reportes"
-              element={<ReportesAdmin />}
-            />
-
-            <Route
-              path="reportes/:id"
-              element={<DetalleReporteAdmin />}
-            />
-
-            <Route
-              path="filtros"
-              element={<FiltrosAdmin />}
-            />
-
-            <Route
-              path="archivos"
-              element={<ArchivosAdmin />}
-            />
-
-            <Route
-              path="mapa-calor"
-              element={<MapaCalorAdmin />}
-            />
-
-            <Route
-              path="alimentadores"
-              element={<AlimentadoresAdmin />}
-            />
-
-            <Route
-              path="configuracion"
-              element={<ConfiguracionAdmin />}
-            />
+              path="/admin"
+              element={<DashboardLayout role="admin" />}
+            >
+              <Route index element={<InicioAdmin />} />
+              <Route path="reportes" element={<ReportesAdmin />} />
+              <Route path="reportes/:id" element={<DetalleReporteAdmin />} />
+              <Route path="filtros" element={<FiltrosAdmin />} />
+              <Route path="archivos" element={<ArchivosAdmin />} />
+              <Route path="mapa-calor" element={<MapaCalorAdmin />} />
+              <Route path="alimentadores" element={<AlimentadoresAdmin />} />
+              <Route path="configuracion" element={<ConfiguracionAdmin />} />
+            </Route>
           </Route>
-
 
           {/* ALIMENTADOR */}
-          <Route
-            path="/alimentador"
-            element={<AlimLayout />}
-          >
-            <Route
-              index
-              element={<InicioAlimentador />}
-            />
+          <Route element={<ProtectedRoute rolPermitido="alimentador" />}>
+            <Route path="/alimentador" element={<AlimLayout />}>
+              <Route index element={<InicioAlimentador />} />
+              <Route path="reportes" element={<ReportesAlim />} />
+              <Route path="mapa" element={<MapaAlim />} />
+              <Route path="configuracion" element={<ConfiguracionAlim />} />
+              <Route path="perfil" element={<PerfilAlim />} />
+            </Route>
+          </Route>
 
+          {/* REPORTANTE */}
+          <Route element={<ProtectedRoute rolPermitido="reportante" />}>
             <Route
-              path="reportes"
-              element={<ReportesAlim />}
-            />
-
-            <Route
-              path="mapa"
-              element={<MapaAlim />}
-            />
-
-            <Route
-              path="configuracion"
-              element={<ConfiguracionAlim />}
-            />
-
-            <Route
-              path="perfil"
-              element={<PerfilAlim />}
+              path="/reportante"
+              element={<InicioReportante />}
             />
           </Route>
 
+          <Route path="*" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </>

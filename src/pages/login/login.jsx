@@ -13,6 +13,9 @@ import { generarHMAC } from "../../services/hmac";
 import logoSIPINNA from "../../assets/sipinnalogo.png";
 import "./login.css";
 
+import { normalizarRol, rutaPorRol } from "../../services/roles";
+
+
 /**
  * Página de inicio de sesión del sistema SIPINNA.
  *
@@ -28,30 +31,7 @@ import "./login.css";
  *    peticiones posteriores.
  *
  * @returns {JSX.Element} Vista del formulario de inicio de sesión.
- */
-
-function normalizarRol(rol) {
-    if (!rol) return null;
-
-    const rolNormalizado = rol.toLowerCase();
-
-    if (
-        rolNormalizado === "admin" ||
-        rolNormalizado === "administrador" ||
-        rolNormalizado === "administrator"
-    ) {
-        return "admin";
-    }
-
-    if (
-        rolNormalizado === "alimentador" ||
-        rolNormalizado === "feeder"
-    ) {
-        return "alimentador";
-    }
-
-    return null;
-}
+ */ 
 
 function Login() {
     /**
@@ -118,89 +98,75 @@ function Login() {
      * @param {React.FormEvent<HTMLFormElement>} e - Evento del formulario.
      * @returns {Promise<void>}
      */
+
     const handleSubmit = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        setError("");
-        setCargando(true);
+    setError("");
+    setCargando(true);
 
-        try {
-            /**
-             * Paso 1:
-             * Solicitar el challenge al servicio de autenticación.
-             */
-            const { challenge, user_id } =
-                await solicitarChallenge(correo.trim());
+    try {
+        // 1. Solicitar challenge al backend
+        const { challenge, user_id } =
+        await solicitarChallenge(correo.trim());
 
-            if (!challenge || user_id == null) {
-                throw new Error(
-                    "La respuesta del servicio de autenticación no es válida."
-                );
-            }
-
-            /**
-             * Paso 2:
-             * Calcular la respuesta HMAC-SHA256 utilizando
-             * la contraseña y el challenge.
-             */
-            const respuestaHMAC = await generarHMAC(
-                contrasena,
-                challenge
-            );
-
-            /**
-             * Paso 3:
-             * Enviar la respuesta calculada al backend
-             * para completar la autenticación.
-             */
-            const datos = await verificarChallenge(
-                user_id,
-                respuestaHMAC
-            );
-
-            /**
-             * Paso 4:
-             * Verificar que la API haya proporcionado
-             * un token JWT.
-             */
-            if (!datos?.token) {
-    throw new Error(
-        "El servidor no devolvió un token de autenticación."
-    );
-    }
-
-            /**
-             * Normaliza el rol recibido desde Auth API.
-             */
-            const rolBackend = normalizarRol(datos.rol);
-
-            if (!rolBackend) {
-                throw new Error(
-                    "El servidor no devolvió un rol reconocido."
-                );
-            }
-
-            guardarSesion(datos.token, rolBackend);
-
-            if (rolBackend === "admin") {
-                navigate("/admin", { replace: true });
-            } else {
-                navigate("/alimentador", { replace: true });
-            }
-
-        } catch (err) {
-            /**
-             * Muestra el mensaje de error generado por la API
-             * o un mensaje genérico cuando no existe uno.
-             */
-            setError(
-                err.message ||
-                "No se pudo iniciar sesión. Verifica tus datos."
-            );
-        } finally {
-            setCargando(false);
+        if (!challenge || user_id == null) {
+        throw new Error(
+            "No se pudo obtener el challenge de autenticación."
+        );
         }
+
+        // 2. Generar respuesta HMAC con la contraseña
+        const respuestaHMAC = await generarHMAC(
+        contrasena,
+        challenge
+        );
+
+        // 3. Verificar credenciales con el backend
+        const datos = await verificarChallenge(
+        user_id,
+        respuestaHMAC
+        );
+
+        if (!datos?.token) {
+        throw new Error(
+            "El servidor no devolvió un token válido."
+        );
+        }
+
+        // 4. Obtener el rol desde el backend
+        const rol = normalizarRol(datos.role);
+
+        if (!rol) {
+        throw new Error(
+            "El usuario no tiene un rol reconocido."
+        );
+        }
+
+        // 5. Guardar la sesión
+        guardarSesion(datos.token, rol);
+
+        // 6. Redirigir según el rol
+        const ruta = rutaPorRol(rol);
+
+        if (!ruta) {
+        throw new Error(
+            "No existe una ruta configurada para este usuario."
+        );
+        }
+
+        navigate(ruta, { replace: true });
+
+    } catch (err) {
+        setError(
+        err.message ||
+        "No se pudo iniciar sesión. Verifica tus credenciales."
+        );
+    } finally {
+        setCargando(false);
+    }
     };
+
 
     return (
         <div className="login-page">

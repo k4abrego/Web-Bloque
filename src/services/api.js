@@ -6,7 +6,7 @@
  *
  * @type {string}
  */
-const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL;
+const AUTH_API_URL = import.meta.env.VITE_AUTH_LOGIN_URL;
 
 /**
  * URL base de la API de comunicación.

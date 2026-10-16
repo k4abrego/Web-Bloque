@@ -1,11 +1,11 @@
-import { apiFetch } from "./api";
+import { apiFetch } from "./authApi";
 
 // Sección: obtenerAlimentadores.
 export async function obtenerAlimentadores() {
-    return apiFetch("/alimentadores");
+  return apiFetch("/alimentadores");
 }
 
 // Sección: obtenerAlimentadorPorId.
 export async function obtenerAlimentadorPorId(id) {
-    return apiFetch(`/alimentadores/${id}`);
-}   
+  return apiFetch(`/alimentadores/${id}`);
+}

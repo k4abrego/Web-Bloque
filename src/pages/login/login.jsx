@@ -51,7 +51,7 @@ function Login() {
     /**
      * Rol seleccionado para la navegación del frontend.
      *
-     * El rol no sustituye la autorización del backend.
+     * El rol no sustituye la autorización del backend.x
      *
      * @type {[string, Function]}
      */

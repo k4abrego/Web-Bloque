@@ -2,8 +2,7 @@
  * URL base del servicio de autenticación.
  * Se obtiene de la variable de entorno VITE_AUTH_API_URL.
  */
-const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL;
-
+const AUTH_API_URL = import.meta.env.VITE_AUTH_LOGIN_URL;
 
 /**
  * Solicita un challenge de autenticación al backend.
@@ -18,21 +17,14 @@ const AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL;
  * @throws {Error} Si el backend rechaza la solicitud.
  */
 export async function solicitarChallenge(correo) {
-  const response = await fetch(
-    `${AUTH_API_URL}/auth/${encodeURIComponent(correo)}`
-  );
+  const url = `${AUTH_API_URL}/auth/${encodeURIComponent(correo)}`;
+
+  console.log("URL REAL DEL LOGIN:", url);
+
+  const response = await fetch(url);
 
   if (!response.ok) {
-    let mensaje = "No se pudo verificar el correo electrónico.";
-
-    try {
-      const errorData = await response.json();
-      mensaje = errorData.error || mensaje;
-    } catch {
-      // La respuesta no contiene JSON.
-    }
-
-    throw new Error(mensaje);
+    throw new Error("No se pudo verificar el correo electrónico.");
   }
 
   return response.json();
@@ -51,6 +43,8 @@ export async function solicitarChallenge(correo) {
  *          Token JWT y rol del usuario autenticado.
  * @throws {Error} Si las credenciales son inválidas o el backend rechaza la solicitud.
  */
+
+
 export async function verificarChallenge(userId, respuestaHMAC) {
   const response = await fetch(`${AUTH_API_URL}/auth`, {
     method: "POST",
@@ -97,3 +91,4 @@ export function cerrarSesion() {
   localStorage.removeItem("token");
   localStorage.removeItem("rol");
 }
+

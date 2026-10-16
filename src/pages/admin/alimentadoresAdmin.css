@@ -742,3 +742,40 @@
     width: 100%;
   }
 }
+/* Selector del municipio en el formulario de cuentas temporales. */
+.alimentador-formulario-campo select {
+  width: 100%;
+  height: 44px;
+  padding: 0 13px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  color: #374151;
+  font-size: 13px;
+}
+.alimentador-formulario-campo select:focus {
+  outline: 2px solid #6735c4;
+  outline-offset: 1px;
+}
+/* Evita que el modal exceda la pantalla con los nuevos campos. */
+.alimentador-modal { max-height: 90vh; overflow-y: auto; }
+/* Da espacio al segundo selector cuando la barra tiene poco ancho. */
+.alimentadores-herramientas { flex-wrap: wrap; }
+.alimentadores-buscador { min-width: 220px; }
+.alimentadores-tabla { min-width: 1050px; }
+
+/* Evita que el modal sobrepase la ventana con los nuevos campos. */
+.alimentador-modal { max-height: 90vh; overflow-y: auto; }
+/* Distribuye los filtros adicionales en pantallas anchas y estrechas. */
+.alimentadores-herramientas { flex-wrap: wrap; }
+.alimentadores-buscador { min-width: 210px; }
+.alimentadores-tabla { min-width: 1200px; }
+/* Formato de selección para institución. */
+.alimentador-formulario-campo select { width: 100%; min-height: 44px; padding: 0 13px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; color: #374151; }
+.alimentador-formulario-campo select:focus { outline: 2px solid #6735c4; outline-offset: 1px; }
+/* Casillas de municipios; permite múltiples asignaciones temporales. */
+.cuentas-municipios { margin: 0 0 18px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 10px; }
+.cuentas-municipios legend { font-size: 13px; color: #374151; font-weight: 600; padding: 0 5px; }
+.cuentas-municipio-opcion { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 13px; cursor: pointer; }
+.cuentas-municipio-opcion input { accent-color: #6735c4; width: 16px; height: 16px; }
+.cuentas-municipios small { color: #6b7280; font-size: 12px; }

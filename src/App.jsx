@@ -1,8 +1,16 @@
+/**
+ * App.jsx
+ *
+ * Define las rutas principales del sistema SIPINNA
+ * y organiza las vistas según el rol del usuario.
+ */
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+// Página de inicio de sesión.
 import Login from "./pages/login/login";
 
+// Páginas del administrador.
 import InicioAdmin from "./pages/admin/inicioAdmin";
 import ReportesAdmin from "./pages/admin/reportesAdmin";
 import FiltrosAdmin from "./pages/admin/filtrosAdmin";
@@ -12,20 +20,36 @@ import AlimentadoresAdmin from "./pages/admin/alimentadoresAdmin";
 import ConfiguracionAdmin from "./pages/admin/configuracionAdmin";
 import DetalleReporteAdmin from "./pages/admin/detalleReporteAdmin";
 
+// Nueva página de gestión de administradores.
+import AdministradoresAdmin from "./pages/admin/administradoresAdmin";
+
+// Páginas del alimentador.
 import InicioAlimentador from "./pages/alimentador/inicioAlim";
 import ReportesAlim from "./pages/alimentador/reportesAlim";
 import MapaAlim from "./pages/alimentador/mapaAlim";
 import PerfilAlim from "./pages/alimentador/perfilAlim";
 import ConfiguracionAlim from "./pages/alimentador/configuracionAlim";
 
+// Página del reportante.
 import InicioReportante from "./pages/reportante/inicioReportante";
 
+// Layouts compartidos.
 import AlimLayout from "./layouts/alimLayout";
 import DashboardLayout from "./layouts/dashboardLayout";
 
+// Componentes de protección y conexión.
 import ProtectedRoute from "./components/ProtectedRoute";
 import ConnectionBanner from "./components/ConnectionBanner";
 
+/**
+ * App
+ *
+ * Configura la navegación principal del sistema.
+ * Cada grupo de rutas utiliza el componente de
+ * protección correspondiente a su rol.
+ *
+ * @returns {JSX.Element} Enrutador de la aplicación.
+ */
 function App() {
   return (
     <>
@@ -33,46 +57,124 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          {/* LOGIN */}
+
+          {/* Inicio de sesión */}
           <Route path="/" element={<Login />} />
 
-          {/* ADMINISTRADOR */}
-          <Route element={<ProtectedRoute rolPermitido="admin" />}>
+          {/* Rutas del administrador */}
+          <Route
+            element={<ProtectedRoute rolPermitido="admin" />}
+          >
             <Route
               path="/admin"
               element={<DashboardLayout role="admin" />}
             >
-              <Route index element={<InicioAdmin />} />
-              <Route path="reportes" element={<ReportesAdmin />} />
-              <Route path="reportes/:id" element={<DetalleReporteAdmin />} />
-              <Route path="filtros" element={<FiltrosAdmin />} />
-              <Route path="archivos" element={<ArchivosAdmin />} />
-              <Route path="mapa-calor" element={<MapaCalorAdmin />} />
-              <Route path="alimentadores" element={<AlimentadoresAdmin />} />
-              <Route path="configuracion" element={<ConfiguracionAdmin />} />
+              <Route
+                index
+                element={<InicioAdmin />}
+              />
+
+              <Route
+                path="reportes"
+                element={<ReportesAdmin />}
+              />
+
+              <Route
+                path="reportes/:id"
+                element={<DetalleReporteAdmin />}
+              />
+
+              <Route
+                path="filtros"
+                element={<FiltrosAdmin />}
+              />
+
+              <Route
+                path="archivos"
+                element={<ArchivosAdmin />}
+              />
+
+              <Route
+                path="mapa-calor"
+                element={<MapaCalorAdmin />}
+              />
+
+              <Route
+                path="alimentadores"
+                element={<AlimentadoresAdmin />}
+              />
+
+              {/*
+               * Gestión temporal de administradores.
+               *
+               * Se incorporará la restricción de
+               * administrador principal cuando el
+               * backend implemente ese permiso.
+               */}
+              <Route
+                path="administradores"
+                element={<AdministradoresAdmin />}
+              />
+
+              <Route
+                path="configuracion"
+                element={<ConfiguracionAdmin />}
+              />
+
             </Route>
           </Route>
 
-          {/* ALIMENTADOR */}
-          <Route element={<ProtectedRoute rolPermitido="alimentador" />}>
-            <Route path="/alimentador" element={<AlimLayout />}>
-              <Route index element={<InicioAlimentador />} />
-              <Route path="reportes" element={<ReportesAlim />} />
-              <Route path="mapa" element={<MapaAlim />} />
-              <Route path="configuracion" element={<ConfiguracionAlim />} />
-              <Route path="perfil" element={<PerfilAlim />} />
+          {/* Rutas del alimentador */}
+          <Route
+            element={<ProtectedRoute rolPermitido="alimentador" />}
+          >
+            <Route
+              path="/alimentador"
+              element={<AlimLayout />}
+            >
+              <Route
+                index
+                element={<InicioAlimentador />}
+              />
+
+              <Route
+                path="reportes"
+                element={<ReportesAlim />}
+              />
+
+              <Route
+                path="mapa"
+                element={<MapaAlim />}
+              />
+
+              <Route
+                path="configuracion"
+                element={<ConfiguracionAlim />}
+              />
+
+              <Route
+                path="perfil"
+                element={<PerfilAlim />}
+              />
             </Route>
           </Route>
 
-          {/* REPORTANTE */}
-          <Route element={<ProtectedRoute rolPermitido="reportante" />}>
+          {/* Ruta del reportante */}
+          <Route
+            element={<ProtectedRoute rolPermitido="reportante" />}
+          >
             <Route
               path="/reportante"
               element={<InicioReportante />}
             />
           </Route>
 
-          <Route path="*" element={<Login />} />
+          {/* Ruta de respaldo */}
+          <Route
+            path="*"
+            element={<Login />}
+          />
+
         </Routes>
       </BrowserRouter>
     </>

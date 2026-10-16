@@ -1,4 +1,14 @@
-// Iconos utilizados en las opciones de los diferentes menús 
+  /**
+ * Configuración de navegación del sistema SIPINNA.
+ *
+ * Define las opciones del menú lateral de acuerdo con
+ * el rol del usuario autenticado.
+ *
+ * IMPORTANTE:
+ * Esta configuración controla únicamente la navegación.
+ * Los permisos reales deben validarse en el backend.
+ */
+
 import {
   House,
   ClipboardList,
@@ -6,18 +16,23 @@ import {
   FolderOpen,
   Map,
   Users,
+  UserCog,
   Settings,
   Clock,
   CircleDot,
 } from "lucide-react";
 
-
-// Opciones del sidebar que corresponden a cada tipo de usuario 
-// Sección: sidebarConfig.
+/**
+ * Menús disponibles para cada rol.
+ *
+ * admin: opciones del panel administrativo.
+ * alimentador: opciones del panel de alimentadores.
+ *
+ * @type {Object<string, Array>}
+ */
 const sidebarConfig = {
 
-//   --- Administrador --- 
-
+  // Menú del administrador.
   admin: [
     {
       label: "Inicio",
@@ -63,6 +78,19 @@ const sidebarConfig = {
       icon: Users,
     },
 
+    /**
+     * Opción de gestión de administradores.
+     *
+     * Temporalmente aparece para el rol admin.
+     * Posteriormente se restringirá al administrador
+     * principal mediante permisos del backend.
+     */
+    {
+      label: "Cuentas de administradores",
+      path: "/admin/administradores",
+      icon: UserCog,
+    },
+
     {
       label: "Configuración",
       path: "/admin/configuracion",
@@ -70,9 +98,7 @@ const sidebarConfig = {
     },
   ],
 
-
-//  --- Alimentador ---
-
+  // Menú del alimentador.
   alimentador: [
     {
       label: "Inicio",
@@ -104,6 +130,4 @@ const sidebarConfig = {
   ],
 };
 
-
-// Permite utilizar esta configuración desde el Sidebar
 export default sidebarConfig;

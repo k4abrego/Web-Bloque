@@ -39,6 +39,7 @@ import DashboardLayout from "./layouts/dashboardLayout";
 
 // Componentes de protección y conexión.
 import ProtectedRoute from "./components/ProtectedRoute";
+import PrincipalRoute from "./components/principalRoute";
 import ConnectionBanner from "./components/ConnectionBanner";
 
 /**
@@ -111,10 +112,20 @@ function App() {
                * administrador principal cuando el
                * backend implemente ese permiso.
                */}
-              <Route
-                path="administradores"
-                element={<AdministradoresAdmin />}
-              />
+              
+              {/*
+              * Rutas exclusivas del administrador principal.
+              *
+              * PrincipalRoute verifica los permisos visuales
+              * antes de permitir el acceso a estas páginas.
+              */}
+              <Route element={<PrincipalRoute />}>
+                <Route
+                  path="administradores"
+                  element={<AdministradoresAdmin />}
+                />
+              </Route>
+
 
               <Route
                 path="configuracion"

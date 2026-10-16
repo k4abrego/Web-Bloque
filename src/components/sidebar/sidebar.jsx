@@ -11,19 +11,43 @@ import {
 import logoSIPINNA from "../../assets/sipinnalogo.png";
 import "./sidebar.css";
 import sidebarConfig from "./sidebarConfig";
+import { obtenerPermisos } from "../../services/permisos";
 
 
 // Crea el menu lateral y decidee si se muestra abierto o cerrado
 // Sección: Sidebar.
 function Sidebar({ role, isOpen, onToggle }) {
 
-// Guarda la info del perfil
-// Sección: declaración.
-  const [profileOpen, setProfileOpen] = useState(false);
+  // Guarda la info del perfil
+  // Sección: declaración.
+    const [profileOpen, setProfileOpen] = useState(false);
 
-// Opciones del menu correspondiente al rol
-// Sección: menuItems.
-  const menuItems = sidebarConfig[role] || [];
+  // Opciones del menu correspondiente al rol
+  // Sección: menuItems.
+    /**
+   * Obtiene los permisos visuales del usuario autenticado.
+   *
+   * Permite distinguir entre administrador principal
+   * y administrador normal.
+   *
+   * IMPORTANTE:
+   * Esta validación es únicamente de interfaz.
+   * La autorización real corresponde al backend.
+   */
+  const permisos = obtenerPermisos();
+
+  /**
+   * Obtiene las opciones correspondientes al rol y
+   * oculta la gestión de administradores cuando
+   * el usuario no tiene el permiso correspondiente.
+   */
+  const menuItems = (sidebarConfig[role] || []).filter((item) => {
+    if (item.path === "/admin/administradores") {
+      return permisos.puedeGestionarAdministradores;
+    }
+
+    return true;
+  });
 
   return (
     <aside

@@ -74,14 +74,16 @@ export async function verificarChallenge(userId, respuestaHMAC) {
 }
 
 /**
- * Guarda la información de la sesión autenticada en localStorage.
+ * Guarda la información de la sesión autenticada.
  *
- * @param {string} token - Token JWT proporcionado por el backend.
- * @param {string} rol - Rol del usuario autenticado.
+ * @param {string} token - Token JWT del usuario.
+ * @param {string} rol - Rol devuelto por el backend.
+ * @param {number} userId - Identificador del usuario autenticado.
  */
-export function guardarSesion(token, rol) {
+export function guardarSesion(token, rol, userId) {
   localStorage.setItem("token", token);
   localStorage.setItem("rol", rol);
+  localStorage.setItem("user_id", String(userId));
 }
 
 /**

@@ -779,3 +779,85 @@
 .cuentas-municipio-opcion { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 13px; cursor: pointer; }
 .cuentas-municipio-opcion input { accent-color: #6735c4; width: 16px; height: 16px; }
 .cuentas-municipios small { color: #6b7280; font-size: 12px; }
+
+
+/**
+ * Selector de múltiples municipios.
+ *
+ * Mantiene las casillas alineadas con sus nombres
+ * dentro de los formularios de alimentadores.
+ */
+
+/* Contenedor de los municipios disponibles. */
+.gestion-municipios-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  max-height: 180px;
+  overflow-y: auto;
+
+  padding: 12px;
+
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+/* Alinea cada municipio y su casilla horizontalmente. */
+.gestion-municipio-opcion {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+
+  width: 100%;
+  margin: 0;
+  padding: 4px 0;
+
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+
+  cursor: pointer;
+}
+
+/* Evita que los estilos generales agranden el checkbox. */
+.gestion-municipio-opcion input[type="checkbox"] {
+  appearance: auto;
+
+  display: inline-block;
+  flex: 0 0 17px;
+
+  width: 17px !important;
+  height: 17px !important;
+
+  min-width: 17px;
+  min-height: 17px;
+
+  margin: 0;
+  padding: 0;
+
+  accent-color: #6735c4;
+  cursor: pointer;
+}
+
+/* Nombre del municipio. */
+.gestion-municipio-opcion span {
+  display: inline-block;
+  flex: 1;
+
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* Explicación de la selección múltiple. */
+.gestion-municipios-ayuda {
+  display: block;
+  margin-top: 7px;
+
+  color: #9ca3af;
+  font-size: 11px;
+}

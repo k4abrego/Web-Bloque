@@ -143,8 +143,8 @@ function Login() {
         );
         }
 
-        // 5. Guardar la sesión
-        guardarSesion(datos.token, rol);
+        // Guarda el identificador junto con la sesión.
+        guardarSesion(datos.token, rol, user_id);
 
         // 6. Redirigir según el rol
         const ruta = rutaPorRol(rol);

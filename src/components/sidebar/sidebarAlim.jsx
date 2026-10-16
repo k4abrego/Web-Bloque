@@ -16,7 +16,20 @@ import {
 import logoSIPINNA from "../../assets/sipinnalogo.png";
 import "./sidebarAlim.css";
 
-// Sección: SidebarAlim.
+/**
+ * Componente de navegación lateral para usuarios con rol de Alimentador.
+ *
+ * Permite navegar entre las secciones principales del sistema SIPINNA,
+ * expandir o contraer la barra lateral y visualizar un menú con
+ * información del perfil y la opción de cerrar sesión.
+ *
+ * @component
+ * @param {Object} props - Propiedades del componente.
+ * @param {boolean} props.isOpen - Indica si la barra lateral está expandida.
+ * @param {Function} props.onToggle - Función que alterna el estado de la barra lateral.
+ * @returns {JSX.Element} Barra lateral de navegación del Alimentador.
+ */
+
 function SidebarAlim({ isOpen, onToggle }) {
 // Sección: declaración.
     const [profileOpen, setProfileOpen] = useState(false);

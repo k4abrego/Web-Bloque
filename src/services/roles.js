@@ -1,4 +1,3 @@
-
 const ALIAS_ROLES = {
   admin: "admin",
   administrador: "admin",

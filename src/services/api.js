@@ -15,7 +15,7 @@ const AUTH_API_URL = import.meta.env.VITE_AUTH_LOGIN_URL;
  * cambiar la dirección del backend sin modificar el código fuente.
  *
  * @type {string}
- */
+ */ 
 const COMMS_API_URL = import.meta.env.VITE_COMMS_API_URL;
 
 /**

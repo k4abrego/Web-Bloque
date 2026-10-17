@@ -3,20 +3,17 @@
  *
  * Pantalla de reportes asignados al personal alimentador.
  *
- * Consulta los reportes reales desde comms-api utilizando
- * la sesión autenticada del usuario.
- *
- * El backend determina qué reportes puede consultar
- * cada alimentador mediante su JWT.
- *
  * Funcionalidades:
- * - Consulta de reportes asignados.
- * - Búsqueda por folio, descripción o dirección.
+ * - Consulta de reportes reales desde comms-api.
+ * - Consulta del catálogo real de territorios.
+ * - Búsqueda por folio, descripción y dirección.
  * - Filtros por estado y territorio.
  * - Pestañas dinámicas según los estados disponibles.
- * - Actualización manual de la lista.
+ * - Actualización manual de los reportes.
+ * - Navegación al detalle de cada reporte.
  *
- * No modifica datos de MariaDB.
+ * El backend determina los reportes autorizados
+ * mediante el JWT del usuario autenticado.
  */
 
 import { useEffect, useMemo, useState } from "react";
@@ -33,14 +30,15 @@ import {
 } from "lucide-react";
 
 import { obtenerHistoricoReportes } from "../../services/reportesApi";
+import { obtenerTerritorios } from "../../services/territoriosApi";
 
 import "./reportesAlim.css";
 
 /**
  * Formatea una fecha recibida desde la API.
  *
- * @param {string|null} fecha - Fecha original.
- * @returns {string} Fecha YYYY-MM-DD o texto alternativo.
+ * @param {string|null} fecha
+ * @returns {string}
  */
 function formatearFecha(fecha) {
   return fecha ? String(fecha).slice(0, 10) : "Sin fecha";
@@ -49,8 +47,8 @@ function formatearFecha(fecha) {
 /**
  * Convierte un valor opcional en texto visible.
  *
- * @param {unknown} valor - Valor original.
- * @returns {string} Texto de presentación.
+ * @param {unknown} valor
+ * @returns {string}
  */
 function mostrarTexto(valor) {
   return valor == null || String(valor).trim() === ""
@@ -61,23 +59,29 @@ function mostrarTexto(valor) {
 /**
  * ReportesAlim
  *
- * Presenta los reportes autorizados para el alimentador
- * autenticado y permite filtrarlos.
+ * Muestra los reportes asignados al alimentador
+ * autenticado y permite consultarlos y filtrarlos.
  *
- * @returns {import("react").JSX.Element} Página de reportes.
+ * @returns {import("react").JSX.Element}
  */
 export default function ReportesAlim() {
   const navigate = useNavigate();
 
-  /** Datos reales obtenidos desde comms-api. */
+  // Reportes reales obtenidos desde comms-api.
   const [reportes, setReportes] = useState([]);
 
-  /** Estado de consulta. */
+  // Catálogo de territorios obtenido desde MariaDB.
+  const [territorios, setTerritorios] = useState([]);
+
+  // Estado de consulta de los reportes.
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
   const [intento, setIntento] = useState(0);
 
-  /** Control de filtros. */
+  // Error independiente de la consulta de territorios.
+  const [errorTerritorios, setErrorTerritorios] = useState("");
+
+  // Controles de filtros.
   const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
   const [estadoActivo, setEstadoActivo] = useState("Todos");
   const [estadoFiltro, setEstadoFiltro] = useState("");
@@ -85,11 +89,10 @@ export default function ReportesAlim() {
   const [busqueda, setBusqueda] = useState("");
 
   /**
-   * Consulta los reportes al montar el componente
-   * y cada vez que el usuario solicita actualizar.
+   * Consulta los reportes asignados al alimentador.
    *
-   * No envía un identificador de usuario desde React.
-   * El servidor identifica al alimentador por su token.
+   * Se ejecuta al montar la vista y cuando el usuario
+   * presiona el botón Actualizar.
    */
   useEffect(() => {
     let vigente = true;
@@ -105,6 +108,7 @@ export default function ReportesAlim() {
         }
 
         setReportes(datos);
+        setError("");
       })
       .catch((err) => {
         if (!vigente) return;
@@ -131,7 +135,47 @@ export default function ReportesAlim() {
   }, [intento]);
 
   /**
-   * Solicita nuevamente los datos del backend.
+   * Consulta el catálogo de territorios.
+   *
+   * Esta consulta es independiente de los reportes.
+   * Si falla, los reportes pueden seguir mostrándose.
+   */
+  useEffect(() => {
+    let vigente = true;
+
+    obtenerTerritorios()
+      .then((datos) => {
+        if (!vigente) return;
+
+        if (!Array.isArray(datos?.territorios)) {
+          throw new Error(
+            "El catálogo de territorios no tiene el formato esperado."
+          );
+        }
+
+        setTerritorios(datos.territorios);
+        setErrorTerritorios("");
+      })
+      .catch((err) => {
+        if (!vigente) return;
+
+        console.error(
+          "Error al consultar territorios:",
+          err
+        );
+
+        setErrorTerritorios(
+          "No se pudieron consultar los nombres de los territorios."
+        );
+      });
+
+    return () => {
+      vigente = false;
+    };
+  }, []);
+
+  /**
+   * Solicita nuevamente los reportes al backend.
    */
   function actualizarReportes() {
     setCargando(true);
@@ -140,10 +184,7 @@ export default function ReportesAlim() {
   }
 
   /**
-   * Construye los estados disponibles a partir de
-   * los reportes devueltos por la API.
-   *
-   * Así evitamos filtrar con estados antiguos.
+   * Obtiene los estados presentes en los reportes.
    */
   const estadosDisponibles = useMemo(() => {
     return [
@@ -156,11 +197,8 @@ export default function ReportesAlim() {
   }, [reportes]);
 
   /**
-   * Obtiene los identificadores de territorio que
-   * aparecen en los reportes asignados.
-   *
-   * El historial no devuelve el nombre del municipio;
-   * por eso todavía utilizamos su identificador.
+   * Obtiene los ID de territorio presentes
+   * en los reportes asignados.
    */
   const territoriosDisponibles = useMemo(() => {
     return [
@@ -173,10 +211,45 @@ export default function ReportesAlim() {
   }, [reportes]);
 
   /**
-   * Filtra los reportes localmente.
+   * Crea un mapa de ID de territorio a nombre.
    *
-   * La autorización de acceso se realiza previamente
-   * en el backend; estos filtros solo afectan la vista.
+   * Ejemplo:
+   * "2" => "Atizapán de Zaragoza"
+   */
+  const nombresTerritorios = useMemo(() => {
+    return new Map(
+      territorios.map((territorio) => [
+        String(territorio.id_territorio),
+        territorio.nombre,
+      ])
+    );
+  }, [territorios]);
+
+  /**
+   * Obtiene el nombre real del territorio.
+   *
+   * Si el catálogo todavía no se ha cargado,
+   * utiliza su identificador como respaldo.
+   *
+   * @param {number|string|null} id
+   * @returns {string}
+   */
+  function nombreTerritorio(id) {
+    if (id === null || id === undefined) {
+      return "No disponible";
+    }
+
+    return (
+      nombresTerritorios.get(String(id)) ||
+      `Territorio ${id}`
+    );
+  }
+
+  /**
+   * Filtra localmente los reportes autorizados.
+   *
+   * El backend realiza la autorización;
+   * estos filtros solo modifican la visualización.
    */
   const reportesFiltrados = useMemo(() => {
     const textoBusqueda = busqueda
@@ -188,6 +261,9 @@ export default function ReportesAlim() {
         reporte.folio,
         reporte.descripcion,
         reporte.direccion,
+        nombresTerritorios.get(
+          String(reporte.id_territorio)
+        ),
       ]
         .filter(Boolean)
         .join(" ")
@@ -197,7 +273,8 @@ export default function ReportesAlim() {
         textoReporte.includes(textoBusqueda);
 
       const coincideEstado =
-        !estadoFiltro || reporte.estado === estadoFiltro;
+        !estadoFiltro ||
+        reporte.estado === estadoFiltro;
 
       const coincideTerritorio =
         !territorioFiltro ||
@@ -220,10 +297,11 @@ export default function ReportesAlim() {
     estadoFiltro,
     territorioFiltro,
     estadoActivo,
+    nombresTerritorios,
   ]);
 
   /**
-   * Restablece todos los filtros.
+   * Restablece los filtros seleccionados.
    */
   function limpiarFiltros() {
     setEstadoFiltro("");
@@ -233,9 +311,9 @@ export default function ReportesAlim() {
   }
 
   /**
-   * Abre la ruta de detalle del reporte seleccionado.
+   * Navega al detalle de un reporte asignado.
    *
-   * @param {string} folio - Folio del reporte.
+   * @param {string} folio
    */
   function verReporte(folio) {
     navigate(
@@ -245,10 +323,8 @@ export default function ReportesAlim() {
 
   return (
     <div className="reportes-alim">
-
       {/* Encabezado */}
       <div className="reportes-alim-header">
-
         <div className="reportes-alim-title">
           <h1>Reportes asignados</h1>
 
@@ -259,8 +335,7 @@ export default function ReportesAlim() {
         </div>
 
         <div className="reportes-alim-actions">
-
-          {/* Abrir y cerrar filtros */}
+          {/* Mostrar u ocultar filtros */}
           <button
             type="button"
             className={`reportes-button ${
@@ -281,7 +356,7 @@ export default function ReportesAlim() {
             />
           </button>
 
-          {/* Actualización desde MariaDB */}
+          {/* Actualización de reportes */}
           <button
             type="button"
             className="reportes-button"
@@ -289,10 +364,11 @@ export default function ReportesAlim() {
             disabled={cargando}
           >
             <RefreshCw size={17} />
+
             {cargando ? "Actualizando..." : "Actualizar"}
           </button>
 
-          {/* Exportación pendiente de implementar */}
+          {/* Exportación pendiente */}
           <button
             type="button"
             className="reportes-button"
@@ -302,17 +378,16 @@ export default function ReportesAlim() {
             <Download size={17} />
             Exportar
           </button>
-
         </div>
       </div>
 
       {/* Panel de filtros */}
       {filtrosAbiertos && (
         <div className="reportes-filters">
-
           <div className="reportes-filter-header">
             <div>
               <h3>Filtrar reportes</h3>
+
               <p>
                 Encuentra un caso mediante sus datos
                 registrados.
@@ -330,7 +405,6 @@ export default function ReportesAlim() {
           </div>
 
           <div className="reportes-filter-grid">
-
             {/* Búsqueda */}
             <div className="reportes-filter-field">
               <label htmlFor="buscar-folio">
@@ -352,7 +426,7 @@ export default function ReportesAlim() {
               </div>
             </div>
 
-            {/* Estado */}
+            {/* Filtro por estado */}
             <div className="reportes-filter-field">
               <label htmlFor="estado-filtro">
                 Estado del reporte
@@ -365,39 +439,66 @@ export default function ReportesAlim() {
                   setEstadoFiltro(evento.target.value)
                 }
               >
-                <option value="">Todos los estados</option>
+                <option value="">
+                  Todos los estados
+                </option>
 
                 {estadosDisponibles.map((estado) => (
-                  <option key={estado} value={estado}>
+                  <option
+                    key={estado}
+                    value={estado}
+                  >
                     {estado}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* Territorio */}
+            {/* Filtro por territorio real */}
             <div className="reportes-filter-field">
-              <label htmlFor="localidad-filtro">
+              <label htmlFor="territorio-filtro">
                 Territorio
               </label>
 
               <select
-                id="localidad-filtro"
+                id="territorio-filtro"
                 value={territorioFiltro}
                 onChange={(evento) =>
                   setTerritorioFiltro(evento.target.value)
                 }
               >
-                <option value="">Todos los territorios</option>
+                <option value="">
+                  Todos los territorios
+                </option>
 
                 {territoriosDisponibles.map((id) => (
-                  <option key={id} value={String(id)}>
-                    Territorio {id}
+                  <option
+                    key={id}
+                    value={String(id)}
+                  >
+                    {nombreTerritorio(id)}
                   </option>
                 ))}
               </select>
             </div>
 
+            {/* Categorías pendientes de integración */}
+            <div className="reportes-filter-field">
+              <label htmlFor="categoria-filtro">
+                Categoría
+              </label>
+
+              <select
+                id="categoria-filtro"
+                value=""
+                disabled
+                title="Las categorías se habilitarán cuando estén disponibles en la API."
+              >
+                <option value="">
+                  Categorías pendientes de integrar
+                </option>
+              </select>
+            </div>
           </div>
 
           <div className="reportes-filter-footer">
@@ -409,13 +510,11 @@ export default function ReportesAlim() {
               Limpiar filtros
             </button>
           </div>
-
         </div>
       )}
 
-      {/* Pestañas por estado real */}
+      {/* Pestañas de estado */}
       <div className="reportes-tabs">
-
         <button
           type="button"
           className={`reportes-tab ${
@@ -438,15 +537,24 @@ export default function ReportesAlim() {
             {estado}
           </button>
         ))}
-
       </div>
 
-      {/* Errores de consulta */}
-      {!cargando && error && (
-        <div
-          className="reportes-filters"
+      {/* Error al consultar territorios */}
+      {errorTerritorios && (
+        <p
           role="alert"
+          style={{
+            color: "#a52837",
+            marginBottom: "12px",
+          }}
         >
+          {errorTerritorios}
+        </p>
+      )}
+
+      {/* Error al consultar reportes */}
+      {!cargando && error && (
+        <div className="reportes-filters" role="alert">
           <p>{error}</p>
 
           <button
@@ -459,12 +567,10 @@ export default function ReportesAlim() {
         </div>
       )}
 
-      {/* Tabla */}
+      {/* Tabla de reportes asignados */}
       <div className="reportes-table-card">
         <div className="reportes-table-wrapper">
-
           <table className="reportes-table">
-
             <thead>
               <tr>
                 <th>Folio</th>
@@ -478,7 +584,6 @@ export default function ReportesAlim() {
             </thead>
 
             <tbody>
-
               {cargando ? (
                 <tr>
                   <td colSpan={7}>
@@ -501,35 +606,40 @@ export default function ReportesAlim() {
               ) : reportesFiltrados.length > 0 ? (
                 reportesFiltrados.map((reporte) => (
                   <tr key={reporte.folio}>
-
+                    {/* Folio */}
                     <td className="reportes-folio">
                       {reporte.folio}
                     </td>
 
+                    {/* Fecha */}
                     <td>
                       {formatearFecha(
                         reporte.fecha_envio
                       )}
                     </td>
 
+                    {/* Descripción */}
                     <td className="reportes-description">
                       {mostrarTexto(
                         reporte.descripcion
                       )}
                     </td>
 
+                    {/* Ubicación */}
                     <td>
                       {mostrarTexto(
                         reporte.direccion
                       )}
                     </td>
 
+                    {/* Nombre real del territorio */}
                     <td>
-                      {reporte.id_territorio != null
-                        ? `Territorio ${reporte.id_territorio}`
-                        : "No disponible"}
+                      {nombreTerritorio(
+                        reporte.id_territorio
+                      )}
                     </td>
 
+                    {/* Estado */}
                     <td>
                       <span
                         className={`reportes-status status-${String(
@@ -544,6 +654,7 @@ export default function ReportesAlim() {
                       </span>
                     </td>
 
+                    {/* Abrir detalle */}
                     <td>
                       <button
                         type="button"
@@ -557,7 +668,6 @@ export default function ReportesAlim() {
                         Ver
                       </button>
                     </td>
-
                   </tr>
                 ))
               ) : (
@@ -581,12 +691,10 @@ export default function ReportesAlim() {
                   </td>
                 </tr>
               )}
-
             </tbody>
           </table>
         </div>
       </div>
-
     </div>
   );
 }

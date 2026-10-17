@@ -1,75 +1,120 @@
-import { apiFetch } from "./api";
-
-// Sección: obtenerReporte.
-export async function obtenerReporte(params = {}) {
-// Sección: query.
-    const query = new URLSearchParams();
-
-    Object.entries(params).forEach(([Key, value]) => {
-        if (value !== undefined && value !== null && value !== "") {
-            query.append(Key, value);
-        }
-    });
-
-// Sección: url.
-    const url = query.toString()
-        ? `/reportes?${query.toString()}`
-        : "/reportes";
-
-    return apiFetch(url);
-}
-    /**
-     * Consulta un reporte real mediante su folio.
-     *
-     * @param {string} folio - Folio del reporte.
-     * @returns {Promise<Object>} Información del reporte.
-     */
-    export async function obtenerReportePorId(folio) {
-    return apiFetch(
-        `/reportes/${encodeURIComponent(folio)}`
-    );
-    }
-
-// Sección: actualizarEstadoReporte.
-export async function actualizarEstadoReporte(folio, datos) {
-    return apiFetch(`/reportes/${folio}`, {
-        method: "POST",
-        body: JSON.stringify(datos),
-    });
-}
-
-// Sección: asignarReporte.
-export async function asignarReporte(folio, idAlimentador) {
-    return apiFetch(`/reportes/asignar/${folio}`, {
-        method: "POST",
-        body: JSON.stringify({
-            id_alimentador: idAlimentador,
-        }),
-    });
-    
-}
-
-
 
 /**
- * Obtiene el historial real de reportes desde comms-api.
+ * reportesApi.js
  *
- * El token de autenticación se envía mediante apiFetch.
+ * Servicios para consultar, asignar y actualizar
+ * reportes mediante comms-api.
+ */
+
+import { apiFetch } from "./api";
+
+/**
+ * Consulta reportes utilizando filtros opcionales.
  *
- * Endpoint:
- * GET /api/v1/reportes/historico
+ * @param {Object} params
+ * @returns {Promise<Object>}
+ */
+export async function obtenerReporte(params = {}) {
+  const query = new URLSearchParams();
+
+  Object.entries(params).forEach(([campo, valor]) => {
+    if (
+      valor !== undefined &&
+      valor !== null &&
+      valor !== ""
+    ) {
+      query.append(campo, String(valor));
+    }
+  });
+
+  const parametros = query.toString();
+
+  const url = parametros
+    ? `/reportes?${parametros}`
+    : "/reportes";
+
+  return apiFetch(url);
+}
+
+/**
+ * Consulta el detalle de un reporte mediante su folio.
  *
- * @param {Object} [filtros={}] - Filtros opcionales.
- * @param {string} [filtros.estado] - Estado del expediente.
- * @param {number} [filtros.id_territorio] - Territorio.
- * @param {"asc"|"desc"} [filtros.orden_fecha] - Orden.
- * @returns {Promise<Object[]>} Reportes del backend.
+ * @param {string} folio
+ * @returns {Promise<Object>}
+ */
+export async function obtenerReportePorId(folio) {
+  return apiFetch(
+    `/reportes/${encodeURIComponent(folio)}`
+  );
+}
+
+/**
+ * Actualiza el estado de un expediente.
+ *
+ * El backend valida:
+ * - La autenticación mediante JWT.
+ * - El estado solicitado.
+ * - Los permisos del usuario sobre el expediente.
+ *
+ * @param {string} folio
+ * @param {Object} datos
+ * @param {string} datos.estado
+ * @param {string|null} [datos.observaciones]
+ * @returns {Promise<Object>}
+ */
+export async function actualizarEstadoReporte(folio, datos) {
+  return apiFetch(
+    `/reportes/${encodeURIComponent(folio)}/estatus`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({
+        estado: datos.estado,
+        observaciones: datos.observaciones ?? null,
+      }),
+    }
+  );
+}
+
+/**
+ * Asigna un reporte a un alimentador.
+ *
+ * @param {string} folio
+ * @param {number} idAlimentador
+ * @returns {Promise<Object>}
+ */
+export async function asignarReporte(folio, idAlimentador) {
+  return apiFetch(
+    `/reportes/asignar/${encodeURIComponent(folio)}`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        id_alimentador: idAlimentador,
+      }),
+    }
+  );
+}
+
+/**
+ * Obtiene el historial de reportes.
+ *
+ * El backend utiliza el JWT para determinar
+ * qué reportes puede consultar cada usuario.
+ *
+ * @param {Object} filtros
+ * @param {string} [filtros.estado]
+ * @param {number} [filtros.id_territorio]
+ * @param {"asc"|"desc"} [filtros.orden_fecha]
+ * @returns {Promise<Object[]>}
  */
 export async function obtenerHistoricoReportes(filtros = {}) {
   const query = new URLSearchParams();
 
   Object.entries(filtros).forEach(([campo, valor]) => {
-    if (valor !== undefined && valor !== null && valor !== "") {
+    if (
+      valor !== undefined &&
+      valor !== null &&
+      valor !== ""
+    ) {
       query.append(campo, String(valor));
     }
   });

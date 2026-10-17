@@ -29,6 +29,7 @@ import ReportesAlim from "./pages/alimentador/reportesAlim";
 import MapaAlim from "./pages/alimentador/mapaAlim";
 import PerfilAlim from "./pages/alimentador/perfilAlim";
 import ConfiguracionAlim from "./pages/alimentador/configuracionAlim";
+import DetalleReporteAlim from "./pages/alimentador/detalleReporteAlim";
 
 // Página del reportante.
 import InicioReportante from "./pages/reportante/inicioReportante";
@@ -151,6 +152,11 @@ function App() {
               <Route
                 path="reportes"
                 element={<ReportesAlim />}
+              />
+
+              <Route
+                path="reportes/:folio"
+                element={<DetalleReporteAlim />}
               />
 
               <Route

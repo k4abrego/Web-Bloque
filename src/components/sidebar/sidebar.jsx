@@ -12,6 +12,7 @@ import logoSIPINNA from "../../assets/sipinnalogo.png";
 import "./sidebar.css";
 import sidebarConfig from "./sidebarConfig";
 import { obtenerPermisos } from "../../services/permisos";
+import { cerrarSesion } from "../../services/authApi";
 
 
 // Crea el menu lateral y decidee si se muestra abierto o cerrado
@@ -162,18 +163,15 @@ function Sidebar({ role, isOpen, onToggle }) {
               {/* Separa la info de la opcion de cerrar sesion*/}
               <div className="profile-divider"></div>
 
-              {/* Cerrar sesión */}
+              {/* Cierra la sesión antes de regresar al login. */}
               <NavLink
                 to="/"
                 className="profile-logout"
+                onClick={manejarCerrarSesion}
               >
-                <LogOut size={18}/>
-
-                <span>
-                  Cerrar sesión
-                </span>
+                <LogOut size={18} />
+                <span>Cerrar sesión</span>
               </NavLink>
-
             </div>
           )}
 
@@ -217,6 +215,23 @@ function Sidebar({ role, isOpen, onToggle }) {
 
     </aside>
   );
+}
+
+/**
+ * Cierra la sesión local del usuario autenticado.
+ *
+ * Elimina las credenciales almacenadas en el navegador
+ * antes de regresar a la pantalla de inicio de sesión.
+ *
+ * IMPORTANTE:
+ * Esta función realiza el cierre de sesión local.
+ * La invalidación del JWT en el backend se implementará
+ * cuando se integre el flujo correspondiente.
+ *
+ * @returns {void}
+ */
+function manejarCerrarSesion() {
+  cerrarSesion();
 }
 
 // Permite utilizar sidebar en otras partes de la app

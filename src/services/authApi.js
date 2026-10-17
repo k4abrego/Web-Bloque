@@ -92,5 +92,6 @@ export function guardarSesion(token, rol, userId) {
 export function cerrarSesion() {
   localStorage.removeItem("token");
   localStorage.removeItem("rol");
+  localStorage.removeItem("user_id");
 }
 

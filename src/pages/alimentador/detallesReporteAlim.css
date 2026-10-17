@@ -214,3 +214,169 @@
     font-size: 25px;
   }
 }
+
+
+
+/* =========================================
+   Confirmación de cambio de estado
+   ========================================= */
+
+.detalle-alim-confirmacion {
+  max-width: 650px;
+  margin-top: 22px;
+  padding: 22px;
+  border: 1px solid #ded1ed;
+  border-radius: 14px;
+  background: #faf8fd;
+}
+
+.detalle-alim-confirmacion-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.detalle-alim-confirmacion-header h4 {
+  margin: 0 0 7px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #312044;
+}
+
+.detalle-alim-confirmacion-header p {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.detalle-alim-confirmacion-cerrar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.detalle-alim-confirmacion-cerrar:hover {
+  background: #eee8f5;
+}
+
+.detalle-alim-confirmacion-folio {
+  margin: 22px 0 12px;
+  color: #5b5265;
+  font-size: 14px;
+}
+
+.detalle-alim-confirmacion-cambio {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
+  color: #7956a5;
+}
+
+.detalle-alim-confirmacion-estado {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 15px;
+  border: 1px solid #e1dce8;
+  border-radius: 9px;
+  background: #fff;
+  color: #4b4056;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.detalle-alim-confirmacion-estado.nuevo {
+  border-color: #cdb6e5;
+  background: #f0e8f8;
+  color: #512681;
+}
+
+.detalle-alim-confirmacion-acciones {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.detalle-alim-confirmacion-cancelar,
+.detalle-alim-confirmacion-aceptar {
+  padding: 11px 18px;
+  border-radius: 9px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.detalle-alim-confirmacion-cancelar {
+  border: 1px solid #cbb8df;
+  background: #fff;
+  color: #512681;
+}
+
+.detalle-alim-confirmacion-cancelar:hover {
+  background: #f4eff9;
+}
+
+.detalle-alim-confirmacion-aceptar {
+  border: 1px solid #512681;
+  background: #512681;
+  color: #fff;
+}
+
+.detalle-alim-confirmacion-aceptar:hover {
+  background: #402069;
+}
+
+.detalle-alim-confirmacion button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   Resultado de actualización
+   ========================================= */
+
+.detalle-alim-resultado-exito,
+.detalle-alim-resultado-error {
+  margin-top: 18px;
+  padding: 13px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.detalle-alim-resultado-exito {
+  border: 1px solid #bedfc6;
+  background: #edf8f0;
+  color: #246337;
+}
+
+.detalle-alim-resultado-error {
+  border: 1px solid #f2c5cb;
+  background: #fff1f2;
+  color: #a52837;
+}
+
+@media (max-width: 600px) {
+  .detalle-alim-confirmacion {
+    padding: 16px;
+  }
+
+  .detalle-alim-confirmacion-acciones {
+    flex-direction: column;
+  }
+
+  .detalle-alim-confirmacion-cancelar,
+  .detalle-alim-confirmacion-aceptar {
+    width: 100%;
+  }
+}

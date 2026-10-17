@@ -1,157 +1,222 @@
-// Documentación automática de src/pages/admin/reportesAdmin.jsx: Página y estilos de la sección reportesAdmin.
-// Imports
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import reportesMock from "../../mocks/reportes";
-import "./reportesAdmin.css";
+/**
+ * reportesAdmin.jsx
+ *
+ * Lista administrativa de reportes registrados en SIPINNA.
+ *
+ * Obtiene datos reales desde el endpoint de histórico.
+ * Permite buscar, filtrar por estado y paginar localmente.
+ *
+ * No modifica información en MariaDB.
+ */
+
+import { useEffect, useMemo, useState } from "react";
+
 import {
   Search,
   ChevronLeft,
   ChevronRight,
+  RefreshCw,
 } from "lucide-react";
 
+import { obtenerHistoricoReportes } from "../../services/reportesApi";
 
+import "./reportesAdmin.css";
 
+import { NavLink } from "react-router-dom";
 
-// Página donde el administrador puede consultar todos los reportes
-// Sección: ReportesAdmin.
-function ReportesAdmin() {
+/** Número máximo de reportes por página. */
+const REPORTES_POR_PAGINA = 5;
 
-  // Guarda el texto escrito en el buscador
-// Sección: declaración.
+/**
+ * Da formato a la fecha devuelta por el backend.
+ *
+ * @param {string|null} fecha - Fecha del reporte.
+ * @returns {string} Fecha YYYY-MM-DD o texto alternativo.
+ */
+function formatearFecha(fecha) {
+  if (!fecha) return "Sin fecha";
+
+  // Conserva el día recibido, sin conversiones de zona horaria.
+  return String(fecha).slice(0, 10);
+}
+
+/**
+ * Devuelve texto legible para los valores opcionales.
+ *
+ * @param {string|null|undefined} valor - Campo original.
+ * @returns {string} Valor o texto alternativo.
+ */
+function mostrarTexto(valor) {
+  return valor == null || String(valor).trim() === ""
+    ? "No disponible"
+    : String(valor);
+}
+
+/**
+ * ReportesAdmin
+ *
+ * Consulta los reportes reales y muestra una tabla con
+ * filtros, manejo de errores y paginación.
+ *
+ * @returns {import("react").JSX.Element} Página de reportes.
+ */
+export default function ReportesAdmin() {
+  const [reportes, setReportes] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState("");
+  const [intento, setIntento] = useState(0);
+
   const [busqueda, setBusqueda] = useState("");
-
-  // Guarda el estado seleccionado
-// Sección: declaración.
   const [filtroEstado, setFiltroEstado] = useState("Todos");
-
-  // Guarda la prioridad seleccionada 
-// Sección: declaración.
-  const [filtroPrioridad, setFiltroPrioridad] = useState("Todas");
-
-  // Guarda la página que se está mostrando
-// Sección: declaración.
   const [paginaActual, setPaginaActual] = useState(1);
 
+  /**
+   * Solicita los registros cuando entra a la pantalla
+   * o cuando el usuario solicita recargar.
+   */
+  useEffect(() => {
+    let vigente = true;
 
-  // Define cuántos reportes se muestran en cada página 
-// Sección: reportesPorPagina.
-  const reportesPorPagina = 5;
+    obtenerHistoricoReportes()
+      .then((datos) => {
+        if (!vigente) return;
 
+        if (!Array.isArray(datos)) {
+          throw new Error(
+            "La API no devolvió una lista válida de reportes."
+          );
+        }
 
-  // Filtra los reportes de acuerdo con las opciones seleccionadas 
-// Sección: reportesFiltrados.
-  const reportesFiltrados = reportesMock.filter((reporte) => {
+        setReportes(datos);
+      })
+      .catch((err) => {
+        if (!vigente) return;
 
-// Sección: textoBusqueda.
-    const textoBusqueda = busqueda.toLowerCase();
+        console.error("Error al consultar reportes:", err);
+        setError(
+          err.message || "No fue posible consultar los reportes."
+        );
+      })
+      .finally(() => {
+        if (vigente) setCargando(false);
+      });
 
-// Sección: coincideBusqueda.
-    const coincideBusqueda =
-      reporte.folio.toLowerCase().includes(textoBusqueda) ||
-      reporte.tipo.toLowerCase().includes(textoBusqueda) ||
-      reporte.alimentador.toLowerCase().includes(textoBusqueda) ||
-      reporte.ubicacion.toLowerCase().includes(textoBusqueda);
+    return () => {
+      vigente = false;
+    };
+  }, [intento]);
 
-// Sección: coincideEstado.
-    const coincideEstado =
-      filtroEstado === "Todos" ||
-      reporte.estado === filtroEstado;
+  /**
+   * Reintenta consultar el historial sin actualizar
+   * ni eliminar reportes de la base de datos.
+   */
+  function recargarReportes() {
+    setCargando(true);
+    setError("");
+    setIntento((anterior) => anterior + 1);
+  }
 
-// Sección: coincidePrioridad.
-    const coincidePrioridad =
-      filtroPrioridad === "Todas" ||
-      reporte.prioridad === filtroPrioridad;
+  /**
+   * Construye el catálogo de estados a partir de
+   * los registros realmente recibidos.
+   */
+  const estadosDisponibles = useMemo(() => {
+    return [...new Set(
+      reportes.map((reporte) => reporte.estado).filter(Boolean)
+    )].sort((a, b) => a.localeCompare(b, "es"));
+  }, [reportes]);
 
-    return (
-      coincideBusqueda &&
-      coincideEstado &&
-      coincidePrioridad
-    );
-  });
+  /**
+   * Filtra los reportes por folio, descripción,
+   * dirección, estado o identificador de alimentador.
+   */
+  const reportesFiltrados = useMemo(() => {
+    const texto = busqueda.trim().toLocaleLowerCase("es");
 
+    return reportes.filter((reporte) => {
+      const contenido = [
+        reporte.folio,
+        reporte.descripcion,
+        reporte.direccion,
+        reporte.estado,
+        reporte.id_alimentador,
+        reporte.id_territorio,
+      ]
+        .filter((valor) => valor !== null && valor !== undefined)
+        .join(" ")
+        .toLocaleLowerCase("es");
 
-  // Calcula la cantidad de páginas necesarias 
-// Sección: totalPaginas.
+      const coincideBusqueda = contenido.includes(texto);
+
+      const coincideEstado =
+        filtroEstado === "Todos" ||
+        reporte.estado === filtroEstado;
+
+      return coincideBusqueda && coincideEstado;
+    });
+  }, [reportes, busqueda, filtroEstado]);
+
+  /** Calcula la paginación. */
   const totalPaginas = Math.ceil(
-    reportesFiltrados.length / reportesPorPagina
+    reportesFiltrados.length / REPORTES_POR_PAGINA
   );
 
+  const indiceInicial = (paginaActual - 1) * REPORTES_POR_PAGINA;
 
-  // Calcula qué reportes corresponden a la página seleccionada 
-// Sección: indiceInicial.
-  const indiceInicial =
-    (paginaActual - 1) * reportesPorPagina;
+  const indiceFinal = indiceInicial + REPORTES_POR_PAGINA;
 
-// Sección: indiceFinal.
-  const indiceFinal =
-    indiceInicial + reportesPorPagina;
-
-
-  // Obtiene únicamente los reportes que se muestran en la página actual 
-// Sección: reportesPaginados.
   const reportesPaginados = reportesFiltrados.slice(
     indiceInicial,
     indiceFinal
   );
 
-
-  // Cambia de página dentro de la lista de reportes 
-// Sección: cambiarPagina.
-  const cambiarPagina = (pagina) => {
-
+  /**
+   * Cambia de página únicamente dentro de los límites.
+   *
+   * @param {number} pagina - Página solicitada.
+   */
+  function cambiarPagina(pagina) {
     if (pagina >= 1 && pagina <= totalPaginas) {
       setPaginaActual(pagina);
     }
-
-  };
-
+  }
 
   return (
     <div className="reportes-admin">
 
-      {/* Encabezado de la página */}
+      {/* Encabezado */}
       <div className="reportes-admin-header">
-
         <div>
           <h1>Lista de reportes</h1>
-
           <p>
-            Consulta y administra los reportes registrados en el sistema.
+            Consulta los reportes registrados en SIPINNA.
           </p>
         </div>
 
-        {/* Muestra la cantidad de reportes encontrados */}
         <div className="reportes-total">
-          {reportesFiltrados.length} de {reportesMock.length} reportes
+          {reportesFiltrados.length} de {reportes.length} reportes
         </div>
-
       </div>
 
-
-      {/* Herramientas para buscar y filtrar reportes */}
+      {/* Herramientas */}
       <div className="reportes-filtros">
 
-        {/* Buscador de reportes */}
         <div className="reportes-buscador">
-
           <Search size={19} />
 
           <input
             type="text"
-            placeholder="Buscar por folio, tipo, ubicación o alimentador..."
+            placeholder="Buscar por folio, descripción o ubicación..."
             value={busqueda}
             onChange={(e) => {
               setBusqueda(e.target.value);
               setPaginaActual(1);
             }}
           />
-
         </div>
 
-
-        {/* Filtro por estado */}
         <select
+          aria-label="Filtrar reportes por estado"
           value={filtroEstado}
           onChange={(e) => {
             setFiltroEstado(e.target.value);
@@ -159,223 +224,184 @@ function ReportesAdmin() {
           }}
         >
           <option value="Todos">Todos los estados</option>
-          <option value="Pendiente">Pendiente</option>
-          <option value="En proceso">En proceso</option>
-          <option value="Resuelto">Resuelto</option>
+
+          {estadosDisponibles.map((estado) => (
+            <option key={estado} value={estado}>
+              {estado}
+            </option>
+          ))}
         </select>
 
-
-        {/* Filtro por prioridad */}
-        <select
-          value={filtroPrioridad}
-          onChange={(e) => {
-            setFiltroPrioridad(e.target.value);
-            setPaginaActual(1);
-          }}
+        <button
+          type="button"
+          onClick={recargarReportes}
+          disabled={cargando}
+          aria-label="Actualizar lista de reportes"
         >
-          <option value="Todas">Todas las prioridades</option>
-          <option value="Alta">Alta</option>
-          <option value="Media">Media</option>
-          <option value="Baja">Baja</option>
-        </select>
+          <RefreshCw size={17} />
+          {" "}
+          Actualizar
+        </button>
 
       </div>
 
+      {/* Estado de carga */}
+      {cargando && (
+        <p role="status">
+          Cargando reportes registrados...
+        </p>
+      )}
 
-      {/* Contenedor principal de la lista */}
-      <div className="reportes-lista">
-
-        {/* Tabla con los reportes encontrados */}
-        <div className="reportes-lista-tabla-container">
-
-          <table className="reportes-lista-tabla">
-
-            <thead>
-              <tr>
-                <th>Folio</th>
-                <th>Tipo de reporte</th>
-                <th>Fecha</th>
-                <th>Prioridad</th>
-                <th>Estado</th>
-                <th>Alimentador</th>
-                <th>Evidencias</th>
-              </tr>
-            </thead>
-
-
-            <tbody>
-
-              {reportesPaginados.map((reporte) => (
-
-                <tr key={reporte.id}>
-
-                  {/* Permite abrir el detalle del reporte seleccionado */}
-                  <td>
-                    <NavLink
-                      to={`/admin/reportes/${reporte.id}`}
-                      className="lista-reporte-folio"
-                    >
-                      {reporte.folio}
-                    </NavLink>
-                  </td>
-
-                  <td>
-                    {reporte.tipo}
-                  </td>
-
-                  <td>
-                    {reporte.fecha}
-                  </td>
-
-                  <td>
-                    <span
-                      className="prioridad-badge"
-                      data-prioridad={reporte.prioridad}
-                    >
-                      {reporte.prioridad}
-                    </span>
-                  </td>
-
-                  <td>
-                    <span
-                      className="lista-estado-badge"
-                      data-estado={reporte.estado}
-                    >
-                      {reporte.estado}
-                    </span>
-                  </td>
-
-                  <td>
-                    {reporte.alimentador}
-                  </td>
-
-                  <td>
-                    {reporte.evidencias.length}
-                  </td>
-
-                </tr>
-
-              ))}
-
-
-              {/* Mensaje mostrado cuando ningún reporte coincide */}
-              {reportesFiltrados.length === 0 && (
-
-                <tr>
-                  <td
-                    colSpan="7"
-                    className="reportes-sin-resultados"
-                  >
-                    No se encontraron reportes con los filtros seleccionados.
-                  </td>
-                </tr>
-
-              )}
-
-            </tbody>
-
-          </table>
-
+      {/* Error de consulta */}
+      {!cargando && error && (
+        <div role="alert">
+          <p>{error}</p>
+          <button type="button" onClick={recargarReportes}>
+            Reintentar
+          </button>
         </div>
+      )}
 
+      {/* Tabla */}
+      {!cargando && !error && (
+        <div className="reportes-lista">
 
-        {/* Paginación de la lista de reportes */}
-        {reportesFiltrados.length > 0 && (
+          <div className="reportes-lista-tabla-container">
+            <table className="reportes-lista-tabla">
+              <thead>
+                <tr>
+                  <th>Folio</th>
+                  <th>Descripción</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
+                  <th>Ubicación</th>
+                  <th>ID asignado</th>
+                </tr>
+              </thead>
 
-          <div className="reportes-paginacion">
+              <tbody>
+                {reportesPaginados.map((reporte) => (
+                  <tr key={reporte.folio}>
 
-            {/* Muestra qué reportes se están visualizando */}
-            <div className="paginacion-info">
+                    <td>
+                      <NavLink
+                        to={`/admin/reportes/${encodeURIComponent(reporte.folio)}`}
+                        className="lista-reporte-folio"
+                      >
+                        {reporte.folio}
+                      </NavLink>
+                    </td>
 
-              Mostrando{" "}
+                    <td>
+                      {mostrarTexto(reporte.descripcion)}
+                    </td>
 
-              <strong>
-                {indiceInicial + 1}
-              </strong>
+                    <td>
+                      {formatearFecha(reporte.fecha_envio)}
+                    </td>
 
-              {" - "}
+                    <td>
+                      <span
+                        className="lista-estado-badge"
+                        data-estado={reporte.estado}
+                      >
+                        {mostrarTexto(reporte.estado)}
+                      </span>
+                    </td>
 
-              <strong>
-                {Math.min(
-                  indiceFinal,
-                  reportesFiltrados.length
+                    <td>
+                      {mostrarTexto(reporte.direccion)}
+                    </td>
+
+                    <td>
+                      {reporte.id_alimentador ?? "Sin asignar"}
+                    </td>
+                  </tr>
+                ))}
+
+                {reportesFiltrados.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={6}
+                      className="reportes-sin-resultados"
+                    >
+                      No se encontraron reportes.
+                    </td>
+                  </tr>
                 )}
-              </strong>
-
-              {" de "}
-
-              <strong>
-                {reportesFiltrados.length}
-              </strong>
-
-              {" reportes"}
-
-            </div>
-
-
-            {/* Controles para cambiar de página */}
-            <div className="paginacion-controles">
-
-              {/* Página anterior */}
-              <button
-                className="paginacion-flecha"
-                onClick={() =>
-                  cambiarPagina(paginaActual - 1)
-                }
-                disabled={paginaActual === 1}
-              >
-                <ChevronLeft size={18} />
-              </button>
-
-
-              {/* Botones de cada página */}
-              {Array.from(
-                { length: totalPaginas },
-                (_, index) => index + 1
-              ).map((pagina) => (
-
-                <button
-                  key={pagina}
-                  className={
-                    paginaActual === pagina
-                      ? "paginacion-numero activo"
-                      : "paginacion-numero"
-                  }
-                  onClick={() =>
-                    cambiarPagina(pagina)
-                  }
-                >
-                  {pagina}
-                </button>
-
-              ))}
-
-
-              {/* Página siguiente */}
-              <button
-                className="paginacion-flecha"
-                onClick={() =>
-                  cambiarPagina(paginaActual + 1)
-                }
-                disabled={
-                  paginaActual === totalPaginas
-                }
-              >
-                <ChevronRight size={18} />
-              </button>
-
-            </div>
-
+              </tbody>
+            </table>
           </div>
 
-        )}
+          {/* Paginación */}
+          {totalPaginas > 1 && (
+            <div className="reportes-paginacion">
 
-      </div>
+              <div className="paginacion-info">
+                Mostrando{" "}
+                <strong>{indiceInicial + 1}</strong>
+                {" - "}
+                <strong>
+                  {Math.min(
+                    indiceFinal,
+                    reportesFiltrados.length
+                  )}
+                </strong>
+                {" de "}
+                <strong>{reportesFiltrados.length}</strong>
+                {" reportes"}
+              </div>
 
+              <div className="paginacion-controles">
+
+                <button
+                  type="button"
+                  className="paginacion-flecha"
+                  onClick={() =>
+                    cambiarPagina(paginaActual - 1)
+                  }
+                  disabled={paginaActual === 1}
+                  aria-label="Página anterior"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+
+                {Array.from(
+                  { length: totalPaginas },
+                  (_, index) => index + 1
+                ).map((pagina) => (
+                  <button
+                    type="button"
+                    key={pagina}
+                    className={
+                      paginaActual === pagina
+                        ? "paginacion-numero activo"
+                        : "paginacion-numero"
+                    }
+                    onClick={() => cambiarPagina(pagina)}
+                  >
+                    {pagina}
+                  </button>
+                ))}
+
+                <button
+                  type="button"
+                  className="paginacion-flecha"
+                  onClick={() =>
+                    cambiarPagina(paginaActual + 1)
+                  }
+                  disabled={paginaActual === totalPaginas}
+                  aria-label="Página siguiente"
+                >
+                  <ChevronRight size={18} />
+                </button>
+
+              </div>
+            </div>
+          )}
+
+        </div>
+      )}
     </div>
   );
 }
-
-
-// Permite utilizar esta página dentro de las rutas del administrador 
-export default ReportesAdmin;

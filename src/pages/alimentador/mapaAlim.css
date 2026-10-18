@@ -85,3 +85,173 @@
     }
 
 }
+
+
+/* Herramientas y leyendas del mapa SIPINNA */
+
+.sipinna-mapa-leyenda {
+  position: absolute;
+  bottom: 20px;
+  left: 16px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  max-width: min(300px, calc(100% - 32px));
+  padding: 13px 16px;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  color: #374151;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.sipinna-mapa-leyenda strong {
+  color: #1f2937;
+  font-size: 13px;
+}
+
+.sipinna-mapa-leyenda small {
+  color: #6b7280;
+}
+
+.sipinna-escala-calor {
+  width: 190px;
+  height: 11px;
+  border-radius: 99px;
+  background: linear-gradient(
+    to right,
+    rgb(34, 197, 94),
+    rgb(250, 204, 21),
+    rgb(249, 115, 22),
+    rgb(239, 68, 68)
+  );
+}
+
+.sipinna-mapa-herramientas,
+.sipinna-mapa-panel-filtros {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px 20px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sipinna-mapa-herramientas label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sipinna-mapa-herramientas button,
+.sipinna-mapa-acciones button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 14px;
+  background: white;
+  border: 1px solid #6735c4;
+  border-radius: 9px;
+  color: #4b2373;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sipinna-mapa-herramientas button:hover,
+.sipinna-mapa-acciones button:hover {
+  background: #eee8f7;
+}
+
+.sipinna-mapa-herramientas button:disabled,
+.sipinna-mapa-acciones button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sipinna-mapa-filtros {
+  display: flex;
+  flex: 1;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.sipinna-mapa-filtros > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 180px;
+}
+
+.sipinna-mapa-filtros label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.sipinna-mapa-filtros select {
+  height: 42px;
+  width: 100%;
+  padding: 0 12px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+  color: #374151;
+}
+
+.sipinna-mapa-acciones {
+  display: flex;
+  gap: 9px;
+}
+
+.sipinna-mapa-contador,
+.sipinna-mapa-instruccion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #faf8fc;
+  color: #4b2373;
+  font-size: 13px;
+}
+
+.sipinna-mapa-error,
+.mapa-calor-mensaje {
+  padding: 10px 20px;
+  color: #b42318;
+  font-size: 13px;
+}
+
+@media (max-width: 650px) {
+  .sipinna-mapa-panel-filtros,
+  .sipinna-mapa-herramientas {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .sipinna-mapa-filtros {
+    flex-direction: column;
+  }
+
+  .sipinna-mapa-acciones {
+    justify-content: flex-end;
+  }
+
+  .sipinna-mapa-leyenda {
+    bottom: 12px;
+    left: 12px;
+    padding: 10px;
+  }
+
+  .sipinna-escala-calor {
+    width: 145px;
+  }
+}

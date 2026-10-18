@@ -38,7 +38,7 @@ import {
 
 import { obtenerAlimentadores } from "../../services/alimentadoresApi";
 import EvidenciaCard from "../../components/evidencia/evidenciaCard";
-
+import UbicacionReporteMapa from "../../components/mapa/UbicacionReporteMapa";
 import "./detalleReporteAdmin.css";
 
 /** Prioridades admitidas por el backend. */
@@ -749,6 +749,12 @@ export default function DetalleReporteAdmin() {
           </div>
         </div>
       </div>
+
+      {/* Ubicación geográfica real del expediente. */}
+      <UbicacionReporteMapa
+        folio={folio}
+        reporte={reporte}
+      />
 
       {/* Descripción original */}
       <div className="detalle-card">

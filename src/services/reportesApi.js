@@ -160,3 +160,28 @@ export async function actualizarPrioridadReporte(folio, prioridad) {
     }
   );
 }
+
+
+/**
+ * Consulta las evidencias asociadas a un expediente.
+ *
+ * Utiliza el endpoint autenticado de comms-api:
+ * GET /reportes/:folio/evidencias
+ *
+ * La API determina, mediante el JWT, si el usuario
+ * tiene autorización para consultar el expediente.
+ *
+ * @param {string} folio - Folio único del reporte.
+ * @returns {Promise<unknown>} Respuesta original de comms-api.
+ */
+export async function obtenerEvidenciasReporte(folio) {
+  if (!folio || typeof folio !== "string") {
+    throw new Error(
+      "Se necesita un folio válido para consultar las evidencias."
+    );
+  }
+
+  return apiFetch(
+    `/reportes/${encodeURIComponent(folio)}/evidencias`
+  );
+}

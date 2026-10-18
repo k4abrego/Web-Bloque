@@ -1,4 +1,3 @@
-
 /**
  * @file googleMap.jsx
  * @description Componente reutilizable de Google Maps para SIPINNA.

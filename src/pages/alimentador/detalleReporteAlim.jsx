@@ -35,7 +35,7 @@ import {
 } from "../../services/reportesApi";
 
 import { obtenerTerritorios } from "../../services/territoriosApi";
-
+import UbicacionReporteMapa from "../../components/mapa/UbicacionReporteMapa";
 import "./detallesReporteAlim.css";
 
 /**
@@ -455,6 +455,12 @@ function DetalleReporteAlim() {
               </p>
             </section>
           </div>
+
+          {/* Ubicación geográfica real del reporte asignado. */}
+          <UbicacionReporteMapa
+            folio={folio}
+            reporte={reporte}
+          />
 
           {/* Actualización del estado */}
           <section className="detalle-alim-tarjeta detalle-alim-seguimiento">

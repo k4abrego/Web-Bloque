@@ -1,4 +1,3 @@
-
 /**
  * Genera una respuesta HMAC-SHA256 compatible
  * con el backend de autenticación de SIPINNA.

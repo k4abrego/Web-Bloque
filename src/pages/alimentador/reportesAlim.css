@@ -602,3 +602,68 @@
     }
 
 }
+
+
+/* =========================================
+   Enlace al detalle desde el folio
+   ========================================= */
+
+.reportes-alim .reportes-folio-enlace {
+  color: #4b2373;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.reportes-alim .reportes-folio-enlace:hover {
+  color: #733bad;
+  text-decoration: underline;
+}
+
+.reportes-alim .reportes-folio-enlace:focus-visible {
+  outline: 2px solid #733bad;
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+/* Tabla con seis columnas en lugar de siete. */
+.reportes-alim .reportes-table {
+  min-width: 900px;
+}
+
+/* Estados utilizados actualmente en MariaDB. */
+.reportes-alim .status-nuevo {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.reportes-alim .status-en-revision {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.reportes-alim .status-asignado {
+  background: #f5f3ff;
+  color: #6d28d9;
+}
+
+.reportes-alim .status-en-investigacion {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.reportes-alim .status-canalizado-a-procuraduria {
+  background: #fdf2f8;
+  color: #9d174d;
+}
+
+.reportes-alim .status-cerrado {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.reportes-alim .status-descartado {
+  background: #f3f4f6;
+  color: #6b7280;
+}

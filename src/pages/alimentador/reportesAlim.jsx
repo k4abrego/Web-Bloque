@@ -1,28 +1,28 @@
 /**
  * reportesAlim.jsx
  *
- * Pantalla de reportes asignados al personal alimentador.
+ * Lista de reportes asignados al alimentador.
  *
  * Funcionalidades:
  * - Consulta de reportes reales desde comms-api.
- * - Consulta del catálogo real de territorios.
- * - Búsqueda por folio, descripción y dirección.
+ * - Consulta de municipios desde el catálogo de territorios.
+ * - Búsqueda por folio, descripción, dirección y municipio.
  * - Filtros por estado y territorio.
- * - Pestañas dinámicas según los estados disponibles.
- * - Actualización manual de los reportes.
- * - Navegación al detalle de cada reporte.
+ * - Pestañas dinámicas según los estados reales.
+ * - Limpieza de filtros.
+ * - Actualización manual de la información.
+ * - Navegación al detalle al seleccionar un folio.
  *
- * El backend determina los reportes autorizados
- * mediante el JWT del usuario autenticado.
+ * El backend determina qué reportes puede consultar
+ * el alimentador mediante su JWT.
  */
 
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import {
   Filter,
   Download,
-  Eye,
   ChevronDown,
   X,
   Search,
@@ -35,7 +35,7 @@ import { obtenerTerritorios } from "../../services/territoriosApi";
 import "./reportesAlim.css";
 
 /**
- * Formatea una fecha recibida desde la API.
+ * Formatea la fecha sin modificar el día recibido.
  *
  * @param {string|null} fecha
  * @returns {string}
@@ -45,7 +45,7 @@ function formatearFecha(fecha) {
 }
 
 /**
- * Convierte un valor opcional en texto visible.
+ * Muestra un texto alternativo cuando faltan datos.
  *
  * @param {unknown} valor
  * @returns {string}
@@ -57,31 +57,37 @@ function mostrarTexto(valor) {
 }
 
 /**
- * ReportesAlim
+ * Convierte el estado en una clase CSS.
  *
- * Muestra los reportes asignados al alimentador
- * autenticado y permite consultarlos y filtrarlos.
+ * @param {string|null} estado
+ * @returns {string}
+ */
+function claseEstado(estado) {
+  return String(estado ?? "")
+    .toLocaleLowerCase("es")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/**
+ * ReportesAlim
  *
  * @returns {import("react").JSX.Element}
  */
 export default function ReportesAlim() {
-  const navigate = useNavigate();
-
-  // Reportes reales obtenidos desde comms-api.
+  // Información real del backend.
   const [reportes, setReportes] = useState([]);
-
-  // Catálogo de territorios obtenido desde MariaDB.
   const [territorios, setTerritorios] = useState([]);
 
-  // Estado de consulta de los reportes.
+  // Estado de las consultas.
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
+  const [errorTerritorios, setErrorTerritorios] = useState("");
   const [intento, setIntento] = useState(0);
 
-  // Error independiente de la consulta de territorios.
-  const [errorTerritorios, setErrorTerritorios] = useState("");
-
-  // Controles de filtros.
+  // Filtros de la lista.
   const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
   const [estadoActivo, setEstadoActivo] = useState("Todos");
   const [estadoFiltro, setEstadoFiltro] = useState("");
@@ -89,10 +95,10 @@ export default function ReportesAlim() {
   const [busqueda, setBusqueda] = useState("");
 
   /**
-   * Consulta los reportes asignados al alimentador.
+   * Consulta los reportes autorizados.
    *
-   * Se ejecuta al montar la vista y cuando el usuario
-   * presiona el botón Actualizar.
+   * Se ejecuta al ingresar a la pantalla y cuando
+   * el usuario solicita actualizar los datos.
    */
   useEffect(() => {
     let vigente = true;
@@ -119,7 +125,7 @@ export default function ReportesAlim() {
         );
 
         setError(
-          err.message ||
+          err?.message ||
             "No fue posible consultar los reportes asignados."
         );
       })
@@ -135,10 +141,9 @@ export default function ReportesAlim() {
   }, [intento]);
 
   /**
-   * Consulta el catálogo de territorios.
+   * Consulta el catálogo real de territorios.
    *
-   * Esta consulta es independiente de los reportes.
-   * Si falla, los reportes pueden seguir mostrándose.
+   * Si falla, no impide mostrar los reportes.
    */
   useEffect(() => {
     let vigente = true;
@@ -149,7 +154,7 @@ export default function ReportesAlim() {
 
         if (!Array.isArray(datos?.territorios)) {
           throw new Error(
-            "El catálogo de territorios no tiene el formato esperado."
+            "La API no devolvió un catálogo válido de territorios."
           );
         }
 
@@ -175,16 +180,18 @@ export default function ReportesAlim() {
   }, []);
 
   /**
-   * Solicita nuevamente los reportes al backend.
+   * Vuelve a consultar los reportes en comms-api.
    */
   function actualizarReportes() {
+    if (cargando) return;
+
     setCargando(true);
     setError("");
     setIntento((anterior) => anterior + 1);
   }
 
   /**
-   * Obtiene los estados presentes en los reportes.
+   * Obtiene los estados que aparecen en la lista.
    */
   const estadosDisponibles = useMemo(() => {
     return [
@@ -197,8 +204,7 @@ export default function ReportesAlim() {
   }, [reportes]);
 
   /**
-   * Obtiene los ID de territorio presentes
-   * en los reportes asignados.
+   * Obtiene los territorios presentes en la lista.
    */
   const territoriosDisponibles = useMemo(() => {
     return [
@@ -211,10 +217,7 @@ export default function ReportesAlim() {
   }, [reportes]);
 
   /**
-   * Crea un mapa de ID de territorio a nombre.
-   *
-   * Ejemplo:
-   * "2" => "Atizapán de Zaragoza"
+   * Relaciona cada ID de territorio con su nombre.
    */
   const nombresTerritorios = useMemo(() => {
     return new Map(
@@ -226,10 +229,7 @@ export default function ReportesAlim() {
   }, [territorios]);
 
   /**
-   * Obtiene el nombre real del territorio.
-   *
-   * Si el catálogo todavía no se ha cargado,
-   * utiliza su identificador como respaldo.
+   * Devuelve el municipio real de un expediente.
    *
    * @param {number|string|null} id
    * @returns {string}
@@ -246,10 +246,10 @@ export default function ReportesAlim() {
   }
 
   /**
-   * Filtra localmente los reportes autorizados.
+   * Aplica los filtros a los reportes recibidos.
    *
-   * El backend realiza la autorización;
-   * estos filtros solo modifican la visualización.
+   * La autorización sigue siendo responsabilidad
+   * de comms-api, no de estos filtros visuales.
    */
   const reportesFiltrados = useMemo(() => {
     const textoBusqueda = busqueda
@@ -257,30 +257,29 @@ export default function ReportesAlim() {
       .toLocaleLowerCase("es");
 
     return reportes.filter((reporte) => {
-      const textoReporte = [
+      const contenido = [
         reporte.folio,
         reporte.descripcion,
         reporte.direccion,
-        nombresTerritorios.get(
-          String(reporte.id_territorio)
-        ),
+        reporte.estado,
+        reporte.id_territorio,
+        nombresTerritorios.get(String(reporte.id_territorio)),
       ]
-        .filter(Boolean)
+        .filter((valor) => valor !== null && valor !== undefined)
         .join(" ")
         .toLocaleLowerCase("es");
 
       const coincideBusqueda =
-        textoReporte.includes(textoBusqueda);
+        contenido.includes(textoBusqueda);
 
       const coincideEstado =
-        !estadoFiltro ||
-        reporte.estado === estadoFiltro;
+        !estadoFiltro || reporte.estado === estadoFiltro;
 
       const coincideTerritorio =
         !territorioFiltro ||
         String(reporte.id_territorio) === territorioFiltro;
 
-      const coincideTab =
+      const coincidePestana =
         estadoActivo === "Todos" ||
         reporte.estado === estadoActivo;
 
@@ -288,7 +287,7 @@ export default function ReportesAlim() {
         coincideBusqueda &&
         coincideEstado &&
         coincideTerritorio &&
-        coincideTab
+        coincidePestana
       );
     });
   }, [
@@ -301,24 +300,13 @@ export default function ReportesAlim() {
   ]);
 
   /**
-   * Restablece los filtros seleccionados.
+   * Elimina todos los filtros, incluida la pestaña.
    */
   function limpiarFiltros() {
     setEstadoFiltro("");
     setTerritorioFiltro("");
     setBusqueda("");
     setEstadoActivo("Todos");
-  }
-
-  /**
-   * Navega al detalle de un reporte asignado.
-   *
-   * @param {string} folio
-   */
-  function verReporte(folio) {
-    navigate(
-      `/alimentador/reportes/${encodeURIComponent(folio)}`
-    );
   }
 
   return (
@@ -341,22 +329,21 @@ export default function ReportesAlim() {
             className={`reportes-button ${
               filtrosAbiertos ? "active" : ""
             }`}
-            onClick={() =>
-              setFiltrosAbiertos((anterior) => !anterior)
-            }
+            onClick={() => {
+              setFiltrosAbiertos((anterior) => !anterior);
+            }}
+            aria-expanded={filtrosAbiertos}
           >
             <Filter size={17} />
             Filtros
 
             <ChevronDown
               size={16}
-              className={
-                filtrosAbiertos ? "rotate" : ""
-              }
+              className={filtrosAbiertos ? "rotate" : ""}
             />
           </button>
 
-          {/* Actualización de reportes */}
+          {/* Recargar desde comms-api */}
           <button
             type="button"
             className="reportes-button"
@@ -364,11 +351,10 @@ export default function ReportesAlim() {
             disabled={cargando}
           >
             <RefreshCw size={17} />
-
             {cargando ? "Actualizando..." : "Actualizar"}
           </button>
 
-          {/* Exportación pendiente */}
+          {/* Funcionalidad no implementada */}
           <button
             type="button"
             className="reportes-button"
@@ -381,7 +367,7 @@ export default function ReportesAlim() {
         </div>
       </div>
 
-      {/* Panel de filtros */}
+      {/* Filtros desplegables */}
       {filtrosAbiertos && (
         <div className="reportes-filters">
           <div className="reportes-filter-header">
@@ -389,8 +375,8 @@ export default function ReportesAlim() {
               <h3>Filtrar reportes</h3>
 
               <p>
-                Encuentra un caso mediante sus datos
-                registrados.
+                Encuentra un expediente utilizando
+                sus datos registrados.
               </p>
             </div>
 
@@ -407,7 +393,7 @@ export default function ReportesAlim() {
           <div className="reportes-filter-grid">
             {/* Búsqueda */}
             <div className="reportes-filter-field">
-              <label htmlFor="buscar-folio">
+              <label htmlFor="buscar-reporte-alim">
                 Buscar reporte
               </label>
 
@@ -415,84 +401,74 @@ export default function ReportesAlim() {
                 <Search size={17} />
 
                 <input
-                  id="buscar-folio"
+                  id="buscar-reporte-alim"
                   type="text"
-                  placeholder="Folio, descripción o dirección"
+                  placeholder="Folio, descripción, ubicación..."
                   value={busqueda}
-                  onChange={(evento) =>
-                    setBusqueda(evento.target.value)
-                  }
+                  onChange={(evento) => {
+                    setBusqueda(evento.target.value);
+                  }}
                 />
               </div>
             </div>
 
-            {/* Filtro por estado */}
+            {/* Estado */}
             <div className="reportes-filter-field">
-              <label htmlFor="estado-filtro">
+              <label htmlFor="estado-filtro-alim">
                 Estado del reporte
               </label>
 
               <select
-                id="estado-filtro"
+                id="estado-filtro-alim"
                 value={estadoFiltro}
-                onChange={(evento) =>
-                  setEstadoFiltro(evento.target.value)
-                }
+                onChange={(evento) => {
+                  setEstadoFiltro(evento.target.value);
+                }}
               >
-                <option value="">
-                  Todos los estados
-                </option>
+                <option value="">Todos los estados</option>
 
                 {estadosDisponibles.map((estado) => (
-                  <option
-                    key={estado}
-                    value={estado}
-                  >
+                  <option key={estado} value={estado}>
                     {estado}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* Filtro por territorio real */}
+            {/* Territorio */}
             <div className="reportes-filter-field">
-              <label htmlFor="territorio-filtro">
+              <label htmlFor="territorio-filtro-alim">
                 Territorio
               </label>
 
               <select
-                id="territorio-filtro"
+                id="territorio-filtro-alim"
                 value={territorioFiltro}
-                onChange={(evento) =>
-                  setTerritorioFiltro(evento.target.value)
-                }
+                onChange={(evento) => {
+                  setTerritorioFiltro(evento.target.value);
+                }}
               >
-                <option value="">
-                  Todos los territorios
-                </option>
+                <option value="">Todos los territorios</option>
 
                 {territoriosDisponibles.map((id) => (
-                  <option
-                    key={id}
-                    value={String(id)}
-                  >
+                  <option key={id} value={String(id)}>
                     {nombreTerritorio(id)}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* Categorías pendientes de integración */}
+            {/* Categorías pendientes de consulta en comms-api */}
             <div className="reportes-filter-field">
-              <label htmlFor="categoria-filtro">
+              <label htmlFor="categoria-filtro-alim">
                 Categoría
               </label>
 
               <select
-                id="categoria-filtro"
+                id="categoria-filtro-alim"
                 value=""
                 disabled
-                title="Las categorías se habilitarán cuando estén disponibles en la API."
+                title="Pendiente de integración con la consulta de etiquetas"
               >
                 <option value="">
                   Categorías pendientes de integrar
@@ -513,12 +489,12 @@ export default function ReportesAlim() {
         </div>
       )}
 
-      {/* Pestañas de estado */}
+      {/* Pestañas dinámicas de estados */}
       <div className="reportes-tabs">
         <button
           type="button"
           className={`reportes-tab ${
-            estadoActivo === "Todos " ? "active" : ""
+            estadoActivo === "Todos" ? "active" : ""
           }`}
           onClick={() => setEstadoActivo("Todos")}
         >
@@ -539,20 +515,20 @@ export default function ReportesAlim() {
         ))}
       </div>
 
-      {/* Error al consultar territorios */}
+      {/* Errores del catálogo */}
       {errorTerritorios && (
         <p
           role="alert"
           style={{
             color: "#a52837",
-            marginBottom: "12px",
+            marginBottom: 12,
           }}
         >
           {errorTerritorios}
         </p>
       )}
 
-      {/* Error al consultar reportes */}
+      {/* Error de consulta */}
       {!cargando && error && (
         <div className="reportes-filters" role="alert">
           <p>{error}</p>
@@ -575,29 +551,24 @@ export default function ReportesAlim() {
               <tr>
                 <th>Folio</th>
                 <th>Fecha</th>
-                <th>Descripción</th>
                 <th>Ubicación</th>
                 <th>Territorio</th>
                 <th>Estado</th>
-                <th>Acciones</th>
               </tr>
             </thead>
 
             <tbody>
               {cargando ? (
                 <tr>
-                  <td colSpan={7}>
-                    <div
-                      className="reportes-empty"
-                      role="status"
-                    >
+                  <td colSpan={6}>
+                    <div className="reportes-empty" role="status">
                       Cargando reportes asignados...
                     </div>
                   </td>
                 </tr>
               ) : error ? (
                 <tr>
-                  <td colSpan={7}>
+                  <td colSpan={6}>
                     <div className="reportes-empty">
                       No fue posible cargar los reportes.
                     </div>
@@ -606,87 +577,67 @@ export default function ReportesAlim() {
               ) : reportesFiltrados.length > 0 ? (
                 reportesFiltrados.map((reporte) => (
                   <tr key={reporte.folio}>
-                    {/* Folio */}
+                    {/* Folio clicable, sin columna Acciones */}
                     <td className="reportes-folio">
-                      {reporte.folio}
+                      <NavLink
+                        to={`/alimentador/reportes/${encodeURIComponent(
+                          reporte.folio
+                        )}`}
+                        className="reportes-folio-enlace"
+                        title={`Abrir reporte ${reporte.folio}`}
+                      >
+                        {reporte.folio}
+                      </NavLink>
                     </td>
 
-                    {/* Fecha */}
                     <td>
-                      {formatearFecha(
-                        reporte.fecha_envio
-                      )}
+                      {formatearFecha(reporte.fecha_envio)}
                     </td>
 
-                    {/* Descripción */}
-                    <td className="reportes-description">
-                      {mostrarTexto(
-                        reporte.descripcion
-                      )}
-                    </td>
-
-                    {/* Ubicación */}
                     <td>
-                      {mostrarTexto(
-                        reporte.direccion
-                      )}
+                      {mostrarTexto(reporte.direccion)}
                     </td>
 
-                    {/* Nombre real del territorio */}
                     <td>
-                      {nombreTerritorio(
-                        reporte.id_territorio
-                      )}
+                      {nombreTerritorio(reporte.id_territorio)}
                     </td>
 
-                    {/* Estado */}
                     <td>
                       <span
-                        className={`reportes-status status-${String(
-                          reporte.estado ?? ""
-                        )
-                          .toLowerCase()
-                          .replace(/\s+/g, "-")}`}
-                      >
-                        {mostrarTexto(
+                        className={`reportes-status status-${claseEstado(
                           reporte.estado
-                        )}
-                      </span>
-                    </td>
-
-                    {/* Abrir detalle */}
-                    <td>
-                      <button
-                        type="button"
-                        className="reportes-view-button"
-                        onClick={() =>
-                          verReporte(reporte.folio)
-                        }
-                        title="Ver reporte"
+                        )}`}
                       >
-                        <Eye size={17} />
-                        Ver
-                      </button>
+                        {mostrarTexto(reporte.estado)}
+                      </span>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7}>
+                  <td colSpan={6}>
                     <div className="reportes-empty">
                       <div className="reportes-empty-icon">
                         <Search size={24} />
                       </div>
 
-                      <strong>
-                        No hay reportes para mostrar
-                      </strong>
+                      <strong>No hay reportes para mostrar</strong>
 
                       <span>
                         {reportes.length === 0
                           ? "Los casos que te asignen aparecerán aquí."
                           : "Ningún reporte coincide con los filtros seleccionados."}
                       </span>
+
+                      {reportes.length > 0 && (
+                        <button
+                          type="button"
+                          className="reportes-clear-button"
+                          onClick={limpiarFiltros}
+                        >
+                          Limpiar filtros
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

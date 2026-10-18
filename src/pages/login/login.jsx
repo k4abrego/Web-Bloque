@@ -49,15 +49,6 @@ function Login() {
     const [contrasena, setContrasena] = useState("");
 
     /**
-     * Rol seleccionado para la navegación del frontend.
-     *
-     * El rol no sustituye la autorización del backend.x
-     *
-     * @type {[string, Function]}
-     */
-    const [rol, setRol] = useState("admin");
-
-    /**
      * Controla si la contraseña se muestra como texto.
      *
      * @type {[boolean, Function]}
@@ -316,39 +307,6 @@ function Login() {
                                 ? "Iniciando sesión..."
                                 : "Iniciar sesión"}
                         </button>
-
-                        {/* Selector de rol */}
-                        <div className="role-selector">
-
-                            <button
-                                type="button"
-                                className={
-                                    rol === "admin"
-                                        ? "role active"
-                                        : "role"
-                                }
-                                onClick={() => setRol("admin")}
-                                disabled={cargando}
-                            >
-                                Administrador
-                            </button>
-
-                            <button
-                                type="button"
-                                className={
-                                    rol === "alimentador"
-                                        ? "role active"
-                                        : "role"
-                                }
-                                onClick={() =>
-                                    setRol("alimentador")
-                                }
-                                disabled={cargando}
-                            >
-                                Alimentador
-                            </button>
-
-                        </div>
 
                     </form>
 

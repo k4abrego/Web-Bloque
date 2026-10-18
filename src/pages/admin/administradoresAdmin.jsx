@@ -521,7 +521,6 @@ function AdministradoresAdmin() {
                           <strong>
                             {admin.nombre} {admin.apellidos}
                           </strong>
-                          <span>Administrador #{admin.id}</span>
                         </div>
                       </div>
                     </td>

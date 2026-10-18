@@ -328,7 +328,7 @@ export default function GestionCuentas({ tipo, inicialesCuentas = [] }) {
                     </div>
                     <div className="alimentador-nombre">
                       <strong>{cuenta.nombre} {cuenta.apellidos || ""}</strong>
-                      <span>{cuenta.alias || `Cuenta ${cuenta.id}`}</span>
+                      {/* <span>{cuenta.alias || `Cuenta ${cuenta.id}`}</span> */}
                     </div>
                   </div></td>
                   <td><span className="alimentador-correo">{cuenta.correo}</span></td>

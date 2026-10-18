@@ -1,4 +1,3 @@
-
 /**
  * reportesApi.js
  *
@@ -126,4 +125,38 @@ export async function obtenerHistoricoReportes(filtros = {}) {
     : "/reportes/historico";
 
   return apiFetch(url);
+}
+
+
+
+/**
+ * Consulta la prioridad actual de un reporte.
+ *
+ * @param {string} folio
+ * @returns {Promise<{folio: string, prioridad: string|null}>}
+ */
+export async function obtenerPrioridadReporte(folio) {
+  return apiFetch(
+    `/reportes/${encodeURIComponent(folio)}/prioridad`
+  );
+}
+
+/**
+ * Actualiza la prioridad de un reporte.
+ *
+ * Solo los administradores autorizados pueden
+ * realizar esta operación.
+ *
+ * @param {string} folio
+ * @param {"Alta"|"Media"|"Baja"} prioridad
+ * @returns {Promise<Object>}
+ */
+export async function actualizarPrioridadReporte(folio, prioridad) {
+  return apiFetch(
+    `/reportes/${encodeURIComponent(folio)}/prioridad`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ prioridad }),
+    }
+  );
 }

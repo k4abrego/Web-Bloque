@@ -518,7 +518,7 @@ export default function ReportesAlim() {
         <button
           type="button"
           className={`reportes-tab ${
-            estadoActivo === "Todos" ? "active" : ""
+            estadoActivo === "Todos " ? "active" : ""
           }`}
           onClick={() => setEstadoActivo("Todos")}
         >

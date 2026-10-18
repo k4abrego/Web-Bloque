@@ -457,7 +457,7 @@ export default function ReportesAdmin() {
               <thead>
                 <tr>
                   <th>Folio</th>
-                  <th>Descripción</th>
+                  {/* <th>Descripción</th> */}
                   <th>Fecha</th>
                   <th>Estado</th>
                   <th>Ubicación</th>
@@ -481,12 +481,12 @@ export default function ReportesAdmin() {
                       </NavLink>
                     </td>
 
-                    {/* Descripción */}
-                    <td>
-                      {mostrarTexto(
-                        reporte.descripcion
-                      )}
-                    </td>
+                      {/* Descripción
+                      <td>
+                        {mostrarTexto(
+                          reporte.descripcion
+                        )}
+                      </td> */}
 
                     {/* Fecha */}
                     <td>

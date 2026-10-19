@@ -20,11 +20,36 @@ import {
 
 import { apiFetch } from "../../services/api";
 import { obtenerHistoricoReportes } from "../../services/reportesApi";
+import { obtenerTerritorios } from "../../services/territoriosApi";
 import { valoresEtiqueta, opcionesEtiqueta } from "../../services/etiquetasReportes";
 
 import "./filtrosAdmin.css";
 
 const TIPOS = ["Categoria", "Riesgo", "Prioridad"];
+
+/**
+ * Unifica nombres equivalentes de municipios.
+ * Solo afecta a su presentación; no modifica MariaDB.
+ */
+function normalizarMunicipio(nombre) {
+  const texto = String(nombre ?? "")
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("es")
+    .replace(/\s+/g, " ");
+
+  return texto === "atizapan"
+    ? "atizapan de zaragoza"
+    : texto;
+}
+
+/** Devuelve la denominación visible del territorio. */
+function mostrarMunicipio(nombre) {
+  return normalizarMunicipio(nombre) === "atizapan de zaragoza"
+    ? "Atizapán de Zaragoza"
+    : String(nombre ?? "").trim();
+}
 
 const CAMPOS = [
   { valor: "folio", nombre: "Folio" },
@@ -110,6 +135,7 @@ function coincideBusqueda(reporte, condiciones) {
 export default function FiltrosAdmin() {
   const [reportes, setReportes] = useState([]);
   const [catalogo, setCatalogo] = useState([]);
+  const [territorios, setTerritorios] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
@@ -129,44 +155,52 @@ export default function FiltrosAdmin() {
   const [tipoNuevo, setTipoNuevo] = useState("Categoria");
   const [nombreNuevo, setNombreNuevo] = useState("");
 
-  /** Consulta reportes y catálogo desde sus endpoints reales. */
+  /**
+   * Consulta reportes, etiquetas y territorios reales.
+   * Conserva los cambios existentes sobre expedientes.
+   */
   useEffect(() => {
     let vigente = true;
 
-    Promise.all([
-      obtenerHistoricoReportes(),
-      apiFetch("/etiquetas"),
-    ])
-      .then(([datosReportes, datosEtiquetas]) => {
-        if (!vigente) return;
+  Promise.all([
+    obtenerHistoricoReportes(),
+    apiFetch("/etiquetas"),
+    obtenerTerritorios(),
+  ])
+    .then(([datosReportes, datosEtiquetas, datosTerritorios]) => {
+      if (!vigente) return;
 
-        if (
-          !Array.isArray(datosReportes) ||
-          !Array.isArray(datosEtiquetas)
-        ) {
-          throw new Error("Las respuestas del servidor no son válidas.");
-        }
+      if (
+        !Array.isArray(datosReportes) ||
+        !Array.isArray(datosEtiquetas) ||
+        !Array.isArray(datosTerritorios?.territorios)
+      ) {
+        throw new Error(
+          "No fue posible obtener reportes, etiquetas o territorios."
+        );
+      }
 
-        setReportes(datosReportes);
-        setCatalogo(datosEtiquetas);
-        setError("");
-      })
-      .catch((err) => {
-        if (vigente) {
-          setError(
-            err.message ||
-            "No se pudieron cargar los datos del sistema."
-          );
-        }
-      })
-      .finally(() => {
-        if (vigente) setCargando(false);
-      });
+      setReportes(datosReportes);
+      setCatalogo(datosEtiquetas);
+      setTerritorios(datosTerritorios.territorios);
+      setError("");
+    })
+    .catch((err) => {
+      if (!vigente) return;
 
-    return () => {
-      vigente = false;
-    };
-  }, [revision]);
+      setError(
+        err.message ||
+          "No se pudieron cargar los datos del sistema."
+      );
+    })
+    .finally(() => {
+      if (vigente) setCargando(false);
+    });
+
+  return () => {
+    vigente = false;
+  };
+}, [revision]);
 
   /** Reportes que cumplen las condiciones aplicadas. */
   const resultados = useMemo(() => {
@@ -186,19 +220,69 @@ export default function FiltrosAdmin() {
     );
   }, [catalogo, tipoAplicar]);
 
-  /** Valores para los campos de búsqueda avanzada. */
+  /** Obtiene nombres de municipio a partir del catálogo real. */
+  const territoriosPorId = useMemo(
+    () =>
+      new Map(
+        territorios.map((territorio) => [
+          String(territorio.id_territorio),
+          territorio.nombre,
+        ])
+      ),
+    [territorios]
+  );
+
+  /**
+   * Construye opciones de búsqueda reales.
+   * - Territorio: conserva IDs internos.
+   * - Etiquetas: utiliza el catálogo de MariaDB.
+   * - Observación y estado: utiliza los reportes reales.
+   */
   function opciones(campo) {
-    if (campo === "Observación" || TIPOS.includes(campo)) {
+    if (campo === "Observación") {
       return opcionesEtiqueta(reportes, campo);
     }
 
-    if (campo === "estado" || campo === "id_territorio") {
+    if (TIPOS.includes(campo)) {
+      return [
+        ...new Set(
+          catalogo
+            .filter(
+              (etiqueta) =>
+                etiqueta.tipo === campo &&
+                etiqueta.es_activo
+            )
+            .map((etiqueta) => etiqueta.nombre_etiqueta)
+        ),
+      ].sort((a, b) => a.localeCompare(b, "es"));
+    }
+
+    if (campo === "id_territorio") {
       return [
         ...new Set(
           reportes
-            .map((reporte) => reporte[campo])
-            .filter((valor) => valor != null)
+            .map((reporte) => reporte.id_territorio)
+            .filter((id) => id != null)
             .map(String)
+        ),
+      ].sort((a, b) => {
+        const nombreA = mostrarMunicipio(
+          territoriosPorId.get(a) ?? a
+        );
+        const nombreB = mostrarMunicipio(
+          territoriosPorId.get(b) ?? b
+        );
+
+        return nombreA.localeCompare(nombreB, "es");
+      });
+    }
+
+    if (campo === "estado") {
+      return [
+        ...new Set(
+          reportes
+            .map((reporte) => reporte.estado)
+            .filter(Boolean)
         ),
       ].sort((a, b) => a.localeCompare(b, "es"));
     }
@@ -481,10 +565,11 @@ export default function FiltrosAdmin() {
                     )
                   }
                 >
-                  <option value="">Selecciona un valor</option>
                   {opciones(condicion.campo).map((valor) => (
                     <option key={valor} value={valor}>
-                      {valor}
+                      {condicion.campo === "id_territorio"
+                        ? mostrarMunicipio(territoriosPorId.get(valor) ?? valor)
+                        : valor}
                     </option>
                   ))}
                 </select>

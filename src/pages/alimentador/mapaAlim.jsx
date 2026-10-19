@@ -1,17 +1,82 @@
+/**
+ * @file mapaAlim.jsx
+ * @description Mapa de expedientes asignados al alimentador.
+ *
+ * Conserva la navegación por folio, el mapa de calor
+ * y los filtros sobre los expedientes autorizados.
+ */
+
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { RefreshCw, RotateCcw, MapPin } from "lucide-react";
+import {
+  RefreshCw,
+  RotateCcw,
+  MapPin,
+} from "lucide-react";
 
 import { apiFetch } from "../../services/api";
 import { obtenerHistoricoReportes } from "../../services/reportesApi";
 import { obtenerTerritorios } from "../../services/territoriosApi";
 import GoogleMap from "../mapa/googleMap";
-import { coincideEtiquetas, opcionesEtiqueta } from "../../services/etiquetasReportes";
+import {
+  coincideEtiquetas,
+  opcionesEtiqueta,
+} from "../../services/etiquetasReportes";
 
 import "./mapaAlim.css";
 
 const CENTRO = { lat: 19.557, lng: -99.271 };
 
+const FILTROS_INICIALES = {
+  Observación: "",
+  Categoria: "",
+  Riesgo: "",
+  Prioridad: "",
+};
+
+/**
+ * Identifica municipios equivalentes sin modificar MariaDB.
+ *
+ * @param {string} nombre
+ * @returns {string}
+ */
+function claveMunicipio(nombre) {
+  const normalizado = String(nombre ?? "")
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("es")
+    .replace(/\s+/g, " ");
+
+  if (
+    normalizado === "atizapan" ||
+    normalizado === "atizapan de zaragoza"
+  ) {
+    return "atizapan de zaragoza";
+  }
+
+  return normalizado;
+}
+
+/**
+ * Obtiene la denominación que aparecerá en el selector.
+ *
+ * @param {string} nombre
+ * @returns {string}
+ */
+function nombreMunicipio(nombre) {
+  if (claveMunicipio(nombre) === "atizapan de zaragoza") {
+    return "Atizapán de Zaragoza";
+  }
+
+  return String(nombre ?? "").trim();
+}
+
+/**
+ * Mapa de reportes para el rol Alimentador.
+ *
+ * @returns {import("react").JSX.Element}
+ */
 export default function MapaAlim() {
   const navigate = useNavigate();
 
@@ -21,7 +86,9 @@ export default function MapaAlim() {
 
   const [estatus, setEstatus] = useState("");
   const [municipio, setMunicipio] = useState("");
-  const [filtrosEtiquetas, setFiltrosEtiquetas] = useState({ Observación: "", Categoria: "", Riesgo: "", Prioridad: "" });
+  const [filtrosEtiquetas, setFiltrosEtiquetas] = useState(
+    FILTROS_INICIALES
+  );
   const [mostrarCalor, setMostrarCalor] = useState(false);
 
   const [cargando, setCargando] = useState(true);
@@ -29,6 +96,10 @@ export default function MapaAlim() {
   const [errorFiltros, setErrorFiltros] = useState("");
   const [intento, setIntento] = useState(0);
 
+  /**
+   * Recupera los puntos y el histórico autorizados
+   * para el usuario autenticado.
+   */
   useEffect(() => {
     let vigente = true;
 
@@ -39,16 +110,9 @@ export default function MapaAlim() {
     ]).then(([mapa, reportes, catalogo]) => {
       if (!vigente) return;
 
-      if (
+      const mapaValido =
         mapa.status === "fulfilled" &&
-        Array.isArray(mapa.value)
-      ) {
-        setPuntos(mapa.value);
-        setError("");
-      } else {
-        setPuntos([]);
-        setError("No se pudieron consultar tus casos geolocalizados.");
-      }
+        Array.isArray(mapa.value);
 
       const historicoValido =
         reportes.status === "fulfilled" &&
@@ -58,9 +122,17 @@ export default function MapaAlim() {
         catalogo.status === "fulfilled" &&
         Array.isArray(catalogo.value?.territorios);
 
+      setPuntos(mapaValido ? mapa.value : []);
       setHistorico(historicoValido ? reportes.value : []);
+
       setTerritorios(
         catalogoValido ? catalogo.value.territorios : []
+      );
+
+      setError(
+        mapaValido
+          ? ""
+          : "No se pudieron consultar tus casos geolocalizados."
       );
 
       setErrorFiltros(
@@ -77,78 +149,141 @@ export default function MapaAlim() {
     };
   }, [intento]);
 
+  /** Relaciona cada folio con su reporte histórico. */
   const datosPorFolio = useMemo(
-    () => new Map(historico.map((r) => [r.folio, r])),
+    () =>
+      new Map(
+        historico.map((reporte) => [
+          reporte.folio,
+          reporte,
+        ])
+      ),
     [historico]
   );
 
+  /** Relaciona los IDs de territorio con sus nombres. */
   const nombresMunicipios = useMemo(
     () =>
       new Map(
-        territorios.map((t) => [
-          String(t.id_territorio),
-          t.nombre,
+        territorios.map((territorio) => [
+          String(territorio.id_territorio),
+          String(territorio.nombre ?? ""),
         ])
       ),
     [territorios]
   );
 
+  /**
+   * Combina datos del mapa con el histórico para poder
+   * aplicar los filtros de etiquetas.
+   */
   const puntosCompletos = useMemo(
     () =>
-      puntos.map((p) => {
-        const detalle = datosPorFolio.get(p.folio);
+      puntos.map((punto) => {
+        const detalle = datosPorFolio.get(punto.folio);
 
         return {
-          ...p,
-          estatus: p.estatus ?? detalle?.estado ?? "",
+          ...punto,
+          estatus:
+            punto.estatus ?? detalle?.estado ?? "",
           id_territorio:
-            p.id_territorio ?? detalle?.id_territorio ?? null,
+            punto.id_territorio ??
+            detalle?.id_territorio ??
+            null,
           etiquetas: detalle?.etiquetas ?? [],
-          peligro_inmediato: detalle?.peligro_inmediato ?? "",
+          peligro_inmediato:
+            detalle?.peligro_inmediato ?? "",
         };
       }),
     [puntos, datosPorFolio]
   );
 
+  /** Obtiene los estados presentes en los casos asignados. */
   const estados = useMemo(
     () =>
       [...new Set(
-        puntosCompletos.map((p) => p.estatus).filter(Boolean)
+        puntosCompletos
+          .map((punto) => punto.estatus)
+          .filter(Boolean)
       )].sort((a, b) => a.localeCompare(b, "es")),
     [puntosCompletos]
   );
 
-  const municipios = useMemo(
-    () =>
-      [...new Set(
-        puntosCompletos
-          .map((p) => p.id_territorio)
-          .filter((id) => id != null)
-          .map(String)
-      )].sort((a, b) =>
-        (nombresMunicipios.get(a) || a).localeCompare(
-          nombresMunicipios.get(b) || b,
-          "es"
-        )
-      ),
-    [puntosCompletos, nombresMunicipios]
-  );
+  /**
+   * Evita municipios duplicados por abreviaturas.
+   * Los valores internos siguen correspondiendo a la
+   * agrupación de los IDs originales.
+   */
+  const municipios = useMemo(() => {
+    const grupos = new Map();
 
+    for (const punto of puntosCompletos) {
+      if (punto.id_territorio == null) continue;
+
+      const id = String(punto.id_territorio);
+      const nombre = nombresMunicipios.get(id);
+
+      if (!nombre) continue;
+
+      const clave = claveMunicipio(nombre);
+      if (!clave) continue;
+
+      if (!grupos.has(clave)) {
+        grupos.set(clave, {
+          clave,
+          nombre: nombreMunicipio(nombre),
+        });
+      }
+    }
+
+    return [...grupos.values()].sort((a, b) =>
+      a.nombre.localeCompare(b.nombre, "es")
+    );
+  }, [puntosCompletos, nombresMunicipios]);
+
+  /** Filtra únicamente los reportes autorizados del alimentador. */
   const visibles = useMemo(
     () =>
-      puntosCompletos.filter(
-        (p) =>
-          (!estatus || p.estatus === estatus) &&
-          (!municipio || String(p.id_territorio) === municipio) &&
-          coincideEtiquetas(p, filtrosEtiquetas)
-      ),
-    [puntosCompletos, estatus, municipio, filtrosEtiquetas]
+      puntosCompletos.filter((punto) => {
+        const coincideEstado =
+          !estatus || punto.estatus === estatus;
+
+        const nombre = nombresMunicipios.get(
+          String(punto.id_territorio)
+        );
+
+        const coincideMunicipio =
+          !municipio ||
+          (nombre && claveMunicipio(nombre) === municipio);
+
+        return (
+          coincideEstado &&
+          coincideMunicipio &&
+          coincideEtiquetas(punto, filtrosEtiquetas)
+        );
+      }),
+    [
+      puntosCompletos,
+      estatus,
+      municipio,
+      nombresMunicipios,
+      filtrosEtiquetas,
+    ]
   );
 
+  /** Limpia todos los filtros del mapa. */
+  function limpiarFiltros() {
+    setEstatus("");
+    setMunicipio("");
+    setFiltrosEtiquetas({ ...FILTROS_INICIALES });
+  }
+
+  /** Solicita los datos más recientes al servidor. */
   function actualizar() {
     setCargando(true);
     setError("");
-    setIntento((n) => n + 1);
+    setErrorFiltros("");
+    setIntento((actual) => actual + 1);
   }
 
   return (
@@ -165,21 +300,27 @@ export default function MapaAlim() {
         <div className="sipinna-mapa-panel-filtros">
           <div className="sipinna-mapa-filtros">
             <div>
-              <label htmlFor="mapa-alim-estatus">Estatus</label>
+              <label htmlFor="mapa-alim-estatus">
+                Estatus
+              </label>
               <select
                 id="mapa-alim-estatus"
                 value={estatus}
                 onChange={(e) => setEstatus(e.target.value)}
               >
                 <option value="">Todos los estatus</option>
-                {estados.map((e) => (
-                  <option key={e} value={e}>{e}</option>
+                {estados.map((estado) => (
+                  <option key={estado} value={estado}>
+                    {estado}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label htmlFor="mapa-alim-municipio">Municipio</label>
+              <label htmlFor="mapa-alim-municipio">
+                Municipio
+              </label>
               <select
                 id="mapa-alim-municipio"
                 value={municipio}
@@ -187,25 +328,40 @@ export default function MapaAlim() {
                 onChange={(e) => setMunicipio(e.target.value)}
               >
                 <option value="">Todos los municipios</option>
-                {municipios.map((id) => (
-                  <option key={id} value={id}>
-                    {nombresMunicipios.get(id) || `Municipio ${id}`}
+
+                {municipios.map((item) => (
+                  <option key={item.clave} value={item.clave}>
+                    {item.nombre}
                   </option>
                 ))}
               </select>
             </div>
+
             {Object.keys(filtrosEtiquetas).map((tipo) => (
               <div key={tipo}>
-                <label htmlFor={`mapa-alim-${tipo}`}>{tipo === "Categoria" ? "Categoría" : tipo}</label>
+                <label htmlFor={`mapa-alim-${tipo}`}>
+                  {tipo === "Categoria" ? "Categoría" : tipo}
+                </label>
+
                 <select
                   id={`mapa-alim-${tipo}`}
                   value={filtrosEtiquetas[tipo]}
-                  onChange={(e) => setFiltrosEtiquetas((prev) => ({ ...prev, [tipo]: e.target.value }))}
+                  onChange={(e) =>
+                    setFiltrosEtiquetas((anteriores) => ({
+                      ...anteriores,
+                      [tipo]: e.target.value,
+                    }))
+                  }
                 >
                   <option value="">Todos</option>
-                  {opcionesEtiqueta(historico, tipo).map((valor) => (
-                    <option key={valor} value={valor}>{valor}</option>
-                  ))}
+
+                  {opcionesEtiqueta(historico, tipo).map(
+                    (valor) => (
+                      <option key={valor} value={valor}>
+                        {valor}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
             ))}
@@ -214,11 +370,7 @@ export default function MapaAlim() {
           <div className="sipinna-mapa-acciones">
             <button
               type="button"
-              onClick={() => {
-                setEstatus("");
-                setMunicipio("");
-                setFiltrosEtiquetas({ Observación: "", Categoria: "", Riesgo: "", Prioridad: "" });
-              }}
+              onClick={limpiarFiltros}
             >
               <RotateCcw size={16} />
               Limpiar

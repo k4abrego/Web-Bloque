@@ -85,7 +85,7 @@ function ConfiguracionAlim() {
 
       try {
         const datos = await authApiFetch(
-          `/user/${encodeURIComponent(correo)}`
+          `/Usuario/${encodeURIComponent(correo)}`
         );
 
         if (vigente) {

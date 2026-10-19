@@ -37,7 +37,7 @@ export async function registrarAdministrador(datos) {
   }
 
   const respuesta = await authApiFetch(
-    `/register/admin/${adminId}`,
+    `/Registrar/Admin/${adminId}`,
     {
       method: "POST",
       body: JSON.stringify({

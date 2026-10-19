@@ -51,7 +51,7 @@ function PerfilAlim() {
         setError("");
 
         const datos = await authApiFetch(
-          `/user/${encodeURIComponent(correo)}`
+          `/Usuario/${encodeURIComponent(correo)}`
         );
 
         if (activo) {

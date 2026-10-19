@@ -61,7 +61,7 @@ export async function registrarAlimentador(datos) {
   }
 
   const respuesta = await authApiFetch(
-    `/register/feeder/${adminId}`,
+    `/Registrar/Alimentador/${adminId}`,
     {
       method: "POST",
 

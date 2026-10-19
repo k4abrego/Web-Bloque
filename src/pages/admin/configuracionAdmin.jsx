@@ -62,7 +62,7 @@ export default function ConfiguracionAdmin() {
     let vigente = true;
 
     authApiFetch(
-      `/user/${encodeURIComponent(correo)}`
+      `/Usuario/${encodeURIComponent(correo)}`
     )
       .then((datos) => {
         if (!vigente) return;

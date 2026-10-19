@@ -1,4 +1,3 @@
-
 /**
  * detalleReporteAdmin.jsx
  *
@@ -40,6 +39,7 @@ import { obtenerAlimentadores } from "../../services/alimentadoresApi";
 import EvidenciaCard from "../../components/evidencia/evidenciaCard";
 import UbicacionReporteMapa from "../../components/mapa/UbicacionReporteMapa";
 import "./detalleReporteAdmin.css";
+import ActualizarEstadoReporte from "../../components/seguimiento/ActualizarEstadoReporte";
 
 /** Prioridades admitidas por el backend. */
 const PRIORIDADES = ["Alta", "Media", "Baja"];
@@ -765,6 +765,14 @@ export default function DetalleReporteAdmin() {
 
         <p>{mostrarTexto(reporte.descripcion)}</p>
       </div>
+
+      {/* Seguimiento del expediente: cambio de estado administrativo. */}
+      <ActualizarEstadoReporte
+      key={`${folio}-${reporte?.estatus ?? reporte?.estado ?? ""}`}
+      folio={folio}
+      reporte={reporte}
+      onActualizado={setReporte}
+      />
 
       {/* Clasificación administrativa por prioridad */}
       <div className="detalle-card">

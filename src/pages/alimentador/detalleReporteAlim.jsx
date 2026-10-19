@@ -39,16 +39,20 @@ import UbicacionReporteMapa from "../../components/mapa/UbicacionReporteMapa";
 import "./detallesReporteAlim.css";
 
 /**
- * Estados admitidos por comms-api y MariaDB.
+ * Estados oficiales del expediente SIPINNA.
+ *
+ * Coinciden con el ENUM expediente.estado de MariaDB
+ * y con la validación de comms-api.
  */
 const ESTADOS_PERMITIDOS = [
-  "Nuevo",
+  "Registrado",
   "En revisión",
-  "Asignado",
-  "En investigación",
-  "Canalizado a Procuraduría",
-  "Cerrado",
-  "Descartado",
+  "En seguimiento",
+  "Canalizado",
+  "Concluido",
+  "Archivado",
+  "Cancelado",
+  "Reincidente",
 ];
 
 /**

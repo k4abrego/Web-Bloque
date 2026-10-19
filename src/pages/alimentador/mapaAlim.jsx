@@ -6,6 +6,7 @@ import { apiFetch } from "../../services/api";
 import { obtenerHistoricoReportes } from "../../services/reportesApi";
 import { obtenerTerritorios } from "../../services/territoriosApi";
 import GoogleMap from "../mapa/googleMap";
+import { coincideEtiquetas, opcionesEtiqueta } from "../../services/etiquetasReportes";
 
 import "./mapaAlim.css";
 
@@ -20,6 +21,7 @@ export default function MapaAlim() {
 
   const [estatus, setEstatus] = useState("");
   const [municipio, setMunicipio] = useState("");
+  const [filtrosEtiquetas, setFiltrosEtiquetas] = useState({ Observación: "", Categoria: "", Riesgo: "", Prioridad: "" });
   const [mostrarCalor, setMostrarCalor] = useState(false);
 
   const [cargando, setCargando] = useState(true);
@@ -101,6 +103,8 @@ export default function MapaAlim() {
           estatus: p.estatus ?? detalle?.estado ?? "",
           id_territorio:
             p.id_territorio ?? detalle?.id_territorio ?? null,
+          etiquetas: detalle?.etiquetas ?? [],
+          peligro_inmediato: detalle?.peligro_inmediato ?? "",
         };
       }),
     [puntos, datosPorFolio]
@@ -135,9 +139,10 @@ export default function MapaAlim() {
       puntosCompletos.filter(
         (p) =>
           (!estatus || p.estatus === estatus) &&
-          (!municipio || String(p.id_territorio) === municipio)
+          (!municipio || String(p.id_territorio) === municipio) &&
+          coincideEtiquetas(p, filtrosEtiquetas)
       ),
-    [puntosCompletos, estatus, municipio]
+    [puntosCompletos, estatus, municipio, filtrosEtiquetas]
   );
 
   function actualizar() {
@@ -189,6 +194,21 @@ export default function MapaAlim() {
                 ))}
               </select>
             </div>
+            {Object.keys(filtrosEtiquetas).map((tipo) => (
+              <div key={tipo}>
+                <label htmlFor={`mapa-alim-${tipo}`}>{tipo === "Categoria" ? "Categoría" : tipo}</label>
+                <select
+                  id={`mapa-alim-${tipo}`}
+                  value={filtrosEtiquetas[tipo]}
+                  onChange={(e) => setFiltrosEtiquetas((prev) => ({ ...prev, [tipo]: e.target.value }))}
+                >
+                  <option value="">Todos</option>
+                  {opcionesEtiqueta(historico, tipo).map((valor) => (
+                    <option key={valor} value={valor}>{valor}</option>
+                  ))}
+                </select>
+              </div>
+            ))}
           </div>
 
           <div className="sipinna-mapa-acciones">
@@ -197,6 +217,7 @@ export default function MapaAlim() {
               onClick={() => {
                 setEstatus("");
                 setMunicipio("");
+                setFiltrosEtiquetas({ Observación: "", Categoria: "", Riesgo: "", Prioridad: "" });
               }}
             >
               <RotateCcw size={16} />

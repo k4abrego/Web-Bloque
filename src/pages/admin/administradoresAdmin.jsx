@@ -1,448 +1,552 @@
 /**
- * Página de gestión temporal de administradores.
+ * @file administradoresAdmin.jsx
+ * @description Gestión de administradores reales de SIPINNA.
  *
- * Permite crear, consultar, editar, filtrar y cambiar el estado
- * de cuentas simuladas, sin realizar peticiones al backend.
+ * Permite:
+ * - Consultar administradores desde MariaDB.
+ * - Consultar el catálogo real de instituciones.
+ * - Buscar y filtrar cuentas por estado.
+ * - Registrar administradores.
+ * - Editar datos personales e institución.
+ * - Desactivar y reactivar administradores.
+ *
+ * La cuenta principal ID 3 está protegida contra
+ * la desactivación.
+ *
+ * La autorización efectiva se realiza en auth-backend.
  */
 
-import { useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import {
   Users,
   UserCheck,
   UserX,
   Plus,
-  Search,
   Pencil,
   Power,
   X,
+  Search,
 } from "lucide-react";
 
-import "./administradoresAdmin.css";
+import { apiFetch } from "../../services/api";
+
+import {
+  obtenerAdministradores,
+  registrarAdministrador,
+  editarAdministrador,
+  cambiarEstadoAdministrador,
+} from "../../services/administradoresApi";
+
+import "./alimentadoresAdmin.css";
+
+/** Campos iniciales del formulario institucional. */
+const VACIO = {
+  nombre: "",
+  apellidos: "",
+  correo: "",
+  telefono: "",
+  institutionId: "",
+  password: "",
+};
 
 /**
- * Catálogo temporal de instituciones.
- * Posteriormente se obtendrá desde MariaDB mediante el backend.
- */
-const INSTITUCIONES = [
-  {
-    id: 2,
-    nombre: "SIPINNA Atizapán de Zaragoza",
-  },
-];
-
-/**
- * Catálogo temporal de municipios.
- * Cada cuenta puede tener múltiples municipios asignados.
- */
-const MUNICIPIOS = [
-  {
-    id: 2,
-    nombre: "Atizapán de Zaragoza",
-    estado: "Estado de México",
-  },
-];
-
-/**
- * Cuenta inicial de demostración.
- * No representa una consulta en tiempo real a la base de datos.
- */
-const ADMINISTRADORES_INICIALES = [
-  {
-    id: 3,
-    nombre: "Administrador",
-    apellidos: "Principal",
-    correo: "admin.prueba@sipinna.gob.mx",
-    telefono: "",
-    institucionId: 2,
-    municipios: [2],
-    estado: "Activo",
-  },
-];
-
-/**
- * Devuelve un formulario con valores iniciales vacíos.
+ * Valida números telefónicos internacionales.
  *
- * @returns {object} Campos iniciales del formulario.
+ * @param {string} telefono - Número telefónico.
+ * @returns {boolean} Indica si cumple E.164.
  */
-function crearFormularioVacio() {
-  return {
-    nombre: "",
-    apellidos: "",
-    correo: "",
-    telefono: "",
-    institucionId: "",
-    municipios: [],
-  };
+function telefonoValido(telefono) {
+  return (
+    !telefono ||
+    /^\+[1-9]\d{7,14}$/.test(telefono)
+  );
 }
 
 /**
- * Obtiene las iniciales de una persona.
+ * Devuelve las iniciales de un nombre.
  *
- * @param {string} nombre - Nombre de la persona.
- * @param {string} apellidos - Apellidos de la persona.
- * @returns {string} Iniciales para el avatar.
+ * @param {string} nombre - Nombre completo.
+ * @returns {string} Iniciales.
  */
-function obtenerIniciales(nombre, apellidos) {
-  return `${nombre} ${apellidos}`
+function iniciales(nombre) {
+  return String(nombre || "")
     .trim()
     .split(/\s+/)
     .slice(0, 2)
-    .map((palabra) => palabra.charAt(0).toUpperCase())
+    .map((parte) =>
+      parte[0]?.toUpperCase() || ""
+    )
     .join("");
-}
-
-/**
- * Obtiene el nombre de una institución mediante su ID.
- *
- * @param {number|string} institucionId - ID de la institución.
- * @returns {string} Nombre de la institución.
- */
-function obtenerInstitucion(institucionId) {
-  const institucion = INSTITUCIONES.find(
-    (item) => item.id === Number(institucionId)
-  );
-
-  return institucion?.nombre || "Sin asignar";
-}
-
-/**
- * Obtiene los nombres de los municipios asignados.
- *
- * @param {number[]} ids - IDs de los municipios.
- * @returns {string[]} Nombres de los municipios.
- */
-function obtenerMunicipios(ids = []) {
-  return ids.map((id) => {
-    const municipio = MUNICIPIOS.find(
-      (item) => item.id === Number(id)
-    );
-
-    return municipio?.nombre || `Municipio ${id}`;
-  });
 }
 
 /**
  * AdministradoresAdmin
  *
- * Renderiza el panel temporal de cuentas de administradores.
- * Los cambios se almacenan exclusivamente en el estado de React.
+ * Pantalla conectada a los administradores e instituciones
+ * reales de la base de datos.
  *
- * @returns {JSX.Element} Página de administradores.
+ * @returns {import("react").JSX.Element}
  */
-function AdministradoresAdmin() {
-  // Registros temporales de la pantalla.
-  const [administradores, setAdministradores] = useState(
-    ADMINISTRADORES_INICIALES
-  );
+export default function AdministradoresAdmin() {
+  const [cuentas, setCuentas] = useState([]);
+  const [instituciones, setInstituciones] = useState([]);
 
-  // Estado del buscador y filtros.
+  const [cargando, setCargando] = useState(true);
+  const [guardando, setGuardando] = useState(false);
+
+  const [error, setError] = useState("");
+  const [aviso, setAviso] = useState("");
+
   const [busqueda, setBusqueda] = useState("");
-  const [filtroEstado, setFiltroEstado] = useState("Todos");
-  const [filtroMunicipio, setFiltroMunicipio] = useState("Todos");
+  const [estado, setEstado] = useState("Todos");
 
-  // Estado del formulario.
-  const [modalAbierto, setModalAbierto] = useState(false);
-  const [cuentaEditando, setCuentaEditando] = useState(null);
-  const [formulario, setFormulario] = useState(
-    crearFormularioVacio()
-  );
-  const [errorFormulario, setErrorFormulario] = useState("");
+  const [modal, setModal] = useState(false);
+  const [editando, setEditando] = useState(null);
+  const [form, setForm] = useState({ ...VACIO });
+  const [revision, setRevision] = useState(0);
 
   /**
-   * Calcula las estadísticas de las cuentas temporales.
+   * Vuelve a consultar las cuentas y el catálogo real.
+   *
+   * Se utiliza después de crear, editar o modificar el
+   * estado de una cuenta.
+   *
+   * @returns {Promise<void>}
    */
-  const totalCuentas = administradores.length;
+  const cargar = useCallback(async () => {
+    const [lista, catalogo] = await Promise.all([
+      obtenerAdministradores(),
+      apiFetch("/instituciones"),
+    ]);
 
-  const cuentasActivas = administradores.filter(
-    (admin) => admin.estado === "Activo"
-  ).length;
+    if (
+      !Array.isArray(lista) ||
+      !Array.isArray(catalogo)
+    ) {
+      throw new Error(
+        "El servidor devolvió una respuesta inválida."
+      );
+    }
 
-  const cuentasInactivas = administradores.filter(
-    (admin) => admin.estado === "Inactivo"
-  ).length;
+    setCuentas(lista);
+
+    setInstituciones(
+      catalogo.filter(
+        (item) =>
+          item?.id_institucion != null &&
+          item?.nombre
+      )
+    );
+  }, []);
 
   /**
-   * Filtra los administradores por texto, estado y municipio.
-   * Los tres filtros funcionan de manera simultánea.
+   * Carga los datos al ingresar a la pantalla.
+   *
+   * Evita actualizar el componente después del desmontaje.
    */
-  const administradoresFiltrados = useMemo(() => {
-    const texto = busqueda.toLowerCase().trim();
+  useEffect(() => {
+    let vigente = true;
 
-    return administradores.filter((admin) => {
-      const nombreCompleto =
-        `${admin.nombre} ${admin.apellidos}`.toLowerCase();
+    Promise.all([
+      obtenerAdministradores(),
+      apiFetch("/instituciones"),
+    ])
+      .then(([lista, catalogo]) => {
+        if (!vigente) return;
 
-      const coincideBusqueda =
-        nombreCompleto.includes(texto) ||
-        admin.correo.toLowerCase().includes(texto);
+        if (
+          !Array.isArray(lista) ||
+          !Array.isArray(catalogo)
+        ) {
+          throw new Error(
+            "El servidor devolvió una respuesta inválida."
+          );
+        }
+
+        setCuentas(lista);
+
+        setInstituciones(
+          catalogo.filter(
+            (item) =>
+              item?.id_institucion != null &&
+              item?.nombre
+          )
+        );
+
+        setError("");
+      })
+      .catch((err) => {
+        if (!vigente) return;
+
+        setError(
+          err.message ||
+          "No se pudieron consultar los administradores."
+        );
+      })
+      .finally(() => {
+        if (vigente) {
+          setCargando(false);
+        }
+      });
+
+    return () => {
+      vigente = false;
+    };
+  }, [revision]);
+
+  /**
+   * Filtra las cuentas por nombre, correo, institución
+   * y estado.
+   */
+  const filtradas = useMemo(() => {
+    return cuentas.filter((cuenta) => {
+      const texto = [
+        cuenta.nombre,
+        cuenta.apellidos,
+        cuenta.correo,
+        cuenta.institucion,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLocaleLowerCase("es");
+
+      const coincideBusqueda = texto.includes(
+        busqueda.trim().toLocaleLowerCase("es")
+      );
+
+      const estadoCuenta = cuenta.es_activo
+        ? "Activo"
+        : "Inactivo";
 
       const coincideEstado =
-        filtroEstado === "Todos" ||
-        admin.estado === filtroEstado;
+        estado === "Todos" ||
+        estadoCuenta === estado;
 
-      const coincideMunicipio =
-        filtroMunicipio === "Todos" ||
-        (filtroMunicipio === "Sin asignar"
-          ? admin.municipios.length === 0
-          : admin.municipios.includes(Number(filtroMunicipio)));
-
-      return (
-        coincideBusqueda &&
-        coincideEstado &&
-        coincideMunicipio
-      );
+      return coincideBusqueda && coincideEstado;
     });
-  }, [administradores, busqueda, filtroEstado, filtroMunicipio]);
+  }, [cuentas, busqueda, estado]);
 
   /**
-   * Abre el formulario para registrar una nueva cuenta temporal.
+   * Abre el formulario para registrar un administrador.
    */
-  function abrirCrearCuenta() {
-    setCuentaEditando(null);
-    setFormulario(crearFormularioVacio());
-    setErrorFormulario("");
-    setModalAbierto(true);
+  function abrirNuevo() {
+    setEditando(null);
+    setForm({ ...VACIO });
+    setError("");
+    setAviso("");
+    setModal(true);
   }
 
   /**
-   * Abre el formulario con los datos de la cuenta seleccionada.
+   * Prepara la edición con los datos existentes.
    *
-   * @param {object} admin - Administrador que se editará.
+   * @param {Object} cuenta - Administrador seleccionado.
    */
-  function abrirEditarCuenta(admin) {
-    setCuentaEditando(admin.id);
+  function abrirEditar(cuenta) {
+    setEditando(cuenta);
 
-    setFormulario({
-      nombre: admin.nombre,
-      apellidos: admin.apellidos,
-      correo: admin.correo,
-      telefono: admin.telefono || "",
-      institucionId: String(admin.institucionId || ""),
-      municipios: [...admin.municipios],
+    setForm({
+      nombre: cuenta.nombre || "",
+      apellidos: cuenta.apellidos || "",
+      correo: cuenta.correo || "",
+      telefono: cuenta.telefono || "",
+      institutionId: String(cuenta.id_institucion),
+      password: "",
     });
 
-    setErrorFormulario("");
-    setModalAbierto(true);
+    setError("");
+    setAviso("");
+    setModal(true);
   }
 
   /**
-   * Cierra el formulario y descarta los cambios pendientes.
-   */
-  function cerrarFormulario() {
-    setModalAbierto(false);
-    setCuentaEditando(null);
-    setErrorFormulario("");
-  }
-
-  /**
-   * Actualiza un campo del formulario.
+   * Modifica un campo del formulario.
    *
-   * @param {string} campo - Nombre del campo.
-   * @param {string|number[]} valor - Nuevo valor.
+   * @param {string} campo - Campo editado.
+   * @param {string} valor - Nuevo valor.
    */
-  function actualizarFormulario(campo, valor) {
-    setFormulario((anterior) => ({
+  function actualizarCampo(campo, valor) {
+    setForm((anterior) => ({
       ...anterior,
       [campo]: valor,
     }));
 
-    setErrorFormulario("");
+    setError("");
   }
 
   /**
-   * Agrega o elimina un municipio de la selección múltiple.
-   *
-   * @param {number} municipioId - ID del municipio.
+   * Cierra el formulario cuando no hay operaciones activas.
    */
-  function cambiarMunicipio(municipioId) {
-    setFormulario((anterior) => {
-      const seleccionado =
-        anterior.municipios.includes(municipioId);
+  function cerrarModal() {
+    if (guardando) return;
 
-      return {
-        ...anterior,
-        municipios: seleccionado
-          ? anterior.municipios.filter(
-              (id) => id !== municipioId
-            )
-          : [...anterior.municipios, municipioId],
-      };
-    });
-
-    setErrorFormulario("");
+    setModal(false);
+    setEditando(null);
+    setError("");
   }
 
   /**
-   * Valida y guarda una cuenta temporal.
+   * Crea o actualiza una cuenta administradora.
    *
-   * @param {React.FormEvent<HTMLFormElement>} evento
+   * La operación se confirma mediante auth-backend
+   * antes de volver a consultar MariaDB.
+   *
+   * @param {import("react").FormEvent<HTMLFormElement>} evento
+   * @returns {Promise<void>}
    */
-  function guardarCuenta(evento) {
+  async function guardar(evento) {
     evento.preventDefault();
 
-    const nombre = formulario.nombre.trim();
-    const apellidos = formulario.apellidos.trim();
-    const correo = formulario.correo.trim().toLowerCase();
-    const telefono = formulario.telefono.trim();
-    const institucionId = Number(formulario.institucionId);
+    if (guardando) return;
 
-    // Valida los datos obligatorios.
+    const datos = {
+      nombre: form.nombre.trim(),
+      apellidos: form.apellidos.trim(),
+      correo: form.correo.trim().toLowerCase(),
+      telefono: form.telefono.trim(),
+      institutionId: Number(form.institutionId),
+      password: form.password,
+    };
+
     if (
-      !nombre ||
-      !apellidos ||
-      !correo ||
-      !institucionId ||
-      formulario.municipios.length === 0
+      datos.nombre.length < 3 ||
+      datos.nombre.length > 30 ||
+      datos.apellidos.length < 3 ||
+      datos.apellidos.length > 100
     ) {
-      setErrorFormulario(
-        "Completa los datos obligatorios y selecciona al menos un municipio."
+      setError(
+        "El nombre o los apellidos no cumplen con los límites permitidos."
       );
       return;
     }
 
-    // El teléfono es opcional, pero debe cumplir el formato E.164.
-    if (telefono && !/^\+[1-9]\d{7,14}$/.test(telefono)) {
-      setErrorFormulario(
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        datos.correo
+      )
+    ) {
+      setError("Introduce un correo válido.");
+      return;
+    }
+
+    if (!telefonoValido(datos.telefono)) {
+      setError(
         "El teléfono debe tener formato internacional, por ejemplo +525512345678."
       );
       return;
     }
 
-    // Impide duplicar correos dentro de las cuentas temporales.
-    const correoExiste = administradores.some(
-      (admin) =>
-        admin.correo.toLowerCase() === correo &&
-        admin.id !== cuentaEditando
+    const institucionValida = instituciones.some(
+      (item) =>
+        Number(item.id_institucion) ===
+        datos.institutionId
     );
 
-    if (correoExiste) {
-      setErrorFormulario(
-        "Ya existe un administrador con ese correo."
+    if (!institucionValida) {
+      setError(
+        "Selecciona una institución válida."
       );
       return;
     }
 
-    const datos = {
-      nombre,
-      apellidos,
-      correo,
-      telefono,
-      institucionId,
-      municipios: [...formulario.municipios],
-    };
-
-    if (cuentaEditando !== null) {
-      // Edita una cuenta temporal existente.
-      setAdministradores((anteriores) =>
-        anteriores.map((admin) =>
-          admin.id === cuentaEditando
-            ? { ...admin, ...datos }
-            : admin
-        )
+    if (
+      !editando &&
+      !/^[a-zA-Z0-9]{8,50}$/.test(datos.password)
+    ) {
+      setError(
+        "La contraseña debe tener entre 8 y 50 caracteres alfanuméricos."
       );
-    } else {
-      // Genera un identificador exclusivo para la simulación.
-      const nuevoId =
-        Math.max(0, ...administradores.map((admin) => admin.id)) + 1;
-
-      setAdministradores((anteriores) => [
-        ...anteriores,
-        {
-          id: nuevoId,
-          ...datos,
-          estado: "Activo",
-        },
-      ]);
+      return;
     }
 
-    cerrarFormulario();
+    setGuardando(true);
+    setError("");
+    setAviso("");
+
+    try {
+      if (editando) {
+        await editarAdministrador(
+          editando.id_usuario,
+          datos
+        );
+      } else {
+        await registrarAdministrador(datos);
+      }
+
+      await cargar();
+
+      setModal(false);
+      setEditando(null);
+
+      setAviso(
+        editando
+          ? "Administrador actualizado en MariaDB."
+          : "Administrador registrado en MariaDB."
+      );
+    } catch (err) {
+      setError(
+        err.message ||
+        "No fue posible guardar los datos."
+      );
+    } finally {
+      setGuardando(false);
+    }
   }
 
   /**
-   * Cambia temporalmente el estado de una cuenta.
+   * Desactiva o reactiva un administrador.
    *
-   * @param {number} id - Identificador del administrador.
+   * La cuenta principal ID 3 no puede desactivarse.
+   *
+   * @param {Object} cuenta - Cuenta seleccionada.
+   * @returns {Promise<void>}
    */
-  function cambiarEstadoCuenta(id) {
-    setAdministradores((anteriores) =>
-      anteriores.map((admin) =>
-        admin.id === id
-          ? {
-              ...admin,
-              estado:
-                admin.estado === "Activo"
-                  ? "Inactivo"
-                  : "Activo",
-            }
-          : admin
-      )
+  async function cambiarEstado(cuenta) {
+    if (guardando) return;
+
+    if (
+      Number(cuenta.id_usuario) === 3 &&
+      cuenta.es_activo
+    ) {
+      setError(
+        "La cuenta principal ID 3 no puede desactivarse."
+      );
+      return;
+    }
+
+    const activo = !cuenta.es_activo;
+
+    const confirmado = window.confirm(
+      `¿Quieres ${
+        activo ? "reactivar" : "desactivar"
+      } a ${cuenta.nombre} ${cuenta.apellidos}?`
     );
+
+    if (!confirmado) return;
+
+    setGuardando(true);
+    setError("");
+    setAviso("");
+
+    try {
+      await cambiarEstadoAdministrador(
+        cuenta.id_usuario,
+        activo
+      );
+
+      await cargar();
+
+      setAviso(
+        activo
+          ? "Administrador reactivado en MariaDB."
+          : "Administrador desactivado en MariaDB."
+      );
+    } catch (err) {
+      setError(
+        err.message ||
+        "No se pudo modificar el estado."
+      );
+    } finally {
+      setGuardando(false);
+    }
   }
 
   return (
-    <div className="administradores-admin">
-
-      {/* Encabezado de la página */}
-      <div className="administradores-header">
+    <div className="alimentadores-admin">
+      <div className="alimentadores-header">
         <div>
           <h1>Cuentas de administradores</h1>
           <p>
-            Administra las cuentas y los municipios
-            asignados al personal administrativo.
+            Gestiona los administradores registrados
+            en SIPINNA.
           </p>
         </div>
 
         <button
           type="button"
-          className="administradores-boton-nuevo"
-          onClick={abrirCrearCuenta}
+          className="alimentadores-boton-nuevo"
+          onClick={abrirNuevo}
+          disabled={guardando || cargando}
         >
           <Plus size={18} />
           Nueva cuenta
         </button>
       </div>
 
-      {/* Resumen de cuentas */}
-      <div className="administradores-resumen">
-        <div className="administradores-resumen-card">
-          <div className="administradores-resumen-icono total">
+      {aviso && <p role="status">{aviso}</p>}
+
+      {!modal && error && (
+        <div
+          role="alert"
+          className="alimentador-formulario-error"
+        >
+          {error}
+
+          <button
+            type="button"
+            onClick={() => {
+              setCargando(true);
+              setRevision((valor) => valor + 1);
+            }}
+          >
+            Reintentar
+          </button>
+        </div>
+      )}
+
+      <div className="alimentadores-resumen">
+        <div className="alimentadores-resumen-card">
+          <div className="alimentadores-resumen-icono total">
             <Users size={22} />
           </div>
           <div>
             <span>Total de cuentas</span>
-            <strong>{totalCuentas}</strong>
+            <strong>{cuentas.length}</strong>
           </div>
         </div>
 
-        <div className="administradores-resumen-card">
-          <div className="administradores-resumen-icono activas">
+        <div className="alimentadores-resumen-card">
+          <div className="alimentadores-resumen-icono activas">
             <UserCheck size={22} />
           </div>
           <div>
             <span>Cuentas activas</span>
-            <strong>{cuentasActivas}</strong>
+            <strong>
+              {cuentas.filter(
+                (cuenta) => cuenta.es_activo
+              ).length}
+            </strong>
           </div>
         </div>
 
-        <div className="administradores-resumen-card">
-          <div className="administradores-resumen-icono inactivas">
+        <div className="alimentadores-resumen-card">
+          <div className="alimentadores-resumen-icono inactivas">
             <UserX size={22} />
           </div>
           <div>
             <span>Cuentas inactivas</span>
-            <strong>{cuentasInactivas}</strong>
+            <strong>
+              {cuentas.filter(
+                (cuenta) => !cuenta.es_activo
+              ).length}
+            </strong>
           </div>
         </div>
       </div>
 
-      {/* Herramientas de búsqueda y filtrado */}
-      <div className="administradores-herramientas">
-
-        <div className="administradores-buscador">
+      <div className="alimentadores-herramientas">
+        <div className="alimentadores-buscador">
           <Search size={18} />
+
           <input
-            type="text"
-            placeholder="Buscar por nombre o correo..."
+            type="search"
+            placeholder="Buscar nombre, correo o institución..."
             value={busqueda}
             onChange={(evento) =>
               setBusqueda(evento.target.value)
@@ -451,121 +555,101 @@ function AdministradoresAdmin() {
         </div>
 
         <select
-          aria-label="Filtrar cuentas por estado"
-          value={filtroEstado}
+          aria-label="Filtrar administradores por estado"
+          value={estado}
           onChange={(evento) =>
-            setFiltroEstado(evento.target.value)
+            setEstado(evento.target.value)
           }
         >
-          <option value="Todos">Todas las cuentas</option>
+          <option value="Todos">
+            Todas las cuentas
+          </option>
           <option value="Activo">Activas</option>
           <option value="Inactivo">Inactivas</option>
         </select>
-
-        <select
-          aria-label="Filtrar cuentas por municipio"
-          value={filtroMunicipio}
-          onChange={(evento) =>
-            setFiltroMunicipio(evento.target.value)
-          }
-        >
-          <option value="Todos">Todos los municipios</option>
-          {MUNICIPIOS.map((municipio) => (
-            <option
-              key={municipio.id}
-              value={municipio.id}
-            >
-              {municipio.nombre}
-            </option>
-          ))}
-          <option value="Sin asignar">Sin asignar</option>
-        </select>
       </div>
 
-      {/* Tabla de administradores */}
-      <div className="administradores-lista">
-
-        <div className="administradores-lista-header">
+      <div className="alimentadores-lista">
+        <div className="alimentadores-lista-header">
           <h2>Personal administrador</h2>
+
           <span>
-            {administradoresFiltrados.length} de {totalCuentas} cuentas
+            {filtradas.length} de {cuentas.length} cuentas
           </span>
         </div>
 
-        <div className="administradores-tabla-scroll">
-          <table className="administradores-tabla">
+        <div className="alimentadores-tabla-scroll">
+          <table className="alimentadores-tabla">
             <thead>
               <tr>
                 <th>Administrador</th>
                 <th>Correo electrónico</th>
                 <th>Institución</th>
-                <th>Municipios</th>
                 <th>Estado</th>
                 <th>Acciones</th>
               </tr>
             </thead>
 
             <tbody>
-              {administradoresFiltrados.length > 0 ? (
-                administradoresFiltrados.map((admin) => (
-                  <tr key={admin.id}>
+              {cargando ? (
+                <tr>
+                  <td colSpan={5}>
+                    Cargando administradores...
+                  </td>
+                </tr>
+              ) : (
+                filtradas.map((cuenta) => (
+                  <tr key={cuenta.id_usuario}>
                     <td>
-                      <div className="administrador-identidad">
-                        <div className="administrador-avatar">
-                          {obtenerIniciales(
-                            admin.nombre,
-                            admin.apellidos
+                      <div className="alimentador-identidad">
+                        <div className="alimentador-avatar">
+                          {iniciales(
+                            `${cuenta.nombre} ${cuenta.apellidos}`
                           )}
                         </div>
-                        <div className="administrador-nombre">
+
+                        <div className="alimentador-nombre">
                           <strong>
-                            {admin.nombre} {admin.apellidos}
+                            {cuenta.nombre}{" "}
+                            {cuenta.apellidos}
                           </strong>
                         </div>
                       </div>
                     </td>
 
-                    <td>{admin.correo}</td>
-
                     <td>
-                      {obtenerInstitucion(admin.institucionId)}
-                    </td>
-
-                    <td>
-                      <div className="administradores-municipios">
-                        {admin.municipios.length > 0
-                          ? obtenerMunicipios(admin.municipios).map(
-                              (municipio) => (
-                                <span
-                                  className="administradores-municipio"
-                                  key={municipio}
-                                >
-                                  {municipio}
-                                </span>
-                              )
-                            )
-                          : "Sin asignar"}
-                      </div>
-                    </td>
-
-                    <td>
-                      <span
-                        className={`administrador-estado ${
-                          admin.estado === "Activo"
-                            ? "activo"
-                            : "inactivo"
-                        }`}
-                      >
-                        {admin.estado}
+                      <span className="alimentador-correo">
+                        {cuenta.correo}
                       </span>
                     </td>
 
                     <td>
-                      <div className="administrador-acciones">
+                      {cuenta.institucion}
+                    </td>
+
+                    <td>
+                      <span
+                        className={`alimentador-estado ${
+                          cuenta.es_activo
+                            ? "activo"
+                            : "inactivo"
+                        }`}
+                      >
+                        {cuenta.es_activo
+                          ? "Activo"
+                          : "Inactivo"}
+                      </span>
+                    </td>
+
+                    <td>
+                      <div className="alimentador-acciones">
                         <button
                           type="button"
-                          className="administrador-accion-editar"
-                          onClick={() => abrirEditarCuenta(admin)}
+                          className="alimentador-accion-editar"
+                          disabled={guardando}
+                          onClick={() =>
+                            abrirEditar(cuenta)
+                          }
                         >
                           <Pencil size={15} />
                           Editar
@@ -573,34 +657,44 @@ function AdministradoresAdmin() {
 
                         <button
                           type="button"
-                          className={`administrador-accion-estado ${
-                            admin.estado === "Activo"
+                          className={`alimentador-accion-estado ${
+                            cuenta.es_activo
                               ? "desactivar"
                               : "activar"
                           }`}
+                          disabled={
+                            guardando ||
+                            (
+                              Number(cuenta.id_usuario) === 3 &&
+                              cuenta.es_activo
+                            )
+                          }
+                          title={
+                            Number(cuenta.id_usuario) === 3 &&
+                            cuenta.es_activo
+                              ? "La cuenta principal está protegida."
+                              : undefined
+                          }
                           onClick={() =>
-                            cambiarEstadoCuenta(admin.id)
+                            cambiarEstado(cuenta)
                           }
                         >
                           <Power size={15} />
-                          {admin.estado === "Activo"
+
+                          {cuenta.es_activo
                             ? "Desactivar"
-                            : "Activar"}
+                            : "Reactivar"}
                         </button>
                       </div>
                     </td>
                   </tr>
                 ))
-              ) : (
+              )}
+
+              {!cargando && filtradas.length === 0 && (
                 <tr>
-                  <td colSpan={6}>
-                    <div className="administradores-vacio">
-                      <Users size={30} />
-                      <strong>No se encontraron cuentas</strong>
-                      <p>
-                        Modifica la búsqueda o los filtros.
-                      </p>
-                    </div>
+                  <td colSpan={5}>
+                    No se encontraron cuentas.
                   </td>
                 </tr>
               )}
@@ -608,123 +702,86 @@ function AdministradoresAdmin() {
           </table>
         </div>
       </div>
-      {/* Modal de creación y edición */}
-      {modalAbierto && (
-        <div className="administrador-modal-fondo">
+
+      {modal && (
+        <div className="alimentador-modal-fondo">
           <div
-            className="administrador-modal"
+            className="alimentador-modal"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="administrador-modal-titulo"
+            aria-labelledby="titulo-admin-modal"
           >
-            <div className="administrador-modal-header">
+            <div className="alimentador-modal-header">
               <div>
-                <h2 id="administrador-modal-titulo">
-                  {cuentaEditando !== null
+                <h2 id="titulo-admin-modal">
+                  {editando
                     ? "Editar administrador"
-                    : "Nueva cuenta"}
+                    : "Nuevo administrador"}
                 </h2>
+
                 <p>
-                  {cuentaEditando !== null
-                    ? "Modifica la información del administrador."
-                    : "Registra temporalmente un nuevo administrador."}
+                  Datos de la cuenta institucional.
                 </p>
               </div>
 
               <button
                 type="button"
-                className="administrador-modal-cerrar"
-                onClick={cerrarFormulario}
+                className="alimentador-modal-cerrar"
+                onClick={cerrarModal}
+                disabled={guardando}
                 aria-label="Cerrar formulario"
               >
                 <X size={20} />
               </button>
             </div>
 
-            <form onSubmit={guardarCuenta}>
+            <form onSubmit={guardar}>
+              {[
+                ["nombre", "Nombre", "text", 30],
+                ["apellidos", "Apellidos", "text", 100],
+                ["correo", "Correo electrónico", "email", 254],
+                ["telefono", "Teléfono", "tel", 30],
+              ].map(([campo, etiqueta, tipo, maximo]) => (
+                <div
+                  className="alimentador-formulario-campo"
+                  key={campo}
+                >
+                  <label htmlFor={`admin-${campo}`}>
+                    {etiqueta}
+                  </label>
 
-              <div className="administrador-formulario-campo">
-                <label htmlFor="admin-nombre">Nombre</label>
-                <input
-                  id="admin-nombre"
-                  type="text"
-                  minLength={3}
-                  maxLength={30}
-                  value={formulario.nombre}
-                  onChange={(evento) =>
-                    actualizarFormulario(
-                      "nombre",
-                      evento.target.value
-                    )
-                  }
-                  required
-                />
-              </div>
+                  <input
+                    id={`admin-${campo}`}
+                    type={tipo}
+                    maxLength={maximo}
+                    required={campo !== "telefono"}
+                    value={form[campo]}
+                    placeholder={
+                      campo === "telefono"
+                        ? "+525512345678"
+                        : undefined
+                    }
+                    onChange={(evento) =>
+                      actualizarCampo(
+                        campo,
+                        evento.target.value
+                      )
+                    }
+                  />
+                </div>
+              ))}
 
-              <div className="administrador-formulario-campo">
-                <label htmlFor="admin-apellidos">Apellidos</label>
-                <input
-                  id="admin-apellidos"
-                  type="text"
-                  minLength={3}
-                  maxLength={100}
-                  value={formulario.apellidos}
-                  onChange={(evento) =>
-                    actualizarFormulario(
-                      "apellidos",
-                      evento.target.value
-                    )
-                  }
-                  required
-                />
-              </div>
-
-              <div className="administrador-formulario-campo">
-                <label htmlFor="admin-correo">
-                  Correo electrónico
-                </label>
-                <input
-                  id="admin-correo"
-                  type="email"
-                  value={formulario.correo}
-                  onChange={(evento) =>
-                    actualizarFormulario(
-                      "correo",
-                      evento.target.value
-                    )
-                  }
-                  required
-                />
-              </div>
-
-              <div className="administrador-formulario-campo">
-                <label htmlFor="admin-telefono">
-                  Teléfono (opcional)
-                </label>
-                <input
-                  id="admin-telefono"
-                  type="tel"
-                  placeholder="+525512345678"
-                  value={formulario.telefono}
-                  onChange={(evento) =>
-                    actualizarFormulario(
-                      "telefono",
-                      evento.target.value
-                    )
-                  }
-                />
-              </div>
-
-              <div className="administrador-formulario-campo">
+              <div className="alimentador-formulario-campo">
                 <label htmlFor="admin-institucion">
                   Institución
                 </label>
+
                 <select
                   id="admin-institucion"
-                  value={formulario.institucionId}
+                  value={form.institutionId}
                   onChange={(evento) =>
-                    actualizarFormulario(
-                      "institucionId",
+                    actualizarCampo(
+                      "institutionId",
                       evento.target.value
                     )
                   }
@@ -733,70 +790,75 @@ function AdministradoresAdmin() {
                   <option value="">
                     Selecciona una institución
                   </option>
-                  {INSTITUCIONES.map((institucion) => (
+
+                  {instituciones.map((item) => (
                     <option
-                      key={institucion.id}
-                      value={institucion.id}
+                      key={item.id_institucion}
+                      value={item.id_institucion}
                     >
-                      {institucion.nombre}
+                      {item.nombre}
                     </option>
                   ))}
                 </select>
               </div>
 
-              {/* Selección múltiple de municipios */}
-              <div className="administrador-formulario-campo">
-                <label>
-                  Municipios asignados
-                </label>
-                <div className="administrador-municipios-selector">
-                  {MUNICIPIOS.map((municipio) => (
-                    <label
-                      className="administrador-municipio-opcion"
-                      key={municipio.id}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formulario.municipios.includes(
-                          municipio.id
-                        )}
-                        onChange={() =>
-                          cambiarMunicipio(municipio.id)
-                        }
-                      />
-                      <span>
-                        {municipio.nombre}
-                        <small>{municipio.estado}</small>
-                      </span>
-                    </label>
-                  ))}
-                </div>
-                <small className="administrador-ayuda">
-                  Puedes seleccionar varios municipios.
-                </small>
-              </div>
+              {!editando && (
+                <div className="alimentador-formulario-campo">
+                  <label htmlFor="admin-password">
+                    Contraseña inicial
+                  </label>
 
-              {errorFormulario && (
-                <p className="administrador-formulario-error">
-                  {errorFormulario}
+                  <input
+                    id="admin-password"
+                    type="password"
+                    minLength={8}
+                    maxLength={50}
+                    required
+                    autoComplete="new-password"
+                    value={form.password}
+                    onChange={(evento) =>
+                      actualizarCampo(
+                        "password",
+                        evento.target.value
+                      )
+                    }
+                  />
+
+                  <small>
+                    De 8 a 50 caracteres alfanuméricos.
+                  </small>
+                </div>
+              )}
+
+              {error && (
+                <p
+                  className="alimentador-formulario-error"
+                  role="alert"
+                >
+                  {error}
                 </p>
               )}
 
-              <div className="administrador-modal-acciones">
+              <div className="alimentador-modal-acciones">
                 <button
                   type="button"
-                  className="administrador-boton-cancelar"
-                  onClick={cerrarFormulario}
+                  className="alimentador-boton-cancelar"
+                  disabled={guardando}
+                  onClick={cerrarModal}
                 >
                   Cancelar
                 </button>
+
                 <button
                   type="submit"
-                  className="administrador-boton-guardar"
+                  className="alimentador-boton-guardar"
+                  disabled={guardando}
                 >
-                  {cuentaEditando !== null
-                    ? "Guardar cambios"
-                    : "Crear cuenta"}
+                  {guardando
+                    ? "Guardando..."
+                    : editando
+                      ? "Guardar cambios"
+                      : "Crear administrador"}
                 </button>
               </div>
             </form>
@@ -806,5 +868,3 @@ function AdministradoresAdmin() {
     </div>
   );
 }
-
-export default AdministradoresAdmin;

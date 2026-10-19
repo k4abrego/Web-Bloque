@@ -1,25 +1,22 @@
 /**
  * @file gestionCuentas.jsx
- * @description Panel compartido de cuentas institucionales.
+ * @description Gestión de cuentas institucionales de SIPINNA.
  *
- * Funcionalidades:
- * - Consulta instituciones y territorios reales de comms-api.
- * - Muestra cuentas recibidas del backend.
- * - Permite buscar y filtrar registros.
- * - Registra alimentadores mediante auth-backend.
- * - Solicita actualizar la lista tras un registro exitoso.
+ * Funcionalidades para alimentadores:
+ * - Consultar cuentas recuperadas desde MariaDB.
+ * - Buscar y filtrar por estado e institución.
+ * - Crear alimentadores mediante auth-backend.
+ * - Editar datos personales e institución.
+ * - Desactivar y reactivar cuentas institucionales.
+ * - Solicitar una nueva consulta después de guardar.
  *
- * La edición y el cambio de estado institucional están
- * deshabilitados hasta contar con endpoints reales.
+ * Las operaciones se confirman desde el backend.
+ * No se generan IDs ni cuentas ficticias en React.
  *
- * La autorización efectiva corresponde al backend.
+ * La autorización efectiva corresponde a auth-backend.
  */
 
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   Users,
@@ -36,110 +33,93 @@ import { apiFetch } from "../../services/api";
 
 import {
   registrarAlimentador,
+  editarAlimentador,
+  cambiarEstadoAlimentador,
 } from "../../services/cuentasInstitucionalesApi";
 
 import "./alimentadoresAdmin.css";
 
 /**
- * Campos iniciales del formulario.
+ * Estructura inicial del formulario de cuentas.
  *
- * La contraseña únicamente se utiliza durante
- * el registro de una nueva cuenta.
+ * La contraseña se utiliza exclusivamente durante
+ * la creación de un alimentador.
  */
-const NUEVO = {
+const FORMULARIO_VACIO = {
   nombre: "",
   apellidos: "",
   correo: "",
   telefono: "",
-  institucion: "",
-  municipios: [],
+  institucionId: "",
   password: "",
 };
 
 /**
- * Obtiene hasta dos iniciales de un nombre.
+ * Devuelve las iniciales de un nombre.
  *
  * @param {string} nombre - Nombre completo.
  * @returns {string} Iniciales en mayúsculas.
  */
-function iniciales(nombre) {
+function obtenerIniciales(nombre) {
   return String(nombre || "")
     .trim()
     .split(/\s+/)
     .slice(0, 2)
-    .map((parte) =>
-      parte[0]?.toUpperCase() || ""
-    )
+    .map((parte) => parte.charAt(0).toUpperCase())
     .join("");
 }
 
 /**
- * Consulta los catálogos de instituciones y territorios.
+ * Valida un teléfono internacional E.164.
  *
- * @returns {Promise<{
- *   instituciones: Object[],
- *   municipios: Object[]
- * }>} Catálogos obtenidos desde comms-api.
- *
- * @throws {Error} Cuando alguna respuesta es inválida.
+ * @param {string} telefono - Teléfono proporcionado.
+ * @returns {boolean} Indica si el teléfono es válido.
  */
-async function consultarCatalogos() {
-  const [
-    respuestaInstituciones,
-    respuestaTerritorios,
-  ] = await Promise.all([
-    apiFetch("/instituciones"),
-    apiFetch("/territorios"),
-  ]);
+function validarTelefono(telefono) {
+  if (!telefono) return true;
+  return /^\+[1-9]\d{7,14}$/.test(telefono);
+}
 
-  if (!Array.isArray(respuestaInstituciones)) {
+/**
+ * Consulta las instituciones reales de SIPINNA.
+ *
+ * @returns {Promise<Array<Object>>} Lista institucional.
+ * @throws {Error} Cuando la respuesta no es válida.
+ */
+async function consultarInstituciones() {
+  const respuesta = await apiFetch("/instituciones");
+
+  if (!Array.isArray(respuesta)) {
     throw new Error(
-      "La API no devolvió una lista válida de instituciones."
+      "El servidor no devolvió instituciones válidas."
     );
   }
 
-  if (
-    !Array.isArray(respuestaTerritorios?.territorios)
-  ) {
-    throw new Error(
-      "La API no devolvió una lista válida de territorios."
-    );
-  }
-
-  return {
-    instituciones: respuestaInstituciones.filter(
-      (item) =>
-        item?.id_institucion != null &&
-        item?.nombre
-    ),
-
-    municipios: respuestaTerritorios.territorios.filter(
-      (item) =>
-        item?.id_territorio != null &&
-        item?.nombre
-    ),
-  };
+  return respuesta.filter(
+    (item) =>
+      item?.id_institucion != null &&
+      item?.nombre
+  );
 }
 
 /**
  * GestionCuentas
  *
- * Componente compartido para presentar cuentas
- * administrativas o alimentadoras.
+ * Componente reutilizable de administración institucional.
  *
- * El registro real está habilitado únicamente
- * para alimentadores.
+ * Las cuentas llegan desde el componente padre y proceden
+ * de una consulta real al backend.
  *
- * @param {Object} props - Propiedades del componente.
+ * @param {Object} props - Propiedades.
  * @param {"alimentador"|"administrador"} props.tipo
- * Tipo de cuenta que se presenta.
- * @param {Object[]} [props.inicialesCuentas=[]]
- * Registros obtenidos por el componente padre.
+ * Tipo de cuenta.
+ * @param {Array<Object>} [props.inicialesCuentas=[]]
+ * Cuentas obtenidas por el componente padre.
  * @param {Function} [props.onCuentaCreada]
- * Función que solicita actualizar la lista real.
+ * Solicita recargar la lista después de una operación.
  *
  * @returns {import("react").JSX.Element}
- * Panel de cuentas institucionales.
+ * Panel de gestión de cuentas.
  */
 export default function GestionCuentas({
   tipo,
@@ -152,68 +132,50 @@ export default function GestionCuentas({
     ? "alimentadores"
     : "administradores";
 
-  /**
-   * Cuentas reales que recibe el componente.
-   *
-   * No se insertan registros ficticios después de guardar.
-   */
+  // Las cuentas proceden del backend.
   const cuentas = inicialesCuentas;
 
-  const [
-    institucionesCatalogo,
-    setInstitucionesCatalogo,
-  ] = useState([]);
+  // Catálogo real de instituciones.
+  const [instituciones, setInstituciones] = useState([]);
+  const [cargandoCatalogos, setCargandoCatalogos] =
+    useState(true);
+  const [errorCatalogos, setErrorCatalogos] =
+    useState("");
+  const [revisionCatalogos, setRevisionCatalogos] =
+    useState(0);
 
-  const [
-    municipiosCatalogo,
-    setMunicipiosCatalogo,
-  ] = useState([]);
-
-  const [
-    cargandoCatalogos,
-    setCargandoCatalogos,
-  ] = useState(true);
-
-  const [
-    errorCatalogos,
-    setErrorCatalogos,
-  ] = useState("");
-
-  const [
-    intentoCatalogos,
-    setIntentoCatalogos,
-  ] = useState(0);
-
+  // Filtros de la tabla.
   const [busqueda, setBusqueda] = useState("");
   const [estado, setEstado] = useState("Todos");
-  const [municipio, setMunicipio] = useState("Todos");
-  const [institucion, setInstitucion] = useState("Todas");
+  const [institucion, setInstitucion] =
+    useState("Todas");
 
+  // Formulario de creación y edición.
   const [abierto, setAbierto] = useState(false);
+  const [editando, setEditando] = useState(null);
   const [formulario, setFormulario] = useState({
-    ...NUEVO,
-    municipios: [],
+    ...FORMULARIO_VACIO,
   });
 
-  const [error, setError] = useState("");
+  // Estados de las operaciones.
   const [guardando, setGuardando] = useState(false);
+  const [error, setError] = useState("");
   const [aviso, setAviso] = useState("");
 
   /**
-   * Solicita los catálogos reales al montar el componente
-   * o cuando se pulsa Reintentar.
+   * Obtiene el catálogo al montar el componente
+   * o cuando se solicita reintentar.
    *
-   * Ignora resultados si el componente se desmonta.
+   * Ignora respuestas tardías después del desmontaje.
    */
   useEffect(() => {
     let vigente = true;
 
-    consultarCatalogos()
-      .then(({ instituciones, municipios }) => {
+    consultarInstituciones()
+      .then((datos) => {
         if (!vigente) return;
 
-        setInstitucionesCatalogo(instituciones);
-        setMunicipiosCatalogo(municipios);
+        setInstituciones(datos);
         setErrorCatalogos("");
       })
       .catch((err) => {
@@ -221,7 +183,7 @@ export default function GestionCuentas({
 
         setErrorCatalogos(
           err.message ||
-          "No fue posible consultar los catálogos."
+            "No fue posible consultar las instituciones."
         );
       })
       .finally(() => {
@@ -233,53 +195,56 @@ export default function GestionCuentas({
     return () => {
       vigente = false;
     };
-  }, [intentoCatalogos]);
+  }, [revisionCatalogos]);
 
   /**
-   * Combina instituciones registradas en el catálogo
-   * con las que aparecen en las cuentas existentes.
+   * Obtiene las instituciones visibles para filtrar.
    */
-  const nombresInstituciones = useMemo(
-    () =>
-      Array.from(
-        new Set([
-          ...institucionesCatalogo.map(
-            (item) => item.nombre
-          ),
-          ...cuentas
-            .map((cuenta) => cuenta.institucion)
-            .filter(Boolean),
-        ])
-      ).sort((a, b) =>
-        a.localeCompare(b, "es")
-      ),
-    [institucionesCatalogo, cuentas]
-  );
+  const nombresInstituciones = useMemo(() => {
+    return Array.from(
+      new Set(
+        cuentas
+          .map((cuenta) => cuenta.institucion)
+          .filter(Boolean)
+      )
+    ).sort((a, b) => a.localeCompare(b, "es"));
+  }, [cuentas]);
 
   /**
-   * Obtiene los municipios disponibles para los filtros.
+   * Filtra las cuentas sin modificar los registros reales.
    */
-  const nombresMunicipios = useMemo(
-    () =>
-      Array.from(
-        new Set([
-          ...municipiosCatalogo.map(
-            (item) => item.nombre
-          ),
-          ...cuentas.flatMap(
-            (cuenta) => cuenta.municipios || []
-          ),
-        ])
-      ).sort((a, b) =>
-        a.localeCompare(b, "es")
-      ),
-    [municipiosCatalogo, cuentas]
-  );
+  const cuentasFiltradas = useMemo(() => {
+    return cuentas.filter((cuenta) => {
+      const texto = [
+        cuenta.nombre,
+        cuenta.apellidos,
+        cuenta.correo,
+        cuenta.alias,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLocaleLowerCase("es");
 
-  /**
-   * Estadísticas calculadas con los registros
-   * proporcionados por el backend.
-   */
+      const coincideBusqueda = texto.includes(
+        busqueda.trim().toLocaleLowerCase("es")
+      );
+
+      const coincideEstado =
+        estado === "Todos" ||
+        cuenta.estado === estado;
+
+      const coincideInstitucion =
+        institucion === "Todas" ||
+        cuenta.institucion === institucion;
+
+      return (
+        coincideBusqueda &&
+        coincideEstado &&
+        coincideInstitucion
+      );
+    });
+  }, [cuentas, busqueda, estado, institucion]);
+
   const totalCuentas = cuentas.length;
 
   const cuentasActivas = cuentas.filter(
@@ -291,76 +256,60 @@ export default function GestionCuentas({
   ).length;
 
   /**
-   * Aplica los filtros de búsqueda, estado,
-   * institución y municipio.
+   * Solicita al padre recuperar nuevamente las cuentas
+   * desde MariaDB.
+   *
+   * @returns {Promise<void>}
    */
-  const filtradas = useMemo(
-    () =>
-      cuentas.filter((cuenta) => {
-        const texto = [
-          cuenta.nombre,
-          cuenta.apellidos,
-          cuenta.correo,
-          cuenta.alias,
-        ]
-          .filter(Boolean)
-          .join(" ")
-          .toLocaleLowerCase("es");
-
-        const coincideBusqueda = texto.includes(
-          busqueda
-            .trim()
-            .toLocaleLowerCase("es")
-        );
-
-        const coincideEstado =
-          estado === "Todos" ||
-          cuenta.estado === estado;
-
-        const coincideInstitucion =
-          institucion === "Todas" ||
-          (institucion === "Sin asignar"
-            ? !cuenta.institucion
-            : cuenta.institucion === institucion);
-
-        const coincideMunicipio =
-          municipio === "Todos" ||
-          (municipio === "Sin asignar"
-            ? !(cuenta.municipios || []).length
-            : (cuenta.municipios || []).includes(
-                municipio
-              ));
-
-        return (
-          coincideBusqueda &&
-          coincideEstado &&
-          coincideInstitucion &&
-          coincideMunicipio
-        );
-      }),
-    [
-      cuentas,
-      busqueda,
-      estado,
-      institucion,
-      municipio,
-    ]
-  );
+  async function recargarCuentas() {
+    if (typeof onCuentaCreada === "function") {
+      await onCuentaCreada();
+    }
+  }
 
   /**
-   * Abre el formulario para crear una cuenta nueva.
-   *
-   * La edición de cuentas institucionales todavía
-   * no está habilitada.
-   *
-   * @returns {void}
+   * Abre el formulario para registrar una cuenta.
    */
-  function abrir() {
+  function abrirCreacion() {
     if (!esAlimentador) return;
 
+    setEditando(null);
+    setFormulario({ ...FORMULARIO_VACIO });
+
+    setError("");
+    setAviso("");
+    setAbierto(true);
+  }
+
+  /**
+   * Abre el formulario con los datos existentes.
+   *
+   * Utiliza el ID institucional cuando está disponible
+   * y, como respaldo, busca el nombre en el catálogo.
+   *
+   * @param {Object} cuenta - Cuenta seleccionada.
+   */
+  function abrirEdicion(cuenta) {
+    if (!esAlimentador) return;
+
+    const seleccionada = instituciones.find(
+      (item) =>
+        Number(item.id_institucion) ===
+          Number(cuenta.id_institucion) ||
+        item.nombre === cuenta.institucion
+    );
+
+    setEditando(cuenta);
+
     setFormulario({
-      ...NUEVO,
-      municipios: [],
+      nombre: cuenta.nombre || "",
+      apellidos: cuenta.apellidos || "",
+      correo: cuenta.correo || "",
+      telefono: cuenta.telefono || "",
+      institucionId: seleccionada
+        ? String(seleccionada.id_institucion)
+        : "",
+      password: "",
     });
 
     setError("");
@@ -369,14 +318,13 @@ export default function GestionCuentas({
   }
 
   /**
-   * Cierra el formulario y limpia el error.
-   *
-   * @returns {void}
+   * Cierra el formulario si no hay una operación en curso.
    */
   function cerrar() {
     if (guardando) return;
 
     setAbierto(false);
+    setEditando(null);
     setError("");
   }
 
@@ -384,8 +332,7 @@ export default function GestionCuentas({
    * Actualiza un campo del formulario.
    *
    * @param {string} campo - Nombre del campo.
-   * @param {string} valor - Valor nuevo.
-   * @returns {void}
+   * @param {string} valor - Nuevo valor.
    */
   function cambiar(campo, valor) {
     setFormulario((anterior) => ({
@@ -397,91 +344,106 @@ export default function GestionCuentas({
   }
 
   /**
-   * Registra un alimentador en MariaDB.
+   * Valida y guarda la creación o edición.
    *
-   * Valida el formulario, identifica la institución
-   * en el catálogo y llama al servicio de autenticación.
+   * En creación:
+   * POST /register/feeder/:adminId
    *
-   * No modifica la lista localmente. Solicita
-   * una nueva consulta al componente padre.
+   * En edición:
+   * PATCH /admin/alimentadores/:id
+   *
+   * La lista no se modifica manualmente.
    *
    * @param {import("react").FormEvent<HTMLFormElement>} evento
-   * Evento de envío del formulario.
    * @returns {Promise<void>}
    */
   async function guardar(evento) {
     evento.preventDefault();
 
-    if (guardando) return;
-
-    if (!esAlimentador) {
-      setError(
-        "El registro de administradores todavía no está habilitado."
-      );
-      return;
-    }
+    if (guardando || !esAlimentador) return;
 
     const datos = {
       nombre: formulario.nombre.trim(),
       apellidos: formulario.apellidos.trim(),
-      correo: formulario.correo
-        .trim()
-        .toLowerCase(),
+      correo: formulario.correo.trim().toLowerCase(),
       telefono: formulario.telefono.trim(),
       password: formulario.password,
+      institutionId: Number(formulario.institucionId),
     };
 
-    const institucionSeleccionada =
-      institucionesCatalogo.find(
+    if (
+      datos.nombre.length < 3 ||
+      datos.nombre.length > 30
+    ) {
+      setError(
+        "El nombre debe tener entre 3 y 30 caracteres."
+      );
+      return;
+    }
+
+    if (
+      datos.apellidos.length < 3 ||
+      datos.apellidos.length > 100
+    ) {
+      setError(
+        "Los apellidos deben tener entre 3 y 100 caracteres."
+      );
+      return;
+    }
+
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        datos.correo
+      )
+    ) {
+      setError("Introduce un correo válido.");
+      return;
+    }
+
+    if (
+      !Number.isSafeInteger(datos.institutionId) ||
+      datos.institutionId <= 0 ||
+      !instituciones.some(
         (item) =>
-          item.nombre === formulario.institucion
-      );
-
-    if (
-      !datos.nombre ||
-      !datos.apellidos ||
-      !datos.correo ||
-      !institucionSeleccionada
+          Number(item.id_institucion) ===
+          datos.institutionId
+      )
     ) {
       setError(
-        "Completa los datos y selecciona una institución del catálogo real."
+        "Selecciona una institución válida del catálogo."
       );
       return;
     }
 
-    /**
-     * La contraseña debe cumplir con las reglas
-     * actuales de registerJSON en auth-backend.
-     */
-    if (!/^[a-zA-Z0-9]{8,50}$/.test(datos.password)) {
-      setError(
-        "La contraseña inicial debe contener entre 8 y 50 caracteres alfanuméricos, sin símbolos."
-      );
-      return;
-    }
-
-    /**
-     * El teléfono es opcional, pero cuando se proporciona
-     * debe respetar el formato internacional E.164.
-     */
-    if (
-      datos.telefono &&
-      !/^\+[1-9]\d{7,14}$/.test(datos.telefono)
-    ) {
+    if (!validarTelefono(datos.telefono)) {
       setError(
         "El teléfono debe tener formato internacional, por ejemplo +525512345678."
       );
       return;
     }
 
+    // La contraseña únicamente se solicita en creación.
     if (
-      cuentas.some(
-        (cuenta) =>
-          cuenta.correo.toLowerCase() === datos.correo
-      )
+      !editando &&
+      !/^[a-zA-Z0-9]{8,50}$/.test(datos.password)
     ) {
       setError(
-        "Ya existe una cuenta visible con ese correo."
+        "La contraseña inicial debe tener entre 8 y 50 caracteres alfanuméricos."
+      );
+      return;
+    }
+
+    // Evita correos duplicados entre las cuentas visibles.
+    // MariaDB también valida su restricción UNIQUE.
+    const correoDuplicado = cuentas.some(
+      (cuenta) =>
+        cuenta.correo?.toLowerCase() === datos.correo &&
+        cuenta.id !== editando?.id
+    );
+
+    if (correoDuplicado) {
+      setError(
+        "Ya existe una cuenta con ese correo."
       );
       return;
     }
@@ -490,29 +452,85 @@ export default function GestionCuentas({
     setError("");
 
     try {
-      await registrarAlimentador({
-        ...datos,
-        institutionId:
-          institucionSeleccionada.id_institucion,
-      });
+      if (editando) {
+        await editarAlimentador(
+          editando.id,
+          datos
+        );
 
-      /**
-       * El registro ya fue confirmado por auth-backend.
-       * Pedimos al padre consultar nuevamente MariaDB.
-       */
-      setAbierto(false);
+        setAviso(
+          "Alimentador actualizado correctamente en MariaDB."
+        );
+      } else {
+        await registrarAlimentador(datos);
 
-      setAviso(
-        "Cuenta registrada en MariaDB. Actualizando la lista..."
-      );
-
-      if (onCuentaCreada) {
-        await onCuentaCreada();
+        setAviso(
+          "Alimentador registrado correctamente en MariaDB."
+        );
       }
+
+      setAbierto(false);
+      setEditando(null);
+
+      await recargarCuentas();
     } catch (err) {
       setError(
         err.message ||
-        "No fue posible registrar la cuenta."
+          "No fue posible guardar los cambios."
+      );
+    } finally {
+      setGuardando(false);
+    }
+  }
+
+  /**
+   * Desactiva o reactiva una cuenta alimentadora.
+   *
+   * PATCH /admin/alimentadores/:id/estado
+   *
+   * El backend actualiza usuario.es_activo
+   * y revoca la firma JWT.
+   *
+   * @param {Object} cuenta - Cuenta seleccionada.
+   * @returns {Promise<void>}
+   */
+  async function alternarEstado(cuenta) {
+    if (guardando || !esAlimentador) return;
+
+    const nuevoEstado = cuenta.estado !== "Activo";
+
+    const accion = nuevoEstado
+      ? "reactivar"
+      : "desactivar";
+
+    const confirmado = window.confirm(
+      `¿Confirmas ${accion} la cuenta de ` +
+        `${cuenta.nombre} ${cuenta.apellidos}?`
+    );
+
+    if (!confirmado) return;
+
+    setGuardando(true);
+    setError("");
+    setAviso("");
+
+    try {
+      await cambiarEstadoAlimentador(
+        cuenta.id,
+        nuevoEstado
+      );
+
+      setAviso(
+        `Cuenta ${
+          nuevoEstado ? "reactivada" : "desactivada"
+        } correctamente en MariaDB.`
+      );
+
+      await recargarCuentas();
+    } catch (err) {
+      setError(
+        err.message ||
+          "No fue posible cambiar el estado."
       );
     } finally {
       setGuardando(false);
@@ -521,55 +539,59 @@ export default function GestionCuentas({
 
   return (
     <div className="alimentadores-admin">
+      {/* Encabezado */}
       <div className="alimentadores-header">
         <div>
           <h1>Cuentas de {titulo}</h1>
           <p>
-            Administra las cuentas, instituciones y
-            municipios asignados.
+            Administra las cuentas y sus instituciones
+            asignadas.
           </p>
         </div>
 
         <button
           type="button"
           className="alimentadores-boton-nuevo"
-          onClick={abrir}
-          disabled={!esAlimentador}
-          title={
-            !esAlimentador
-              ? "Registro de administradores pendiente"
-              : undefined
-          }
+          onClick={abrirCreacion}
+          disabled={!esAlimentador || guardando}
         >
           <Plus size={18} />
           Nueva cuenta
         </button>
       </div>
 
+      {/* Mensajes de operaciones */}
       {aviso && (
         <p role="status">{aviso}</p>
       )}
 
+      {error && !abierto && (
+        <p
+          role="alert"
+          className="alimentador-formulario-error"
+        >
+          {error}
+        </p>
+      )}
+
       {cargandoCatalogos && (
         <p role="status">
-          Cargando instituciones y municipios...
+          Cargando instituciones...
         </p>
       )}
 
       {errorCatalogos && (
-        <div
-          role="alert"
-          style={{ marginBottom: 16 }}
-        >
-          No se pudieron cargar todos los catálogos:{" "}
-          {errorCatalogos}{" "}
+        <div role="alert">
+          <p>{errorCatalogos}</p>
 
           <button
             type="button"
             onClick={() => {
               setCargandoCatalogos(true);
               setErrorCatalogos("");
-              setIntentoCatalogos((n) => n + 1);
+              setRevisionCatalogos(
+                (valor) => valor + 1
+              );
             }}
           >
             Reintentar
@@ -577,6 +599,7 @@ export default function GestionCuentas({
         </div>
       )}
 
+      {/* Estadísticas */}
       <div className="alimentadores-resumen">
         <div className="alimentadores-resumen-card">
           <div className="alimentadores-resumen-icono total">
@@ -612,6 +635,7 @@ export default function GestionCuentas({
         </div>
       </div>
 
+      {/* Búsqueda y filtros */}
       <div className="alimentadores-herramientas">
         <div className="alimentadores-buscador">
           <Search size={18} />
@@ -620,8 +644,8 @@ export default function GestionCuentas({
             type="text"
             placeholder="Buscar por nombre o correo..."
             value={busqueda}
-            onChange={(e) =>
-              setBusqueda(e.target.value)
+            onChange={(evento) =>
+              setBusqueda(evento.target.value)
             }
           />
         </div>
@@ -629,8 +653,8 @@ export default function GestionCuentas({
         <select
           aria-label="Filtrar por estado"
           value={estado}
-          onChange={(e) =>
-            setEstado(e.target.value)
+          onChange={(evento) =>
+            setEstado(evento.target.value)
           }
         >
           <option value="Todos">
@@ -643,8 +667,8 @@ export default function GestionCuentas({
         <select
           aria-label="Filtrar por institución"
           value={institucion}
-          onChange={(e) =>
-            setInstitucion(e.target.value)
+          onChange={(evento) =>
+            setInstitucion(evento.target.value)
           }
         >
           <option value="Todas">
@@ -652,51 +676,21 @@ export default function GestionCuentas({
           </option>
 
           {nombresInstituciones.map((nombre) => (
-            <option
-              key={nombre}
-              value={nombre}
-            >
+            <option key={nombre} value={nombre}>
               {nombre}
             </option>
           ))}
-
-          <option value="Sin asignar">
-            Sin asignar
-          </option>
-        </select>
-
-        <select
-          aria-label="Filtrar por municipio"
-          value={municipio}
-          onChange={(e) =>
-            setMunicipio(e.target.value)
-          }
-        >
-          <option value="Todos">
-            Todos los municipios
-          </option>
-
-          {nombresMunicipios.map((nombre) => (
-            <option
-              key={nombre}
-              value={nombre}
-            >
-              {nombre}
-            </option>
-          ))}
-
-          <option value="Sin asignar">
-            Sin asignar
-          </option>
         </select>
       </div>
 
+      {/* Listado de cuentas */}
       <div className="alimentadores-lista">
         <div className="alimentadores-lista-header">
           <h2>Personal {titulo}</h2>
 
           <span>
-            {filtradas.length} de {totalCuentas} cuentas
+            {cuentasFiltradas.length} de{" "}
+            {totalCuentas} cuentas
           </span>
         </div>
 
@@ -723,21 +717,21 @@ export default function GestionCuentas({
             </thead>
 
             <tbody>
-              {filtradas.length ? (
-                filtradas.map((cuenta) => (
+              {cuentasFiltradas.length > 0 ? (
+                cuentasFiltradas.map((cuenta) => (
                   <tr key={cuenta.id}>
                     <td>
                       <div className="alimentador-identidad">
                         <div className="alimentador-avatar">
-                          {iniciales(
-                            `${cuenta.nombre} ${cuenta.apellidos || ""}`
+                          {obtenerIniciales(
+                            `${cuenta.nombre} ${cuenta.apellidos}`
                           )}
                         </div>
 
                         <div className="alimentador-nombre">
                           <strong>
                             {cuenta.nombre}{" "}
-                            {cuenta.apellidos || ""}
+                            {cuenta.apellidos}
                           </strong>
                         </div>
                       </div>
@@ -750,19 +744,20 @@ export default function GestionCuentas({
                     </td>
 
                     <td>
-                      {cuenta.institucion || "Sin asignar"}
+                      {cuenta.institucion ||
+                        "Sin asignar"}
                     </td>
 
                     <td>
                       {cuenta.municipios?.length
                         ? cuenta.municipios.join(", ")
-                        : "Sin asignar"}
+                        : "No disponible"}
                     </td>
 
                     {esAlimentador && (
                       <td>
                         <span className="alimentador-reportes">
-                          {cuenta.reportes ?? 0}
+                          {cuenta.reportes ?? "—"}
                         </span>
                       </td>
                     )}
@@ -784,8 +779,12 @@ export default function GestionCuentas({
                         <button
                           type="button"
                           className="alimentador-accion-editar"
-                          disabled
-                          title="La edición institucional aún no está habilitada"
+                          disabled={
+                            guardando || !esAlimentador
+                          }
+                          onClick={() =>
+                            abrirEdicion(cuenta)
+                          }
                         >
                           <Pencil size={15} />
                           Editar
@@ -798,14 +797,18 @@ export default function GestionCuentas({
                               ? "desactivar"
                               : "activar"
                           }`}
-                          disabled
-                          title="El cambio de estado institucional aún no está habilitado"
+                          disabled={
+                            guardando || !esAlimentador
+                          }
+                          onClick={() =>
+                            alternarEstado(cuenta)
+                          }
                         >
                           <Power size={15} />
 
                           {cuenta.estado === "Activo"
                             ? "Desactivar"
-                            : "Activar"}
+                            : "Reactivar"}
                         </button>
                       </div>
                     </td>
@@ -822,7 +825,7 @@ export default function GestionCuentas({
                       </strong>
 
                       <p>
-                        Modifica la búsqueda o los filtros.
+                        Prueba con otros filtros.
                       </p>
                     </div>
                   </td>
@@ -833,11 +836,14 @@ export default function GestionCuentas({
         </div>
       </div>
 
+      {/* Información sobre los datos */}
       <p className="alimentadores-nota">
-        La creación de alimentadores se guarda en
-        la base de datos.
+        Las cuentas y sus estados se consultan desde
+        la base de datos. La institución determina el territorio
+        correspondiente.
       </p>
 
+      {/* Formulario de creación y edición */}
       {abierto && (
         <div className="alimentador-modal-fondo">
           <div
@@ -849,12 +855,15 @@ export default function GestionCuentas({
             <div className="alimentador-modal-header">
               <div>
                 <h2 id="gestion-cuentas-modal-titulo">
-                  Nueva cuenta
+                  {editando
+                    ? "Editar alimentador"
+                    : "Nueva cuenta"}
                 </h2>
 
                 <p>
-                  Registra la información del personal
-                  alimentador.
+                  {editando
+                    ? "Modifica los datos y guarda los cambios."
+                    : "Registra una nueva cuenta alimentadora."}
                 </p>
               </div>
 
@@ -871,98 +880,115 @@ export default function GestionCuentas({
 
             <form onSubmit={guardar}>
               <div className="alimentador-formulario-campo">
-                <label htmlFor="gestion-nombre">
+                <label htmlFor="cuenta-nombre">
                   Nombre
                 </label>
 
                 <input
-                  id="gestion-nombre"
+                  id="cuenta-nombre"
                   type="text"
                   minLength={3}
                   maxLength={30}
-                  value={formulario.nombre}
-                  onChange={(e) =>
-                    cambiar("nombre", e.target.value)
-                  }
                   required
+                  value={formulario.nombre}
+                  onChange={(evento) =>
+                    cambiar(
+                      "nombre",
+                      evento.target.value
+                    )
+                  }
                 />
               </div>
 
               <div className="alimentador-formulario-campo">
-                <label htmlFor="gestion-apellidos">
+                <label htmlFor="cuenta-apellidos">
                   Apellidos
                 </label>
 
                 <input
-                  id="gestion-apellidos"
+                  id="cuenta-apellidos"
                   type="text"
                   minLength={3}
                   maxLength={100}
-                  value={formulario.apellidos}
-                  onChange={(e) =>
-                    cambiar("apellidos", e.target.value)
-                  }
                   required
+                  value={formulario.apellidos}
+                  onChange={(evento) =>
+                    cambiar(
+                      "apellidos",
+                      evento.target.value
+                    )
+                  }
                 />
               </div>
 
               <div className="alimentador-formulario-campo">
-                <label htmlFor="gestion-correo">
+                <label htmlFor="cuenta-correo">
                   Correo electrónico
                 </label>
 
                 <input
-                  id="gestion-correo"
+                  id="cuenta-correo"
                   type="email"
-                  value={formulario.correo}
-                  onChange={(e) =>
-                    cambiar("correo", e.target.value)
-                  }
                   required
+                  value={formulario.correo}
+                  onChange={(evento) =>
+                    cambiar(
+                      "correo",
+                      evento.target.value
+                    )
+                  }
                 />
               </div>
 
               <div className="alimentador-formulario-campo">
-                <label htmlFor="gestion-telefono">
-                  Teléfono (opcional)
+                <label htmlFor="cuenta-telefono">
+                  Teléfono
                 </label>
 
                 <input
-                  id="gestion-telefono"
+                  id="cuenta-telefono"
                   type="tel"
                   placeholder="+525512345678"
                   value={formulario.telefono}
-                  onChange={(e) =>
-                    cambiar("telefono", e.target.value)
+                  onChange={(evento) =>
+                    cambiar(
+                      "telefono",
+                      evento.target.value
+                    )
                   }
                 />
               </div>
 
               <div className="alimentador-formulario-campo">
-                <label htmlFor="gestion-institucion">
+                <label htmlFor="cuenta-institucion">
                   Institución
                 </label>
 
                 <select
-                  id="gestion-institucion"
-                  value={formulario.institucion}
-                  onChange={(e) =>
-                    cambiar("institucion", e.target.value)
-                  }
+                  id="cuenta-institucion"
+                  required
+                  value={formulario.institucionId}
                   disabled={
                     cargandoCatalogos ||
-                    !!errorCatalogos
+                    Boolean(errorCatalogos)
                   }
-                  required
+                  onChange={(evento) =>
+                    cambiar(
+                      "institucionId",
+                      evento.target.value
+                    )
+                  }
                 >
                   <option value="">
                     Selecciona una institución
                   </option>
 
-                  {institucionesCatalogo.map((item) => (
+                  {instituciones.map((item) => (
                     <option
                       key={item.id_institucion}
-                      value={item.nombre}
+                      value={String(
+                        item.id_institucion
+                      )}
                     >
                       {item.nombre}
                     </option>
@@ -970,34 +996,38 @@ export default function GestionCuentas({
                 </select>
               </div>
 
-              <div className="alimentador-formulario-campo">
-                <label htmlFor="gestion-password">
-                  Contraseña inicial
-                </label>
+              {/* Contraseña solo para cuentas nuevas */}
+              {!editando && (
+                <div className="alimentador-formulario-campo">
+                  <label htmlFor="cuenta-password">
+                    Contraseña inicial
+                  </label>
 
-                <input
-                  id="gestion-password"
-                  type="password"
-                  minLength={8}
-                  maxLength={50}
-                  autoComplete="new-password"
-                  required
-                  value={formulario.password}
-                  onChange={(e) =>
-                    cambiar("password", e.target.value)
-                  }
-                />
+                  <input
+                    id="cuenta-password"
+                    type="password"
+                    minLength={8}
+                    maxLength={50}
+                    autoComplete="new-password"
+                    required
+                    value={formulario.password}
+                    onChange={(evento) =>
+                      cambiar(
+                        "password",
+                        evento.target.value
+                      )
+                    }
+                  />
 
-                <small>
-                  Entre 8 y 50 letras o números.
-                  Compártela con la persona de forma segura.
-                </small>
-              </div>
+                  <small>
+                    Entre 8 y 50 letras o números.
+                  </small>
+                </div>
+              )}
 
               <small>
-                El municipio se determina por la
-                institución registrada; no se asignan
-                municipios adicionales desde este formulario.
+                El municipio depende de la institución
+                seleccionada.
               </small>
 
               {error && (
@@ -1025,12 +1055,14 @@ export default function GestionCuentas({
                   disabled={
                     guardando ||
                     cargandoCatalogos ||
-                    !!errorCatalogos
+                    Boolean(errorCatalogos)
                   }
                 >
                   {guardando
-                    ? "Guardando en MariaDB..."
-                    : "Crear cuenta"}
+                    ? "Guardando..."
+                    : editando
+                      ? "Guardar cambios"
+                      : "Crear cuenta"}
                 </button>
               </div>
             </form>

@@ -101,3 +101,57 @@ export async function registrarAlimentador(datos) {
 
   return respuesta;
 }
+
+
+/**
+ * Edita los datos personales y la institución de un alimentador.
+ *
+ * Envía una petición real a auth-backend, que actualiza
+ * las tablas usuario y administrador mediante una transacción.
+ *
+ * @param {number} id - ID del alimentador que se editará.
+ * @param {Object} datos - Información actualizada.
+ * @param {string} datos.nombre - Nombre.
+ * @param {string} datos.apellidos - Apellidos.
+ * @param {string} datos.correo - Correo electrónico.
+ * @param {string} [datos.telefono] - Teléfono en formato E.164.
+ * @param {number} datos.institutionId - ID de la institución.
+ * @returns {Promise<Object>} Respuesta de auth-backend.
+ * @throws {Error} Si la actualización falla.
+ */
+export async function editarAlimentador(id, datos) {
+  return authApiFetch(`/admin/alimentadores/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      nombre: datos.nombre.trim(),
+      apellidos: datos.apellidos.trim(),
+      correo: datos.correo.trim().toLowerCase(),
+      telefono: datos.telefono?.trim() || null,
+      institution_id: Number(datos.institutionId),
+    }),
+  });
+}
+
+/**
+ * Activa o desactiva una cuenta alimentadora.
+ *
+ * El backend actualiza usuario.es_activo e invalida
+ * las claves JWT asociadas a la cuenta.
+ *
+ * @param {number} id - ID del alimentador.
+ * @param {boolean} esActivo - true para activar,
+ * false para desactivar.
+ * @returns {Promise<Object>} Confirmación del backend.
+ * @throws {Error} Si no se puede actualizar el estado.
+ */
+export async function cambiarEstadoAlimentador(id, esActivo) {
+  return authApiFetch(
+    `/admin/alimentadores/${id}/estado`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({
+        es_activo: esActivo,
+      }),
+    }
+  );
+}

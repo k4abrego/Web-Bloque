@@ -11,6 +11,7 @@ import { apiFetch } from "../../services/api";
 import { obtenerHistoricoReportes } from "../../services/reportesApi";
 import { obtenerTerritorios } from "../../services/territoriosApi";
 import GoogleMap from "../mapa/googleMap";
+import { coincideEtiquetas, opcionesEtiqueta } from "../../services/etiquetasReportes";
 
 import "./mapaCalorAdmin.css";
 
@@ -25,6 +26,7 @@ export default function MapaCalorAdmin() {
 
   const [estatus, setEstatus] = useState("");
   const [municipio, setMunicipio] = useState("");
+  const [filtrosEtiquetas, setFiltrosEtiquetas] = useState({ Observación: "", Categoria: "", Riesgo: "", Prioridad: "" });
   const [mostrarCalor, setMostrarCalor] = useState(true);
 
   const [cargando, setCargando] = useState(true);
@@ -106,6 +108,8 @@ export default function MapaCalorAdmin() {
           estatus: p.estatus ?? detalle?.estado ?? "",
           id_territorio:
             p.id_territorio ?? detalle?.id_territorio ?? null,
+          etiquetas: detalle?.etiquetas ?? [],
+          peligro_inmediato: detalle?.peligro_inmediato ?? "",
         };
       }),
     [puntos, reportesPorFolio]
@@ -145,14 +149,15 @@ export default function MapaCalorAdmin() {
           !municipio ||
           String(p.id_territorio) === municipio;
 
-        return coincideEstado && coincideMunicipio;
+        return coincideEstado && coincideMunicipio && coincideEtiquetas(p, filtrosEtiquetas);
       }),
-    [puntosCompletos, estatus, municipio]
+    [puntosCompletos, estatus, municipio, filtrosEtiquetas]
   );
 
   function limpiarFiltros() {
     setEstatus("");
     setMunicipio("");
+    setFiltrosEtiquetas({ Observación: "", Categoria: "", Riesgo: "", Prioridad: "" });
   }
 
   function actualizar() {
@@ -216,6 +221,21 @@ export default function MapaCalorAdmin() {
               ))}
             </select>
           </div>
+          {Object.keys(filtrosEtiquetas).map((tipo) => (
+            <div className="mapa-calor-filtro" key={tipo}>
+              <label htmlFor={`mapa-admin-${tipo}`}>{tipo === "Categoria" ? "Categoría" : tipo}</label>
+              <select
+                id={`mapa-admin-${tipo}`}
+                value={filtrosEtiquetas[tipo]}
+                onChange={(e) => setFiltrosEtiquetas((prev) => ({ ...prev, [tipo]: e.target.value }))}
+              >
+                <option value="">Todos</option>
+                {opcionesEtiqueta(historico, tipo).map((valor) => (
+                  <option key={valor} value={valor}>{valor}</option>
+                ))}
+              </select>
+            </div>
+          ))}
         </div>
 
         {errorFiltros && (

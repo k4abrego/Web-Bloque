@@ -733,3 +733,404 @@
   color: #6735c4;
   font-size: 11px;
 }
+
+
+/* ============================================================
+   Ajustes de compatibilidad: Filtros y etiquetas reales
+   Conserva los estilos originales de SIPINNA.
+   ============================================================ */
+
+.filtros-admin {
+  width: 100%;
+  min-width: 0;
+  padding-bottom: 32px;
+}
+
+/* Encabezado de la pantalla */
+
+.filtros-admin .filtros-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.filtros-admin .filtros-header > div {
+  flex: 1;
+  min-width: 240px;
+}
+
+.filtros-admin button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.filtros-admin button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.filtros-admin .boton-buscar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 9px;
+  background: #6735c4;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.filtros-admin .boton-buscar:hover:not(:disabled) {
+  background: #5428a9;
+}
+
+/* Búsqueda avanzada */
+
+.filtros-admin .busqueda-avanzada-card {
+  margin-bottom: 24px;
+}
+
+.filtros-admin .condiciones-lista {
+  gap: 12px;
+}
+
+.filtros-admin .condicion-fila {
+  display: grid;
+  grid-template-columns:
+    minmax(85px, 100px)
+    minmax(180px, 240px)
+    minmax(180px, 1fr);
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.filtros-admin .condicion-fila > .condicion-campo {
+  grid-column: 2;
+}
+
+.filtros-admin .condicion-fila > .condicion-valor {
+  grid-column: 3;
+}
+
+.filtros-admin .condicion-conector {
+  grid-column: 1;
+  width: 100%;
+}
+
+.filtros-admin select.condicion-conector,
+.filtros-admin .condicion-campo,
+.filtros-admin select.condicion-valor,
+.filtros-admin input.condicion-valor {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0 13px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #374151;
+  font-size: 13px;
+}
+
+.filtros-admin select.condicion-conector,
+.filtros-admin .condicion-campo,
+.filtros-admin select.condicion-valor {
+  padding-right: 36px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.filtros-admin .condicion-conector {
+  color: #6735c4;
+  font-weight: 600;
+}
+
+.filtros-admin .condicion-campo:focus,
+.filtros-admin .condicion-valor:focus,
+.filtros-admin select.condicion-conector:focus {
+  outline: 2px solid #bfa6ee;
+  outline-offset: 1px;
+  border-color: #6735c4;
+}
+
+/* Primera condición: no necesita AND/OR */
+
+.filtros-admin .condicion-fila > .condicion-campo:first-child {
+  grid-column: 2;
+}
+
+/* Botones de búsqueda y condiciones */
+
+.filtros-admin .condiciones-acciones,
+.filtros-admin .busqueda-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.filtros-admin .condiciones-acciones button,
+.filtros-admin .busqueda-acciones button:not(.boton-buscar) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 9px 14px;
+  border: 1px solid #e5d9f5;
+  border-radius: 9px;
+  background: #faf8fe;
+  color: #6735c4;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.filtros-admin .condiciones-acciones button:hover:not(:disabled),
+.filtros-admin .busqueda-acciones button:not(.boton-buscar):hover:not(:disabled) {
+  background: #eee8f7;
+}
+
+.filtros-admin .busqueda-acciones {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f1f3;
+}
+
+/* Resultados de búsqueda */
+
+.filtros-admin .filtros-resultados {
+  margin-top: 24px;
+  padding: 0;
+}
+
+.filtros-admin .filtros-resultados-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 18px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.filtros-admin .filtros-resultados-header h2 {
+  margin: 0;
+}
+
+.filtros-admin .filtros-resultados-header span {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.filtros-admin .resultado-reporte {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 18px 20px;
+}
+
+.filtros-admin .resultado-principal {
+  display: flex;
+  align-items: flex-start;
+  flex: 1 1 420px;
+  min-width: 0;
+  gap: 14px;
+}
+
+.filtros-admin .resultado-datos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+  gap: 5px;
+  color: #374151;
+}
+
+.filtros-admin .resultado-datos a {
+  color: #6735c4;
+  text-decoration: none;
+}
+
+.filtros-admin .resultado-datos a:hover {
+  text-decoration: underline;
+}
+
+.filtros-admin .resultado-datos p {
+  margin: 0;
+  line-height: 1.5;
+  color: #374151;
+}
+
+.filtros-admin .resultado-datos > span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.filtros-admin .resultado-estado {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 6px 10px;
+  background: #f3f4f6;
+  border-radius: 20px;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.filtros-admin .resultado-etiquetas {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  flex: 0 1 390px;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.filtros-admin .resultado-etiquetas span {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: #eee8f7;
+  color: #6735c4;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Etiquetas disponibles */
+
+.filtros-admin .etiquetas-card {
+  margin-top: 24px;
+}
+
+.filtros-admin .etiquetas-disponibles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 16px;
+}
+
+.filtros-admin .etiquetas-card > p {
+  margin: 12px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Diseño responsivo */
+
+@media (max-width: 900px) {
+  .filtros-admin .condicion-fila {
+    grid-template-columns: 85px minmax(0, 1fr);
+  }
+
+  .filtros-admin .condicion-fila > .condicion-campo {
+    grid-column: 2;
+  }
+
+  .filtros-admin .condicion-fila > .condicion-valor {
+    grid-column: 2;
+  }
+
+  .filtros-admin .condicion-fila > .condicion-campo:first-child {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .filtros-admin .filtros-header {
+    align-items: stretch;
+  }
+
+  .filtros-admin .busqueda-avanzada-card,
+  .filtros-admin .etiquetas-card {
+    padding: 16px;
+  }
+
+  .filtros-admin .condicion-fila {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .filtros-admin .resultado-reporte {
+    flex-direction: column;
+  }
+
+  .filtros-admin .resultado-principal {
+    flex-basis: auto;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .filtros-admin .resultado-etiquetas {
+    justify-content: flex-start;
+    flex-basis: auto;
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+
+
+/* Formulario de creación y selección de etiquetas. */
+.filtros-admin .crear-etiqueta select {
+  min-width: 170px;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: white;
+  color: #374151;
+  font: inherit;
+}
+
+.filtros-admin .crear-etiqueta input {
+  min-width: 0;
+}
+
+.filtros-admin .resultado-checkbox {
+  margin-right: 8px;
+}
+
+.filtros-admin .aplicar-etiqueta {
+  flex-wrap: wrap;
+}
+
+.filtros-admin .aplicar-etiqueta-acciones {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 750px) {
+  .filtros-admin .crear-etiqueta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filtros-admin .crear-etiqueta select,
+  .filtros-admin .crear-etiqueta input,
+  .filtros-admin .crear-etiqueta button {
+    width: 100%;
+  }
+}

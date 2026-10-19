@@ -278,15 +278,6 @@ function Login() {
                             </div>
                         </div>
 
-                        {/* Recuperación de contraseña */}
-                        <div className="forgot-password">
-
-                            <button type="button">
-                                ¿Olvidaste tu contraseña?
-                            </button>
-
-                        </div>
-
                         {/* Mensaje de error */}
                         {error && (
                             <p

@@ -464,7 +464,7 @@ export default function UsuariosAppAdmin() {
                 ["nombre", "Nombre"],
                 ["apellidos", "Apellidos"],
                 ["correo", "Correo electrónico"],
-                ["telefono", "Teléfono (opcional)"],
+                ["telefono", "Teléfono"],
               ].map(([campo, titulo]) => (
                 <div
                   className="alimentador-formulario-campo"

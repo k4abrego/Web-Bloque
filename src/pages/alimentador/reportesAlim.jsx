@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 
 import { obtenerHistoricoReportes } from "../../services/reportesApi";
+import { coincideEtiquetas, opcionesEtiqueta } from "../../services/etiquetasReportes";
 import { obtenerTerritorios } from "../../services/territoriosApi";
 
 import "./reportesAlim.css";
@@ -92,6 +93,7 @@ export default function ReportesAlim() {
   const [estadoActivo, setEstadoActivo] = useState("Todos");
   const [estadoFiltro, setEstadoFiltro] = useState("");
   const [territorioFiltro, setTerritorioFiltro] = useState("");
+  const [filtrosEtiquetas, setFiltrosEtiquetas] = useState({ Observación: "", Categoria: "", Riesgo: "", Prioridad: "" });
   const [busqueda, setBusqueda] = useState("");
 
   /**
@@ -287,7 +289,8 @@ export default function ReportesAlim() {
         coincideBusqueda &&
         coincideEstado &&
         coincideTerritorio &&
-        coincidePestana
+        coincidePestana &&
+        coincideEtiquetas(reporte, filtrosEtiquetas)
       );
     });
   }, [
@@ -296,6 +299,7 @@ export default function ReportesAlim() {
     estadoFiltro,
     territorioFiltro,
     estadoActivo,
+    filtrosEtiquetas,
     nombresTerritorios,
   ]);
 
@@ -307,6 +311,7 @@ export default function ReportesAlim() {
     setTerritorioFiltro("");
     setBusqueda("");
     setEstadoActivo("Todos");
+    setFiltrosEtiquetas({ Observación: "", Categoria: "", Riesgo: "", Prioridad: "" });
   }
 
   return (
@@ -458,23 +463,21 @@ export default function ReportesAlim() {
               </select>
             </div>
 
-            {/* Categorías pendientes de consulta en comms-api */}
-            <div className="reportes-filter-field">
-              <label htmlFor="categoria-filtro-alim">
-                Categoría
-              </label>
-
-              <select
-                id="categoria-filtro-alim"
-                value=""
-                disabled
-                title="Pendiente de integración con la consulta de etiquetas"
-              >
-                <option value="">
-                  Categorías pendientes de integrar
-                </option>
-              </select>
-            </div>
+            {Object.keys(filtrosEtiquetas).map((tipo) => (
+              <div className="reportes-filter-field" key={tipo}>
+                <label htmlFor={`filtro-alim-${tipo}`}>{tipo === "Categoria" ? "Categoría" : tipo}</label>
+                <select
+                  id={`filtro-alim-${tipo}`}
+                  value={filtrosEtiquetas[tipo]}
+                  onChange={(e) => setFiltrosEtiquetas((prev) => ({ ...prev, [tipo]: e.target.value }))}
+                >
+                  <option value="">Todos</option>
+                  {opcionesEtiqueta(reportes, tipo).map((valor) => (
+                    <option key={valor} value={valor}>{valor}</option>
+                  ))}
+                </select>
+              </div>
+            ))}
           </div>
 
           <div className="reportes-filter-footer">
@@ -649,4 +652,3 @@ export default function ReportesAlim() {
     </div>
   );
 }
-

@@ -58,13 +58,18 @@ function adaptarAlimentador(alimentador) {
      * Hasta tener un endpoint de listado con estado,
      * no podemos representar cuentas desactivadas.
      */
-    estado: "Activo",
+    estado: alimentador.es_activo
+      ? "Activo"
+      : "Inactivo",
+
+    // Estado real de la institución asociada.
+    institucionActiva: alimentador.institucion_activa,
 
     /**
      * El número de reportes asignados todavía no
      * forma parte de la respuesta de este endpoint.
      */
-    reportes: 0,
+    reportes: null,
   };
 }
 

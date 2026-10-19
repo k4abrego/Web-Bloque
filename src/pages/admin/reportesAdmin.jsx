@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Search, ChevronLeft, ChevronRight, RefreshCw, RotateCcw } from "lucide-react";
 import { obtenerHistoricoReportes } from "../../services/reportesApi";
+import { coincideEtiquetas, opcionesEtiqueta } from "../../services/etiquetasReportes";
 import { obtenerTerritorios } from "../../services/territoriosApi";
 import "./reportesAdmin.css";
 
@@ -33,6 +34,7 @@ export default function ReportesAdmin() {
   const [busqueda, setBusqueda] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("Todos");
   const [filtroTerritorio, setFiltroTerritorio] = useState("");
+  const [filtrosEtiquetas, setFiltrosEtiquetas] = useState({ Observación: "", Categoria: "", Riesgo: "", Prioridad: "" });
   const [paginaActual, setPaginaActual] = useState(1);
 
   useEffect(() => {
@@ -88,6 +90,7 @@ export default function ReportesAdmin() {
     setBusqueda("");
     setFiltroEstado("Todos");
     setFiltroTerritorio("");
+    setFiltrosEtiquetas({ Observación: "", Categoria: "", Riesgo: "", Prioridad: "" });
     setPaginaActual(1);
   }
 
@@ -118,16 +121,17 @@ export default function ReportesAdmin() {
       ].filter((valor) => valor != null).join(" ").toLocaleLowerCase("es");
       return contenido.includes(texto) &&
         (filtroEstado === "Todos" || reporte.estado === filtroEstado) &&
-        (!filtroTerritorio || String(reporte.id_territorio) === filtroTerritorio);
+        (!filtroTerritorio || String(reporte.id_territorio) === filtroTerritorio) &&
+        coincideEtiquetas(reporte, filtrosEtiquetas);
     });
-  }, [reportes, busqueda, filtroEstado, filtroTerritorio, nombresTerritorios]);
+  }, [reportes, busqueda, filtroEstado, filtroTerritorio, filtrosEtiquetas, nombresTerritorios]);
 
   const totalPaginas = Math.ceil(reportesFiltrados.length / REPORTES_POR_PAGINA);
   const paginaVisible = Math.min(paginaActual, Math.max(1, totalPaginas));
   const indiceInicial = (paginaVisible - 1) * REPORTES_POR_PAGINA;
   const indiceFinal = indiceInicial + REPORTES_POR_PAGINA;
   const reportesPaginados = reportesFiltrados.slice(indiceInicial, indiceFinal);
-  const hayFiltros = busqueda.trim() !== "" || filtroEstado !== "Todos" || filtroTerritorio !== "";
+  const hayFiltros = busqueda.trim() !== "" || filtroEstado !== "Todos" || filtroTerritorio !== "" || Object.values(filtrosEtiquetas).some(Boolean);
 
   function cambiarPagina(pagina) {
     if (pagina >= 1 && pagina <= totalPaginas) setPaginaActual(pagina);
@@ -185,6 +189,22 @@ export default function ReportesAdmin() {
             <option key={String(id)} value={String(id)}>{nombreTerritorio(id)}</option>
           ))}
         </select>
+        {Object.keys(filtrosEtiquetas).map((tipo) => (
+          <select
+            key={tipo}
+            aria-label={`Filtrar por ${tipo}`}
+            value={filtrosEtiquetas[tipo]}
+            onChange={(e) => {
+              setFiltrosEtiquetas((prev) => ({ ...prev, [tipo]: e.target.value }));
+              setPaginaActual(1);
+            }}
+          >
+            <option value="">{tipo === "Categoria" ? "Todas las categorías" : `Todos: ${tipo}`}</option>
+            {opcionesEtiqueta(reportes, tipo).map((valor) => (
+              <option key={valor} value={valor}>{valor}</option>
+            ))}
+          </select>
+        ))}
         <button
           type="button"
           className="reportes-admin-boton"

@@ -185,3 +185,36 @@ export async function obtenerEvidenciasReporte(folio) {
     `/reportes/${encodeURIComponent(folio)}/evidencias`
   );
 }
+
+
+
+/**
+ * Descarga el archivo real de una evidencia autorizada.
+ *
+ * Utiliza el cliente HTTP de comms-api para enviar
+ * automáticamente el token JWT de la sesión.
+ *
+ * El backend verifica que:
+ * - El usuario tenga acceso al expediente.
+ * - La evidencia pertenezca al folio solicitado.
+ * - El archivo esté disponible en el servidor.
+ *
+ * @param {string} folio - Folio del expediente.
+ * @param {number|string} idEvidencia - Identificador de la evidencia.
+ * @returns {Promise<Blob>} Archivo binario de imagen o video.
+ * @throws {Error} Si ocurre un error de autenticación,
+ * autorización, disponibilidad o conexión.
+ */
+export async function descargarArchivoEvidencia(folio, idEvidencia) {
+  if (!folio || !idEvidencia) {
+    throw new Error("Folio e ID de evidencia requeridos.");
+  }
+
+  return apiFetch(
+    `/reportes/${encodeURIComponent(folio)}/evidencias/${encodeURIComponent(idEvidencia)}/archivo`,
+    {
+      method: "GET",
+      responseType: "blob",
+    }
+  );
+}

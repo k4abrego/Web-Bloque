@@ -34,9 +34,14 @@ const COMMS_API_URL = import.meta.env.VITE_COMMS_API_URL;
 function createApiFetch(baseURL) {
     return async function apiFetch(endpoint, options = {}) {
         /**
-         * Token JWT almacenado localmente después de iniciar sesión.
-         *
-         * @type {string|null}
+         * Indica si la respuesta debe recibirse como archivo binario.
+         * Se elimina de las opciones enviadas a fetch.
+         */
+        const { responseType = "json", ...fetchOptions } = options;
+
+        /**
+         * Token JWT de la sesión actual.
+         * Se incluye automáticamente en las peticiones autenticadas.
          */
         const token = localStorage.getItem("token");
 
@@ -61,7 +66,7 @@ function createApiFetch(baseURL) {
 
         try {
             response = await fetch(`${baseURL}${endpoint}`, {
-                ...options,
+                ...fetchOptions,
                 headers,
             });
         } catch {
@@ -111,10 +116,13 @@ function createApiFetch(baseURL) {
         }
 
         /**
-         * Devuelve la respuesta convertida a JSON.
-         *
-         * @returns {Promise<object|Array>}
+         * Permite descargar imágenes y videos sin intentar
+         * interpretar su contenido como JSON.
          */
+        if (responseType === "blob") {
+            return response.blob();
+        }
+
         return response.json();
     };
 }

@@ -40,8 +40,21 @@ import DashboardLayout from "./layouts/dashboardLayout";
 
 // Componentes de protección y conexión.
 import ProtectedRoute from "./components/ProtectedRoute";
-import PrincipalRoute from "./components/principalRoute";
 import ConnectionBanner from "./components/ConnectionBanner";
+
+
+/**
+ * Vista de administración de usuarios registrados
+ * desde la aplicación móvil.
+ */
+import UsuariosAppAdmin from "./pages/admin/usuariosAppAdmin";
+
+/**
+ * Protección de rutas exclusivas para
+ * el administrador principal.
+ */
+import PrincipalRoute from "./components/principalRoute";
+
 
 /**
  * App
@@ -105,27 +118,25 @@ function App() {
                 path="alimentadores"
                 element={<AlimentadoresAdmin />}
               />
-
-              {/*
-               * Gestión temporal de administradores.
-               *
-               * Se incorporará la restricción de
-               * administrador principal cuando el
-               * backend implemente ese permiso.
-               */}
-              
-              {/*
-              * Rutas exclusivas del administrador principal.
-              *
-              * PrincipalRoute verifica los permisos visuales
-              * antes de permitir el acceso a estas páginas.
-              */}
               <Route element={<PrincipalRoute />}>
                 <Route
                   path="administradores"
                   element={<AdministradoresAdmin />}
                 />
               </Route>
+
+              <Route element={<PrincipalRoute />}>
+
+              <Route
+                path="administradores"
+                element={<AdministradoresAdmin />}
+              />
+
+              <Route
+                path="usuarios-app"
+                element={<UsuariosAppAdmin />}
+              />
+            </Route>
 
 
               <Route

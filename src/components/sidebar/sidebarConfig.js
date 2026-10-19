@@ -78,6 +78,12 @@ const sidebarConfig = {
       icon: Users,
     },
 
+    {
+      label: "Usuarios de la aplicación",
+      path: "/admin/usuarios-app",
+      icon: Users,
+    },
+
     /**
      * Opción de gestión de administradores.
      *

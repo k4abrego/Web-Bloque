@@ -42,13 +42,19 @@ function Sidebar({ role, isOpen, onToggle }) {
    * oculta la gestión de administradores cuando
    * el usuario no tiene el permiso correspondiente.
    */
-  const menuItems = (sidebarConfig[role] || []).filter((item) => {
-    if (item.path === "/admin/administradores") {
-      return permisos.puedeGestionarAdministradores;
-    }
+  const menuItems = (sidebarConfig[role] || []).filter(
+    (item) => {
+      const rutaExclusiva =
+        item.path === "/admin/administradores" ||
+        item.path === "/admin/usuarios-app";
 
-    return true;
-  });
+      if (rutaExclusiva) {
+        return permisos.puedeGestionarAdministradores;
+      }
+
+      return true;
+    }
+  );
 
   return (
     <aside

@@ -1,47 +1,45 @@
 /**
  * @file googleMap.jsx
- * @description Componente reutilizable de Google Maps para SIPINNA.
+ * @description Mapa reutilizable de reportes SIPINNA.
  *
  * Funcionalidades:
- * - Visualiza reportes con coordenadas obtenidas de comms-api.
- * - Muestra marcadores individuales clicables.
- * - Permite abrir el detalle de un expediente mediante onSelect.
- * - Ofrece una capa opcional de concentración geográfica.
- * - Actualiza los puntos al aplicar filtros sin recrear el mapa.
- * - Ajusta la vista según las ubicaciones disponibles.
- * - Muestra una leyenda para interpretar el mapa.
- *
- * La autorización de los reportes corresponde al backend.
+ * - Marcadores con navegación al expediente.
+ * - Mapa de calor opcional.
+ * - Actualización automática de los reportes visibles.
+ * - Validación de coordenadas.
+ * - Centro de respaldo cuando no existen puntos válidos.
+ * - Limpieza de marcadores y capas.
  */
 
 import { useEffect, useRef, useState } from "react";
-import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
+import {
+  setOptions,
+  importLibrary,
+} from "@googlemaps/js-api-loader";
+
 import { GoogleMapsOverlay } from "@deck.gl/google-maps";
 import { HeatmapLayer } from "@deck.gl/aggregation-layers";
 
 /**
- * Coordenadas iniciales utilizadas cuando no hay reportes.
- *
- * @type {{lat: number, lng: number}}
+ * Centro predeterminado en el Estado de México.
  */
-
 const CENTRO = {
   lat: 19.557,
   lng: -99.271,
 };
 
-
 /**
- * Evita configurar repetidamente el cargador de Google Maps.
- *
- * @param {string} apiKey - Clave pública restringida de Google Maps.
+ * Configura el cargador únicamente una vez por módulo.
  */
 let googleMapsConfigurado = false;
 
+/**
+ * Inicializa la configuración de Google Maps.
+ *
+ * @param {string} apiKey
+ */
 function configurarGoogleMaps(apiKey) {
-  if (googleMapsConfigurado) {
-    return;
-  }
+  if (googleMapsConfigurado) return;
 
   setOptions({
     key: apiKey,
@@ -51,33 +49,58 @@ function configurarGoogleMaps(apiKey) {
   googleMapsConfigurado = true;
 }
 
-
 /**
- * @typedef {Object} ReporteMapa
- * @property {string} folio - Identificador del expediente.
- * @property {number|string} latitud - Latitud del reporte.
- * @property {number|string} longitud - Longitud del reporte.
- * @property {string} [estatus] - Estado actual del expediente.
- */
-
-/**
- * @typedef {Object} GoogleMapProps
- * @property {{lat: number, lng: number}} [center]
- * Centro inicial del mapa.
- * @property {number} [zoom]
- * Nivel de acercamiento inicial.
- * @property {ReporteMapa[]} [reportes]
- * Reportes autorizados que deben visualizarse.
- * @property {(folio: string) => void} [onSelect]
- * Función que se ejecuta cuando se selecciona un marcador.
- * @property {boolean} [mostrarCalor]
- * Indica si debe visualizarse la capa de concentración.
- */
-
-/**
- * Renderiza un mapa interactivo de reportes de SIPINNA.
+ * Convierte una coordenada a número.
  *
- * @param {GoogleMapProps} props
+ * @param {unknown} valor
+ * @returns {number}
+ */
+function convertirCoordenada(valor) {
+  if (
+    valor === null ||
+    valor === undefined ||
+    valor === ""
+  ) {
+    return NaN;
+  }
+
+  return Number(valor);
+}
+
+/**
+ * Comprueba si un reporte tiene coordenadas utilizables.
+ *
+ * Se descarta (0, 0), que suele utilizarse como
+ * ubicación predeterminada cuando no hay geolocalización.
+ *
+ * @param {object} reporte
+ * @returns {boolean}
+ */
+function tieneCoordenadasValidas(reporte) {
+  const lat = convertirCoordenada(reporte.latitud);
+  const lng = convertirCoordenada(reporte.longitud);
+
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+    return false;
+  }
+
+  if (lat < -90 || lat > 90) return false;
+  if (lng < -180 || lng > 180) return false;
+
+  if (lat === 0 && lng === 0) return false;
+
+  return true;
+}
+
+/**
+ * Componente reutilizable GoogleMap.
+ *
+ * @param {object} props
+ * @param {{lat:number,lng:number}} [props.center]
+ * @param {number} [props.zoom]
+ * @param {Array<object>} [props.reportes]
+ * @param {(folio:string)=>void} [props.onSelect]
+ * @param {boolean} [props.mostrarCalor]
  * @returns {import("react").JSX.Element}
  */
 function GoogleMap({
@@ -87,55 +110,38 @@ function GoogleMap({
   onSelect,
   mostrarCalor = false,
 }) {
-  /** Referencia al contenedor HTML del mapa. */
   const contenedorRef = useRef(null);
 
-  /** Instancia de Google Maps. */
   const mapaRef = useRef(null);
-
-  /** Marcadores creados para los reportes visibles. */
   const marcadoresRef = useRef([]);
-
-  /** Capa de concentración de deck.gl. */
   const overlayRef = useRef(null);
 
-  /** Referencia al callback de navegación más reciente. */
-  const onSelectRef = useRef(onSelect);
-
-  /** Constructor de marcadores cargado desde Google Maps. */
   const markerClassRef = useRef(null);
-
-  /** Constructor de límites geográficos. */
   const boundsClassRef = useRef(null);
 
-  /** Estado de inicialización del mapa. */
-  const [mapaListo, setMapaListo] = useState(false);
+  const onSelectRef = useRef(onSelect);
 
-  /** Error relacionado con la carga de Google Maps. */
+  const [mapaListo, setMapaListo] = useState(false);
   const [error, setError] = useState("");
 
   /**
-   * Mantiene actualizado el callback de selección sin
-   * reconstruir el mapa cada vez que cambia el componente padre.
+   * Mantiene actualizada la función que abre reportes.
    */
   useEffect(() => {
     onSelectRef.current = onSelect;
   }, [onSelect]);
 
   /**
-   * Inicializa Google Maps una sola vez durante el montaje.
-   *
-   * Las clases necesarias se obtienen con importLibrary:
-   * - Map: mapa base.
-   * - Marker: marcadores individuales.
-   * - LatLngBounds: límites para encuadrar varios puntos.
+   * Inicializa Google Maps.
    */
   useEffect(() => {
     let vigente = true;
+    let mapaCreado = null;
 
     async function iniciarMapa() {
       try {
-        const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+        const apiKey =
+          import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
         if (!apiKey) {
           throw new Error(
@@ -153,15 +159,24 @@ function GoogleMap({
           return;
         }
 
-        // Guardar los constructores para utilizarlos en
-        // los efectos que actualizan los reportes.
         markerClassRef.current = Marker;
         boundsClassRef.current = LatLngBounds;
 
-        // Crear la instancia principal del mapa.
+        const centroInicial =
+          Number.isFinite(Number(center?.lat)) &&
+          Number.isFinite(Number(center?.lng)) &&
+          !(Number(center.lat) === 0 &&
+            Number(center.lng) === 0)
+            ? {
+                lat: Number(center.lat),
+                lng: Number(center.lng),
+              }
+            : CENTRO;
+
         const mapa = new Map(contenedorRef.current, {
-          center,
+          center: centroInicial,
           zoom,
+          mapTypeId: "roadmap",
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: true,
@@ -170,12 +185,16 @@ function GoogleMap({
           zoomControl: true,
         });
 
+        mapaCreado = mapa;
         mapaRef.current = mapa;
+
+        setError("");
         setMapaListo(true);
       } catch (err) {
         if (vigente) {
           setError(
-            err?.message || "No fue posible cargar Google Maps."
+            err?.message ||
+              "No fue posible cargar Google Maps."
           );
         }
       }
@@ -183,9 +202,6 @@ function GoogleMap({
 
     iniciarMapa();
 
-    /**
-     * Limpia los recursos al desmontar el componente.
-     */
     return () => {
       vigente = false;
 
@@ -200,20 +216,21 @@ function GoogleMap({
         overlayRef.current = null;
       }
 
-      mapaRef.current = null;
+      if (mapaRef.current === mapaCreado) {
+        mapaRef.current = null;
+      }
+
       markerClassRef.current = null;
       boundsClassRef.current = null;
     };
 
-    // La posición inicial se fija durante el montaje.
+    // El mapa se inicializa una vez al montar el componente.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
-   * Actualiza los marcadores y la capa de concentración
-   * cuando cambian los reportes visibles o los filtros.
-   *
-   * No se vuelve a crear la instancia principal del mapa.
+   * Actualiza marcadores, concentración y encuadre
+   * cuando cambian los reportes visibles.
    */
   useEffect(() => {
     if (
@@ -229,91 +246,79 @@ function GoogleMap({
     const Marker = markerClassRef.current;
     const LatLngBounds = boundsClassRef.current;
 
-    /**
-     * Elimina los marcadores anteriores para evitar
-     * duplicados al actualizar los filtros.
-     */
+    // Eliminar marcadores anteriores.
     marcadoresRef.current.forEach((marcador) => {
       marcador.setMap(null);
     });
 
     marcadoresRef.current = [];
 
-    /**
-     * Elimina la capa de calor anterior.
-     */
+    // Eliminar capa de calor anterior.
     if (overlayRef.current) {
       overlayRef.current.setMap(null);
       overlayRef.current = null;
     }
 
     /**
-     * Conserva únicamente reportes con coordenadas válidas.
-     *
-     * @type {ReporteMapa[]}
+     * No modificar los datos originales.
+     * Filtrar únicamente coordenadas utilizables.
      */
-    const reportesValidos = reportes.filter((reporte) => {
-      if (
-        reporte.latitud === null ||
-        reporte.latitud === undefined ||
-        reporte.latitud === "" ||
-        reporte.longitud === null ||
-        reporte.longitud === undefined ||
-        reporte.longitud === ""
-      ) {
-        return false;
-      }
+    const reportesValidos = reportes.filter(
+      tieneCoordenadasValidas
+    );
 
-      const latitud = Number(reporte.latitud);
-      const longitud = Number(reporte.longitud);
+    const reportesDescartados =
+      reportes.length - reportesValidos.length;
 
-      return (
-        Number.isFinite(latitud) &&
-        Number.isFinite(longitud) &&
-        latitud >= -90 &&
-        latitud <= 90 &&
-        longitud >= -180 &&
-        longitud <= 180
+    if (reportesDescartados > 0) {
+      console.warn(
+        `[SIPINNA Maps] ${reportesDescartados} reporte(s) ` +
+          "sin coordenadas utilizables. " +
+          "No se mostrarán como marcadores."
       );
-    });
+    }
 
     /**
-     * Crea un marcador individual para cada reporte.
+     * Si no tenemos ubicaciones, mostrar el centro
+     * del Estado de México en lugar del océano.
      */
-    const nuevosMarcadores = reportesValidos.map((reporte) => {
-      const marcador = new Marker({
-        map: mapa,
-        position: {
-          lat: Number(reporte.latitud),
-          lng: Number(reporte.longitud),
-        },
-        title: reporte.folio
-          ? `Abrir reporte ${reporte.folio}`
-          : "Reporte geolocalizado",
-        clickable: Boolean(reporte.folio),
-      });
+    if (reportesValidos.length === 0) {
+      mapa.setCenter(CENTRO);
+      mapa.setZoom(zoom);
+      return;
+    }
 
-      /**
-       * Abre el expediente correspondiente cuando
-       * el usuario selecciona el marcador.
-       */
-      if (reporte.folio) {
-        marcador.addListener("click", () => {
-          onSelectRef.current?.(reporte.folio);
+    /**
+     * Crear los marcadores.
+     */
+    const nuevosMarcadores = reportesValidos.map(
+      (reporte) => {
+        const lat = Number(reporte.latitud);
+        const lng = Number(reporte.longitud);
+
+        const marcador = new Marker({
+          map: mapa,
+          position: { lat, lng },
+          title: reporte.folio
+            ? `Abrir reporte ${reporte.folio}`
+            : "Reporte geolocalizado",
+          clickable: Boolean(reporte.folio),
         });
-      }
 
-      return marcador;
-    });
+        if (reporte.folio) {
+          marcador.addListener("click", () => {
+            onSelectRef.current?.(reporte.folio);
+          });
+        }
+
+        return marcador;
+      }
+    );
 
     marcadoresRef.current = nuevosMarcadores;
 
     /**
-     * Genera la concentración geográfica únicamente
-     * cuando el usuario activa esta visualización.
-     *
-     * La intensidad representa cantidad de reportes,
-     * NO gravedad, prioridad ni nivel de riesgo.
+     * Mostrar concentración cuando está habilitada.
      */
     if (mostrarCalor && reportesValidos.length > 0) {
       const capaCalor = new HeatmapLayer({
@@ -347,8 +352,7 @@ function GoogleMap({
     }
 
     /**
-     * Ajusta el encuadre dependiendo de la cantidad
-     * de reportes que cumplen los filtros.
+     * Ajustar automáticamente el mapa a los puntos.
      */
     if (reportesValidos.length === 1) {
       const reporte = reportesValidos[0];
@@ -359,7 +363,7 @@ function GoogleMap({
       });
 
       mapa.setZoom(14);
-    } else if (reportesValidos.length > 1) {
+    } else {
       const limites = new LatLngBounds();
 
       reportesValidos.forEach((reporte) => {
@@ -373,7 +377,7 @@ function GoogleMap({
     }
 
     /**
-     * Limpieza del efecto al cambiar los reportes.
+     * Limpiar recursos cuando cambien los reportes.
      */
     return () => {
       nuevosMarcadores.forEach((marcador) => {
@@ -385,11 +389,8 @@ function GoogleMap({
         overlayRef.current = null;
       }
     };
-  }, [reportes, mapaListo, mostrarCalor]);
+  }, [reportes, mapaListo, mostrarCalor, zoom]);
 
-  /**
-   * Renderiza el mapa y su leyenda.
-   */
   return (
     <div
       className="sipinna-google-map"
@@ -420,7 +421,8 @@ function GoogleMap({
             background: "white",
             borderRadius: 8,
             color: "#b42318",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+            boxShadow:
+              "0 2px 8px rgba(0,0,0,0.12)",
           }}
         >
           {error}

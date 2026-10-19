@@ -19,14 +19,50 @@ import { obtenerTerritorios } from "../../services/territoriosApi";
 
 import "./inicioAlim.css";
 
-const PROCESO = new Set([
-  "En revisión",
-  "Asignado",
-  "En investigación",
-  "Canalizado a Procuraduría",
-]);
+  /**
+   * Estados oficiales considerados casos en proceso.
+   */
+  const PROCESO = new Set([
+    "En revisión",
+    "En seguimiento",
+    "Canalizado",
+    "Reincidente",
+  ]);
 
-const FINALIZADOS = new Set(["Cerrado", "Descartado"]);
+  /**
+   * Estados oficiales considerados casos finalizados.
+   */
+  const FINALIZADOS = new Set([
+    "Concluido",
+    "Archivado",
+    "Cancelado",
+  ]);
+
+
+  /**
+   * Paleta institucional para identificar estados.
+   */
+  const COLORES_ESTADO = {
+    Registrado: "#64748b",
+    "En revisión": "#2563eb",
+    "En seguimiento": "#7e22ce",
+    Canalizado: "#ea580c",
+    Concluido: "#16a34a",
+    Archivado: "#475569",
+    Cancelado: "#dc2626",
+    Reincidente: "#be185d",
+  };
+
+  /**
+   * Devuelve el color correspondiente a un estado.
+   *
+   * @param {string} estado
+   * @returns {string}
+   */
+  function colorEstado(estado) {
+    return COLORES_ESTADO[estado] || "#6735c4";
+  }
+
 
 function texto(valor) {
   return valor == null || String(valor).trim() === ""
@@ -89,9 +125,10 @@ function Barras({ datos, cargando }) {
             aria-label={`${nombre}: ${cantidad} reportes`}
           >
             <div
-              style={{
-                width: `${(cantidad / maximo) * 100}%`,
-              }}
+                style={{
+                  width: `${(cantidad / maximo) * 100}%`,
+                  backgroundColor: colorEstado(nombre),
+                }}
             />
           </div>
 
@@ -332,17 +369,24 @@ export default function InicioAlim() {
     [reportes]
   );
 
-  const recientes = useMemo(
-    () =>
-      [...reportes]
-        .sort(
-          (a, b) =>
-            (Date.parse(b.fecha_envio) || 0) -
-            (Date.parse(a.fecha_envio) || 0)
-        )
-        .slice(0, 5),
-    [reportes]
-  );
+
+/**
+ * Obtiene los cinco expedientes asignados más recientemente.
+ *
+ * Ordena por fecha_asignacion de forma descendente.
+ * Los reportes sin fecha de asignación quedan al final.
+ */
+const recientes = useMemo(
+  () =>
+    [...reportes]
+      .sort((a, b) => 
+        (Date.parse(a.fecha_envio) || 0) -
+        (Date.parse(b.fecha_envio) || 0)
+      )
+      .slice(0, 5),
+  [reportes]
+);
+
 
   function nombreTerritorio(id) {
     if (id == null) {

@@ -1,19 +1,17 @@
-
 /**
- * alimentadoresAdmin.jsx
+ * @file alimentadoresAdmin.jsx
+ * @description Pantalla de administración de alimentadores.
  *
- * Pantalla de gestión de alimentadores.
+ * Recupera las cuentas institucionales reales mediante
+ * la API de comunicación de SIPINNA.
  *
- * Consulta los alimentadores registrados en MariaDB
- * mediante la API de comunicación de SIPINNA.
+ * Convierte los registros del backend al formato
+ * requerido por el componente GestionCuentas.
  *
- * Adapta la respuesta para utilizar el componente
- * reutilizable GestionCuentas.
+ * Cuando se registra una nueva cuenta, vuelve a consultar
+ * MariaDB para obtener los datos actualizados.
  *
- * IMPORTANTE:
- * La consulta de cuentas es real.
- * Las operaciones de creación, edición y desactivación
- * siguen siendo temporales dentro de GestionCuentas.
+ * No crea registros locales ficticios.
  */
 
 import { useEffect, useState } from "react";
@@ -25,10 +23,10 @@ import {
 } from "../../services/alimentadoresApi";
 
 /**
- * Convierte un registro del backend al formato
- * utilizado por el componente GestionCuentas.
+ * Adapta un registro institucional del backend
+ * al formato que utiliza GestionCuentas.
  *
- * @param {Object} alimentador - Registro devuelto por la API.
+ * @param {Object} alimentador - Registro de la API.
  * @returns {Object} Cuenta adaptada para la interfaz.
  */
 function adaptarAlimentador(alimentador) {
@@ -42,18 +40,30 @@ function adaptarAlimentador(alimentador) {
 
     institucion: alimentador.institucion || "",
 
-    // La API todavía no devuelve municipios por usuario.
-    // No se asigna automáticamente el de la institución.
+    /**
+     * Actualmente el endpoint no proporciona una
+     * asignación independiente de municipios.
+     *
+     * La institución se relaciona con su territorio
+     * en MariaDB.
+     */
     municipios: [],
 
     alias: `Alimentador ${String(
       alimentador.id_usuario
     ).padStart(2, "0")}`,
 
-    // Actualmente el endpoint devuelve cuentas activas.
+    /**
+     * El endpoint actual devuelve alimentadores activos.
+     * Hasta tener un endpoint de listado con estado,
+     * no podemos representar cuentas desactivadas.
+     */
     estado: "Activo",
 
-    // Los reportes asignados todavía no se consultan.
+    /**
+     * El número de reportes asignados todavía no
+     * forma parte de la respuesta de este endpoint.
+     */
     reportes: 0,
   };
 }
@@ -61,32 +71,41 @@ function adaptarAlimentador(alimentador) {
 /**
  * AlimentadoresAdmin
  *
- * Obtiene los alimentadores reales desde el backend
- * y los proporciona al componente GestionCuentas.
+ * Consulta los alimentadores desde la API y administra
+ * la recarga después de un registro exitoso.
  *
- * @returns {JSX.Element} Pantalla de alimentadores.
+ * @returns {import("react").JSX.Element}
+ * Pantalla de gestión de alimentadores.
  */
 export default function AlimentadoresAdmin() {
   /**
-   * Registros recuperados desde la API.
+   * Cuentas reales recuperadas del backend.
    */
   const [cuentas, setCuentas] = useState([]);
 
   /**
-   * Indica si la consulta continúa ejecutándose.
+   * Contador utilizado para solicitar una nueva consulta
+   * después de registrar una cuenta.
+   */
+  const [revision, setRevision] = useState(0);
+
+  /**
+   * Indica si se está ejecutando la consulta inicial
+   * o una actualización posterior.
    */
   const [cargando, setCargando] = useState(true);
 
   /**
-   * Mensaje de error de la consulta.
+   * Error de comunicación o respuesta inválida.
    */
   const [error, setError] = useState("");
 
   /**
-   * Consulta los alimentadores cuando se monta la página.
+   * Consulta los alimentadores al montar la pantalla
+   * y cada vez que cambia el contador de revisión.
    *
-   * Evita actualizar el estado si el componente
-   * se desmonta antes de terminar la petición.
+   * Evita actualizar React después de desmontar
+   * el componente.
    */
   useEffect(() => {
     let activo = true;
@@ -120,7 +139,7 @@ export default function AlimentadoresAdmin() {
         if (activo) {
           setError(
             err.message ||
-              "No fue posible obtener los alimentadores."
+            "No fue posible obtener los alimentadores."
           );
         }
       } finally {
@@ -135,10 +154,22 @@ export default function AlimentadoresAdmin() {
     return () => {
       activo = false;
     };
-  }, []);
+  }, [revision]);
 
   /**
-   * Muestra un indicador durante la consulta inicial.
+   * Solicita volver a consultar las cuentas.
+   *
+   * GestionCuentas llama esta función únicamente
+   * cuando el backend confirma un nuevo registro.
+   *
+   * @returns {void}
+   */
+  function actualizarCuentas() {
+    setRevision((valor) => valor + 1);
+  }
+
+  /**
+   * Presenta el estado de carga.
    */
   if (cargando) {
     return (
@@ -150,32 +181,44 @@ export default function AlimentadoresAdmin() {
   }
 
   /**
-   * Muestra el error sin sustituirlo por registros ficticios.
+   * Presenta errores reales de consulta.
+   * Nunca reemplaza una respuesta fallida
+   * por datos simulados.
    */
   if (error) {
     return (
       <div className="alimentadores-admin">
         <h1>Cuentas de alimentadores</h1>
+
         <p role="alert">{error}</p>
+
         <p>
-          Comprueba que la API de comunicación esté
-          funcionando en el puerto 8085.
+          Comprueba que la API de comunicación
+          esté funcionando y sea accesible.
         </p>
+
+        <button
+          type="button"
+          onClick={actualizarCuentas}
+        >
+          Reintentar
+        </button>
       </div>
     );
   }
 
   /**
-   * Presenta las cuentas reales usando la interfaz existente.
+   * Muestra las cuentas reales en GestionCuentas.
    *
-   * La propiedad key hace que GestionCuentas inicialice
-   * su estado local cuando cambie el resultado de la consulta.
+   * La propiedad key permite reinicializar el estado
+   * del componente cuando se recupera la lista.
    */
   return (
     <GestionCuentas
-      key="alimentadores-reales"
+      key={`alimentadores-reales-${revision}`}
       tipo="alimentador"
       inicialesCuentas={cuentas}
+      onCuentaCreada={actualizarCuentas}
     />
   );
 }

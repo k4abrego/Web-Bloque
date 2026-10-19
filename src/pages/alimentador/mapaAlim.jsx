@@ -20,6 +20,7 @@ export default function MapaAlim() {
 
   const [estatus, setEstatus] = useState("");
   const [municipio, setMunicipio] = useState("");
+  const [mostrarCalor, setMostrarCalor] = useState(false);
 
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
@@ -230,9 +231,21 @@ export default function MapaAlim() {
           </p>
         )}
 
+        <div className="sipinna-mapa-herramientas">
+          <label>
+            <input
+              type="checkbox"
+              checked={mostrarCalor}
+              onChange={(e) => setMostrarCalor(e.target.checked)}
+            />
+            Mostrar concentración
+          </label>
+        </div>
+
         <div className="mapa-alim-map">
           <GoogleMap
             center={CENTRO}
+            mostrarCalor={mostrarCalor}
             zoom={13}
             reportes={visibles}
             onSelect={(folio) =>

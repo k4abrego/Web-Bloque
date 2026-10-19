@@ -608,12 +608,6 @@ function AdministradoresAdmin() {
           </table>
         </div>
       </div>
-
-      <p className="administradores-nota">
-        Los cambios son temporales y no modifican cuentas
-        ni permisos reales.
-      </p>
-
       {/* Modal de creación y edición */}
       {modalAbierto && (
         <div className="administrador-modal-fondo">

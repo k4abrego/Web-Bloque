@@ -34,7 +34,7 @@ import {
   Search,
 } from "lucide-react";
 
-import { apiFetch } from "./api";
+import { apiFetch } from "../../services/api";
 
 import {
   obtenerAdministradores,

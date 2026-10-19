@@ -16,7 +16,7 @@
 
 import { useEffect, useState } from "react";
 import { ExternalLink, MapPin } from "lucide-react";
-import { apiFetch } from "./api";
+import { apiFetch } from "../../services/api";
 
 /**
  * Convierte un valor recibido del backend en un número válido.

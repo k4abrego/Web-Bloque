@@ -24,10 +24,33 @@ import { HeatmapLayer } from "@deck.gl/aggregation-layers";
  *
  * @type {{lat: number, lng: number}}
  */
+
 const CENTRO = {
   lat: 19.557,
   lng: -99.271,
 };
+
+
+/**
+ * Evita configurar repetidamente el cargador de Google Maps.
+ *
+ * @param {string} apiKey - Clave pública restringida de Google Maps.
+ */
+let googleMapsConfigurado = false;
+
+function configurarGoogleMaps(apiKey) {
+  if (googleMapsConfigurado) {
+    return;
+  }
+
+  setOptions({
+    key: apiKey,
+    v: "weekly",
+  });
+
+  googleMapsConfigurado = true;
+}
+
 
 /**
  * @typedef {Object} ReporteMapa
@@ -120,10 +143,7 @@ function GoogleMap({
           );
         }
 
-        setOptions({
-          key: apiKey,
-          v: "weekly",
-        });
+        configurarGoogleMaps(apiKey);
 
         const { Map } = await importLibrary("maps");
         const { Marker } = await importLibrary("marker");

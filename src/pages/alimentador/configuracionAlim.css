@@ -247,3 +247,102 @@
     }
 
 }
+
+
+/* Mensajes de carga y error en configuración. */
+.config-alim-mensaje,
+.config-alim-error {
+  margin: 20px 26px;
+  font-size: 14px;
+}
+
+.config-alim-error {
+  color: #b42318;
+}
+
+/* Contenedor del resumen de actividad. */
+.config-alim-actividad-contenido {
+  padding: 24px;
+}
+
+/* Tarjetas de estadísticas reales. */
+.config-alim-estadisticas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.config-alim-estadistica {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.config-alim-estadistica svg {
+  color: #6735c4;
+}
+
+.config-alim-estadistica span {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.config-alim-estadistica strong {
+  font-size: 28px;
+  color: #4b2373;
+}
+
+/* Listado de expedientes asignados. */
+.config-alim-reportes-recientes {
+  margin-top: 28px;
+}
+
+.config-alim-reportes-recientes h3 {
+  margin: 0 0 16px;
+  color: #111827;
+  font-size: 17px;
+}
+
+.config-alim-lista-reportes {
+  display: flex;
+  flex-direction: column;
+}
+
+.config-alim-reporte {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.config-alim-reporte span {
+  color: #6735c4;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.config-alim-reporte strong {
+  color: #374151;
+  font-weight: 500;
+  text-align: right;
+}
+
+@media (max-width: 800px) {
+  .config-alim-estadisticas {
+    grid-template-columns: 1fr;
+  }
+
+  .config-alim-reporte {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+}

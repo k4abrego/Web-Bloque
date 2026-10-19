@@ -17,7 +17,7 @@ const AUTH_API_URL = import.meta.env.VITE_AUTH_LOGIN_URL;
  * @throws {Error} Si el backend rechaza la solicitud.
  */
 export async function solicitarChallenge(correo) {
-  const url = `${AUTH_API_URL}/login/${encodeURIComponent(correo)}`;
+  const url = `${AUTH_API_URL}/Login/${encodeURIComponent(correo)}`;
 
   console.log("URL REAL DEL LOGIN:", url);
 
@@ -46,7 +46,7 @@ export async function solicitarChallenge(correo) {
 
 
 export async function verificarChallenge(userId, respuestaHMAC) {
-  const response = await fetch(`${AUTH_API_URL}/auth`, {
+  const response = await fetch(`${AUTH_API_URL}/Login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

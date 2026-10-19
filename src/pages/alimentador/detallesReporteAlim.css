@@ -380,3 +380,54 @@
     width: 100%;
   }
 }
+
+
+/* Estados oficiales de SIPINNA: detalle del administrador. */
+
+/* Reporte recibido y registrado en el sistema. */
+.detalle-estado-badge[data-estado="Registrado"] {
+  background: #eef2f7;
+  color: #475569;
+}
+
+/* Reporte en proceso de revisión. */
+.detalle-estado-badge[data-estado="En revisión"] {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+/* Reporte con seguimiento activo. */
+.detalle-estado-badge[data-estado="En seguimiento"] {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+/* Reporte canalizado a la instancia correspondiente. */
+.detalle-estado-badge[data-estado="Canalizado"] {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+/* Reporte concluido. */
+.detalle-estado-badge[data-estado="Concluido"] {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* Reporte archivado. */
+.detalle-estado-badge[data-estado="Archivado"] {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+/* Reporte cancelado. */
+.detalle-estado-badge[data-estado="Cancelado"] {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Reporte identificado como reincidente. */
+.detalle-estado-badge[data-estado="Reincidente"] {
+  background: #fce7f3;
+  color: #9d174d;
+}

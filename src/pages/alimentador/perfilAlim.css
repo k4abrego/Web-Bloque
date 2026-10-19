@@ -173,3 +173,22 @@
         align-items: flex-start;
     }
 }
+
+
+/* Muestra los datos del perfil dentro de los campos existentes. */
+.perfil-input-empty.perfil-valor {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  color: #374151;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  height: auto;
+  min-height: 44px;
+}
+
+/* Diferencia los botones que todavía no están habilitados. */
+.perfil-security-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

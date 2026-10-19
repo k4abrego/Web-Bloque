@@ -393,7 +393,8 @@ function DetalleReporteAlim() {
               <h2>{reporte.folio || folio}</h2>
             </div>
 
-            <span className="detalle-alim-estado">
+            <span className="detalle-alim-estado"
+              data-estado={estadoActual} >
               {estadoActual || "Sin estado"}
             </span>
           </div>

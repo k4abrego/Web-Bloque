@@ -425,14 +425,51 @@
 }
 .reportes-admin .reportes-lista-tabla { min-width: 1000px; }
 .reportes-admin .lista-reporte-folio:focus-visible { outline: 2px solid #6735c4; outline-offset: 3px; }
+
 /* Estados que realmente devuelve comms-api. */
-.reportes-admin .lista-estado-badge[data-estado="Nuevo"] { background: #f3f4f6; color: #4b5563; }
-.reportes-admin .lista-estado-badge[data-estado="En revisión"] { background: #eff6ff; color: #1d4ed8; }
-.reportes-admin .lista-estado-badge[data-estado="Asignado"] { background: #f5f3ff; color: #6d28d9; }
-.reportes-admin .lista-estado-badge[data-estado="En investigación"] { background: #fff7ed; color: #c2410c; }
-.reportes-admin .lista-estado-badge[data-estado="Canalizado a Procuraduría"] { background: #fdf2f8; color: #9d174d; }
-.reportes-admin .lista-estado-badge[data-estado="Cerrado"] { background: #ecfdf5; color: #047857; }
-.reportes-admin .lista-estado-badge[data-estado="Descartado"] { background: #f3f4f6; color: #6b7280; }
+
+/* Estados oficiales de los expedientes SIPINNA. */
+
+.reportes-admin .lista-estado-badge[data-estado="Registrado"] {
+  background: #eef2f7;
+  color: #475569;
+}
+
+.reportes-admin .lista-estado-badge[data-estado="En revisión"] {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.reportes-admin .lista-estado-badge[data-estado="En seguimiento"] {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.reportes-admin .lista-estado-badge[data-estado="Canalizado"] {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.reportes-admin .lista-estado-badge[data-estado="Concluido"] {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.reportes-admin .lista-estado-badge[data-estado="Archivado"] {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.reportes-admin .lista-estado-badge[data-estado="Cancelado"] {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.reportes-admin .lista-estado-badge[data-estado="Reincidente"] {
+  background: #fce7f3;
+  color: #9d174d;
+}
+
 @media (max-width: 720px) {
   .reportes-admin .reportes-admin-header { align-items: flex-start; flex-direction: column; gap: 12px; }
   .reportes-admin .reportes-filtros { flex-direction: column; }

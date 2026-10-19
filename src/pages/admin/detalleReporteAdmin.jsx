@@ -1324,52 +1324,25 @@ return (
 
 {/* Estado real */}
 
-          <span
-
-            className="detalle-estado-badge"
-
-            data-estado={estadoReporte}
-
-          >
-
-{estadoReporte}
-
+          <span className="detalle-estado-badge"
+          data-estado={estadoReporte} >
+            {estadoReporte}
           </span>
-
-
 
 {/* Prioridad real */}
-
-          <span
-
-            className="detalle-prioridad-badge"
-
-            data-prioridad={prioridad || "Sin asignar"}
-
-          >
-
+          <span className="detalle-prioridad-badge"
+            data-prioridad={prioridad || "Sin asignar"} >
             Prioridad:{" "}
-
 {cargandoPrioridad
-
               ? "Consultando..."
-
               : errorPrioridad
-
                 ? "No disponible"
-
                 : prioridad || "Sin asignar"}
-
           </span>
-
         </div>
-
       </div>
 
-
-
-{/* Información general */}
-
+{/* Información general */} 
       <div className="detalle-card">
 
         <div className="detalle-card-header">

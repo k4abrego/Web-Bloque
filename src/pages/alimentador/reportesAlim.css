@@ -667,3 +667,46 @@
   background: #f3f4f6;
   color: #6b7280;
 }
+
+
+/* Estados oficiales de SIPINNA: lista del alimentador. */
+
+.reportes-status.status-registrado {
+  background: #eef2f7;
+  color: #475569;
+}
+
+.reportes-status.status-en-revision {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.reportes-status.status-en-seguimiento {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.reportes-status.status-canalizado {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.reportes-status.status-concluido {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.reportes-status.status-archivado {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.reportes-status.status-cancelado {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.reportes-status.status-reincidente {
+  background: #fce7f3;
+  color: #9d174d;
+}

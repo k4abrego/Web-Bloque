@@ -74,24 +74,31 @@ export async function verificarChallenge(userId, respuestaHMAC) {
 }
 
 /**
- * Guarda la información de la sesión autenticada.
+ * Guarda los datos de la sesión después de una autenticación exitosa.
  *
- * @param {string} token - Token JWT del usuario.
+ * @param {string} token - JWT del usuario autenticado.
  * @param {string} rol - Rol devuelto por el backend.
- * @param {number} userId - Identificador del usuario autenticado.
+ * @param {number} userId - Identificador del usuario.
+ * @param {string} correo - Correo utilizado para iniciar sesión.
  */
-export function guardarSesion(token, rol, userId) {
+export function guardarSesion(token, rol, userId, correo) {
   localStorage.setItem("token", token);
   localStorage.setItem("rol", rol);
   localStorage.setItem("user_id", String(userId));
+
+  if (correo) {
+    localStorage.setItem("correo", correo.trim().toLowerCase());
+  } else {
+    localStorage.removeItem("correo");
+  }
 }
 
 /**
- * Elimina la información de autenticación almacenada localmente.
+ * Elimina todos los datos de la sesión al cerrar sesión.
  */
 export function cerrarSesion() {
   localStorage.removeItem("token");
   localStorage.removeItem("rol");
   localStorage.removeItem("user_id");
+  localStorage.removeItem("correo");
 }
-

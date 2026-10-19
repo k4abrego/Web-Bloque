@@ -459,6 +459,8 @@ export default function AdministradoresAdmin() {
 
   return (
     <div className="alimentadores-admin">
+      
+
       <div className="alimentadores-header">
         <div>
           <h1>Cuentas de administradores</h1>

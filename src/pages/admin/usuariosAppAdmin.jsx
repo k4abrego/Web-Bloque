@@ -18,7 +18,7 @@ import {
   useState,
 } from "react";
 
-import { authApiFetch } from "../../services/api";
+import { apiFetch } from "../../services/api";
 import "./alimentadoresAdmin.css";
 import "./usuariosAppAdmin.css";
 
@@ -64,7 +64,7 @@ export default function UsuariosAppAdmin() {
     setCargando(true);
 
     try {
-      const datos = await authApiFetch(
+      const datos = await apiFetch(
         "/admin/usuarios-app"
       );
 
@@ -180,7 +180,7 @@ export default function UsuariosAppAdmin() {
     setError("");
 
     try {
-      await authApiFetch(
+      await apiFetch(
         `/admin/usuarios-app/${editando.id_usuario}`,
         {
           method: "PATCH",
@@ -236,7 +236,7 @@ export default function UsuariosAppAdmin() {
     setMensaje("");
 
     try {
-      await authApiFetch(
+      await apiFetch(
         `/admin/usuarios-app/${usuario.id_usuario}/estado`,
         {
           method: "PATCH",
@@ -273,6 +273,8 @@ export default function UsuariosAppAdmin() {
 
   return (
     <div className="alimentadores-admin usuarios-app-admin">
+      
+
       <div className="alimentadores-header">
         <div>
           <h1>Usuarios de la aplicación</h1>
@@ -464,7 +466,7 @@ export default function UsuariosAppAdmin() {
                 ["nombre", "Nombre"],
                 ["apellidos", "Apellidos"],
                 ["correo", "Correo electrónico"],
-                ["telefono", "Teléfono"],
+                ["telefono", "Teléfono (opcional)"],
               ].map(([campo, titulo]) => (
                 <div
                   className="alimentador-formulario-campo"

@@ -1,51 +1,36 @@
+
 /**
- * permisos.js
+ * @file permisos.js
+ * @description Permisos visuales basados en roles de SIPINNA.
  *
- * Define los permisos visuales provisionales
- * de los diferentes tipos de usuarios.
- *
- * IMPORTANTE:
- * Estas comprobaciones no sustituyen la
- * autorización del backend.
+ * Estas comprobaciones controlan la interfaz.
+ * El backend debe validar independientemente cada operación.
  */
 
 import { normalizarRol } from "./roles";
 
 /**
- * ID temporal del administrador principal.
+ * Obtiene los permisos del usuario autenticado.
  *
- * Corresponde a la cuenta administrativa de prueba.
- */
-const ADMIN_PRINCIPAL_ID = 3;
-
-/**
- * Obtiene el contexto de permisos visuales
- * del usuario autenticado.
- *
- * @returns {Object} Información de permisos.
+ * @returns {Object}
  */
 export function obtenerPermisos() {
   const rol = normalizarRol(localStorage.getItem("rol"));
 
-  const userId = Number(
-    localStorage.getItem("user_id")
-  );
+  const userId = Number(localStorage.getItem("user_id"));
 
-  const esAdministrador = rol === "admin";
-
-  const esAdministradorPrincipal =
-    esAdministrador &&
-    userId === ADMIN_PRINCIPAL_ID;
+  const esAdministrador = rol === "Administrador";
 
   return {
     rol,
     userId,
     esAdministrador,
-    esAdministradorPrincipal,
+
+    esAdministradorPrincipal:
+      esAdministrador && userId === 3,
 
     puedeGestionarAlimentadores: esAdministrador,
 
-    puedeGestionarAdministradores:
-      esAdministradorPrincipal,
+    puedeGestionarAdministradores: esAdministrador,
   };
 }

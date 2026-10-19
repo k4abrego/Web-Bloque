@@ -126,7 +126,7 @@ function Login() {
         }
 
         // 4. Obtener el rol desde el backend
-        const rol = normalizarRol(datos.role);
+        const rol = normalizarRol(datos.rol);
 
         if (!rol) {
         throw new Error(

@@ -15,7 +15,8 @@ import {
   MapPin,
 } from "lucide-react";
 
-import { authApiFetch } from "../../services/api";
+import { apiFetch } from "../../services/api";
+
 import "../alimentador/configuracionAlim.css";
 
 /**
@@ -61,7 +62,7 @@ export default function ConfiguracionAdmin() {
 
     let vigente = true;
 
-    authApiFetch(
+    apiFetch(
       `/Usuario/${encodeURIComponent(correo)}`
     )
       .then((datos) => {

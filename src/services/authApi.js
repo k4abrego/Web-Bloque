@@ -1,8 +1,8 @@
 /**
  * URL base del servicio de autenticación.
- * Se obtiene de la variable de entorno VITE_AUTH_API_URL.
+ * Se obtiene de la variable de entorno VITE_AUTH_LOGIN_URL.
  */
-const AUTH_API_URL = import.meta.env.VITE_AUTH_LOGIN_URL;
+const VITE_AUTH_LOGIN_URL = import.meta.env.VITE_AUTH_LOGIN_URL;
 
 /**
  * Solicita un challenge de autenticación al backend.
@@ -17,7 +17,7 @@ const AUTH_API_URL = import.meta.env.VITE_AUTH_LOGIN_URL;
  * @throws {Error} Si el backend rechaza la solicitud.
  */
 export async function solicitarChallenge(correo) {
-  const url = `${AUTH_API_URL}/Login/${encodeURIComponent(correo)}`;
+  const url = `${VITE_AUTH_LOGIN_URL}/Login/${encodeURIComponent(correo)}`;
 
   console.log("URL REAL DEL LOGIN:", url);
 
@@ -46,7 +46,7 @@ export async function solicitarChallenge(correo) {
 
 
 export async function verificarChallenge(userId, respuestaHMAC) {
-  const response = await fetch(`${AUTH_API_URL}/Login`, {
+  const response = await fetch(`${VITE_AUTH_LOGIN_URL}/Login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

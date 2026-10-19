@@ -1,3 +1,4 @@
+import { atenderDemoAdmin } from "./demoAdmin";
 /**
  * URL base de la API de autenticación.
  *
@@ -6,7 +7,7 @@
  *
  * @type {string}
  */
-const AUTH_API_URL = import.meta.env.VITE_AUTH_LOGIN_URL;
+const VITE_AUTH_API_URL = import.meta.env.VITE_AUTH_API_URL;
 
 /**
  * URL base de la API de comunicación.
@@ -16,7 +17,7 @@ const AUTH_API_URL = import.meta.env.VITE_AUTH_LOGIN_URL;
  *
  * @type {string}
  */ 
-const COMMS_API_URL = import.meta.env.VITE_COMMS_API_URL;
+const VITE_COMMS_API_URL = import.meta.env.VITE_COMMS_API_URL;
 
 /**
  * Crea una función para realizar peticiones HTTP hacia una API específica.
@@ -33,6 +34,9 @@ const COMMS_API_URL = import.meta.env.VITE_COMMS_API_URL;
  */
 function createApiFetch(baseURL) {
     return async function apiFetch(endpoint, options = {}) {
+    const demo = atenderDemoAdmin(endpoint, options);
+    if (demo.handled) return demo.result;
+
         /**
          * Indica si la respuesta debe recibirse como archivo binario.
          * Se elimina de las opciones enviadas a fetch.
@@ -132,11 +136,12 @@ function createApiFetch(baseURL) {
  *
  * Base configurada mediante VITE_AUTH_API_URL.
  */
-export const authApiFetch = createApiFetch(AUTH_API_URL);
+export const authApiFetch = createApiFetch(VITE_AUTH_API_URL);
 
 /**
  * Cliente HTTP para la API de comunicación.
  *
  * Base configurada mediante VITE_COMMS_API_URL.
  */
-export const apiFetch = createApiFetch(COMMS_API_URL);
+export const apiFetch = createApiFetch(VITE_COMMS_API_URL);
+    

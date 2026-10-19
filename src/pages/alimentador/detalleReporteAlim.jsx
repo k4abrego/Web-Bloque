@@ -37,6 +37,7 @@ import {
 import { obtenerTerritorios } from "../../services/territoriosApi";
 import UbicacionReporteMapa from "../../components/mapa/UbicacionReporteMapa";
 import "./detallesReporteAlim.css";
+import EvidenciasReporte from "../../components/evidencia/EvidenciasReporte";
 
 /**
  * Estados oficiales del expediente SIPINNA.
@@ -649,6 +650,23 @@ function DetalleReporteAlim() {
               actualiza únicamente el estado del expediente.
             </div>
           </section>
+
+          {/* Evidencias reales del expediente */}
+          <section
+            className="detalle-alim-seccion"
+            aria-label="Evidencias del expediente"
+          >
+            <h2>Evidencias del reporte</h2>
+
+            <p>
+              Fotografías y videos asociados al expediente.
+              Los archivos se consultan mediante una conexión
+              autenticada.
+            </p>
+
+            <EvidenciasReporte folio={folio} />
+          </section>
+
         </>
       )}
     </div>

@@ -34,7 +34,7 @@ import {
   Search,
 } from "lucide-react";
 
-import { apiFetch } from "../../services/api";
+import { apiFetch } from "./api";
 
 import {
   obtenerAdministradores,
@@ -459,8 +459,6 @@ export default function AdministradoresAdmin() {
 
   return (
     <div className="alimentadores-admin">
-      
-
       <div className="alimentadores-header">
         <div>
           <h1>Cuentas de administradores</h1>
